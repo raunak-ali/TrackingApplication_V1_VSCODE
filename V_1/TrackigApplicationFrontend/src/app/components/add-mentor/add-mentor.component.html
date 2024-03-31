@@ -1,0 +1,94 @@
+<p>add-mentor works!</p>
+<form [formGroup]="AddMentorForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="name">Name:</label>
+    <input type="text" id="name" formControlName="name">
+    <div *ngIf="AddMentorForm.get('name')?.errors?.['required']" class="error">Name is required</div>
+  </div>
+
+  <div>
+    <label for="role">Role:</label>
+    <select id="role" formControlName="role">
+      <option [value]="Role.Employee">Employee</option>
+      <!-- Add more options for other roles -->
+    </select>
+  </div>
+
+  <div>
+    <label for="domain">Domain:</label>
+    <input type="text" id="domain" formControlName="domain">
+    <div *ngIf="AddMentorForm.get('domain')?.errors?.['required']" class="error">Domain is required</div>
+  </div>
+
+  <div>
+    <label for="jobTitle">Job Title:</label>
+    <input type="text" id="jobTitle" formControlName="jobTitle">
+  </div>
+
+  <div>
+    <label for="location">Location:</label>
+    <input type="text" id="location" formControlName="location">
+  </div>
+
+  <div>
+    <label for="phone">Phone:</label>
+    <input type="text" id="phone" formControlName="phone">
+  </div>
+
+  <div>
+    <label for="isCr">Is CR:</label>
+    <input type="checkbox" id="isCr" formControlName="isCr">
+  </div>
+
+  <div>
+    <label for="gender">Gender:</label>
+    <input type="text" id="gender" formControlName="gender">
+  </div>
+
+  <div>
+    <label for="doj">Date of Joining:</label>
+    <input type="date" id="doj" formControlName="doj">
+    <div *ngIf="AddMentorForm.get('doj')?.errors?.['required']" class="error">Date of Joining is required</div>
+  </div>
+
+  <div>
+    <label for="capgeminiEmailId">Capgemini Email ID:</label>
+    <input type="email" id="capgeminiEmailId" formControlName="capgeminiEmailId">
+    <div *ngIf="AddMentorForm.get('capgeminiEmailId')?.errors?.['required']" class="error">Capgemini Email ID is required</div>
+    <div *ngIf="AddMentorForm.get('capgeminiEmailId')?.errors?.['email']" class="error">Invalid email format</div>
+  </div>
+
+  <div>
+    <label for="grade">Grade:</label>
+    <input type="text" id="grade" formControlName="grade">
+  </div>
+
+  <div>
+    <label for="totalAverageRatingStatus">Total Average Rating Status:</label>
+    <input type="number" id="totalAverageRatingStatus" formControlName="totalAverageRatingStatus">
+  </div>
+
+  <div>
+    <label for="personalEmailId">Personal Email ID:</label>
+    <input type="email" id="personalEmailId" formControlName="personalEmailId">
+  </div>
+
+  <div>
+    <label for="earlierMentorName">Earlier Mentor Name:</label>
+    <input type="text" id="earlierMentorName" formControlName="earlierMentorName">
+  </div>
+
+  <div>
+    <label for="finalMentorName">Final Mentor Name:</label>
+    <input type="text" id="finalMentorName" formControlName="finalMentorName">
+  </div>
+
+  <div>
+    <label for="attendanceCount">Attendance Count:</label>
+    <input type="number" id="attendanceCount" formControlName="attendanceCount">
+  </div>
+
+  <!-- Add more form controls for other fields -->
+
+  <button type="submit" [disabled]="!AddMentorForm.valid">Submit</button>
+</form>
