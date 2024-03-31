@@ -9,12 +9,14 @@ import { LoginService } from './Services/login.service';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { AddMentorComponent } from './components/add-mentor/add-mentor.component';
+import { AddBatchesComponent } from './components/add-batches/add-batches.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    AddMentorComponent
+    AddMentorComponent,
+    AddBatchesComponent
   ],
   imports: [
     BrowserModule,

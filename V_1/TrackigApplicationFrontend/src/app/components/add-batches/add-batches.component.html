@@ -1,0 +1,29 @@
+<p>add-batches works!</p>
+<form [formGroup]="AddBatchForm" (ngSubmit)="onSubmit()">
+  <div class="form-group">
+    <label for="MentorId">Mentor ID</label>
+    <input type="number" class="form-control" id="MentorId" formControlName="MentorId">
+  </div>
+  <div class="form-group">
+    <label for="Domain">Domain</label>
+    <input type="text" class="form-control" id="Domain" formControlName="Domain">
+    <div *ngIf="AddBatchForm.get('Domain')?.invalid && AddBatchForm.get('Domain')?.touched" class="text-danger">
+      Domain is required
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="Description">Description</label>
+    <textarea class="form-control" id="Description" formControlName="Description"></textarea>
+    <div *ngIf="AddBatchForm.get('Description')?.invalid && AddBatchForm.get('Description')?.touched" class="text-danger">
+      Description is required
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="Employee_info_Excel_File">Employee Info Excel</label>
+    <input type="file" (change)="onFileChange($event)" accept=".xlsx" formControlName="Employee_info_Excel_File" id="Employee_info_Excel_File" class="Employee_info_Excel_File"/>
+    <div *ngIf="AddBatchForm.get('Employee_info_Excel_File')?.invalid && AddBatchForm.get('Employee_info_Excel_File')?.touched" class="text-danger">
+      Employee Info Excel is required
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

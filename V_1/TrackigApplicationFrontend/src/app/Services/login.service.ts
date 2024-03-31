@@ -8,7 +8,7 @@ import { Observable, tap } from 'rxjs';
 export class LoginService {
 
 private tokenKey = 'auth_token';
-  //private User='active_user';
+  private User!:any;
 
   private apiUrl = 'http://localhost:5138/User/Login';
 
@@ -26,13 +26,13 @@ private tokenKey = 'auth_token';
           this.saveToken(response.token);
         }
         if(response && response.userProfile){
-          //this.saveUser(response.userProfile);
+          this.saveUser(response.userProfile);
         }
       })
     );
   }
-  /*private saveUser(User:User): void {
-    sessionStorage.setItem(this.User,User.AccountNumber);
+  private saveUser(User:any): void {
+    sessionStorage.setItem(this.User,User.UserId);
   }
 
   getUser(): string |null {
@@ -41,7 +41,7 @@ private tokenKey = 'auth_token';
 
   clearUser(): void {
     sessionStorage.removeItem(this.User);
-  }*/
+  }
 
 
   private saveToken(token: string): void {

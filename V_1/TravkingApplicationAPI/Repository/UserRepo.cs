@@ -74,7 +74,7 @@ string Token=GenerateToken(existing_user);
             try{
                 if(user!=null){
                     //Generate a username
-                    string username=user.Name.Substring(0,3)+user.Domain;
+                    string username=user.Name.Substring(0,3)+"_"+user.Domain.Substring(3,user.Domain.Length);
                     string password = Convert.ToBase64String(System.Security.Cryptography.RandomNumberGenerator.GetBytes(10)).Substring(0, 12);
 //Adding the generateed Username and Password to the existing user
 User newuser=new User();

@@ -6,16 +6,21 @@ using System.Text;
 using TravkingApplicationAPI.Interfaces;
 using TravkingApplicationAPI.Repository;
 using TravkingApplicationAPI.Services;
+using OfficeOpenXml;
 
 
 var builder = WebApplication.CreateBuilder(args);
+ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddDbContext<TrackingApplicationDbContext>(options=>options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddControllers();
 builder.Services.AddCors(p => p.AddDefaultPolicy(policy => policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod()));
-
+ builder.Services.Configure<IISServerOptions>(options =>
+    {
+        options.MaxRequestBodySize = int.MaxValue; // Set maximum request body size to the maximum value
+    });
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 .AddJwtBearer(
@@ -36,8 +41,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddScoped<IUser,UserRepo>();
 builder.Services.AddScoped<UserService,UserService>();
 
+builder.Services.AddScoped<IBatch,BatchRepo>();
+builder.Services.AddScoped<BatchService,BatchService>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.Limits.MaxRequestBodySize = 100_000_000;
+});
 
 var app = builder.Build();
 
@@ -51,10 +64,15 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthentication();//For Authentication
     app.UseAuthorization();
+// Configure Kestrel server options to adjust maximum request body size
+
+app.UseRouting();
 
 app.UseHttpsRedirection();
 
 app.UseCors();
+    app.UseHttpsRedirection();
+
 
 app.MapControllers();
 
