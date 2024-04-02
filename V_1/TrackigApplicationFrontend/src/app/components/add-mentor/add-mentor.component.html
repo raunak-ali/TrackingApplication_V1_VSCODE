@@ -1,5 +1,8 @@
 <p>add-mentor works!</p>
-<form [formGroup]="AddMentorForm" (ngSubmit)="onSubmit()">
+<div class="container">
+  <h2 class="text-center mb-4">Add Mentor</h2>
+  <form [formGroup]="AddMentorForm" (ngSubmit)="onSubmit()" class="form-container">
+    <div class="form-group">
   <div>
     <label for="name">Name:</label>
     <input type="text" id="name" formControlName="name">
@@ -9,7 +12,7 @@
   <div>
     <label for="role">Role:</label>
     <select id="role" formControlName="role">
-      <option [value]="Role.Employee">Employee</option>
+      <option [value]="Role.Mentor">Mentor</option>
       <!-- Add more options for other roles -->
     </select>
   </div>
@@ -91,4 +94,6 @@
   <!-- Add more form controls for other fields -->
 
   <button type="submit" [disabled]="!AddMentorForm.valid">Submit</button>
+</div>
 </form>
+</div>

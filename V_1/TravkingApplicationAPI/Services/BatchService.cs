@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TravkingApplicationAPI.DTO;
 using TravkingApplicationAPI.Interfaces;
+using TravkingApplicationAPI.Models;
 
 namespace TravkingApplicationAPI.Services
 {
@@ -22,5 +23,15 @@ namespace TravkingApplicationAPI.Services
             throw;
         }
        }
+    
+public async Task<List<Batch>>  GetAllBatches(int MentorId){
+        try{
+            return await Batch.GetAllBatches(MentorId);
+        }
+        catch(Exception ex){
+            throw;
+        }
+       }
     }
+
 }

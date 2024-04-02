@@ -1,0 +1,34 @@
+<p>batch-dashboard works!</p>
+<div class="container">
+  <div *ngIf="AllTasks.length > 0; else noTransactions">
+    <h2>All Batches</h2>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>batch ID</th>
+            <th>assignedBy</th>
+            <th>assignedTo</th>
+            <th>taskName</th>
+            <!-- Add more table headers as needed -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let task of AllTasks">
+            <td>{{ task.batchId }}</td>
+            <td>{{ task.assignedBy }}</td>
+            <td>{{ task.assignedTo }}</td>
+            <td>{{ task.taskName }}</td>
+
+            <!-- Add more table cells as needed -->
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <ng-template #noTransactions>
+    <p>No batches available.</p>
+  </ng-template>
+</div>
+

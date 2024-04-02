@@ -1,0 +1,33 @@
+body {
+  background-color: #f0f8ff; /* Super light blue background */
+}
+
+.navbar {
+  background-color: #212529; /* Dark background color for navbar */
+  color: blue; /* Blue text color for navbar links */
+  width: 200px; /* Width of the navbar */
+  height: 100%; /* Full height */
+  position: fixed; /* Fixed position */
+  top: 0; /* Position at the top */
+  left: 0; /* Position at the left */
+  overflow-x: hidden; /* Hide horizontal scrollbar */
+  padding-top: 20px; /* Add top padding */
+}
+
+.navbar a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 20px;
+  color: blue; /* Blue text color for navbar links */
+  display: block;
+}
+
+.navbar a:hover {
+  background-color: #555; /* Darken background on hover */
+  color: white; /* White text color on hover */
+}
+
+.content {
+  margin-left: 220px; /* Adjust content margin to account for navbar width */
+  padding: 20px; /* Add padding */
+}

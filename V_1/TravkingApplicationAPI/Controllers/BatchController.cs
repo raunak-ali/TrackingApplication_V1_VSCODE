@@ -24,7 +24,7 @@ namespace TravkingApplicationAPI.Controllers
     this.BatchService = batchService;
 }
 [HttpPost]
-[AllowAnonymous]
+[Authorize(Roles ="Admin")]
 [DisableRequestSizeLimit]
 [Route("AddBatch")]
 public async Task<ActionResult>  AddBatch([FromBody]dynamic data)//Try [FromBody]
@@ -43,6 +43,29 @@ try{
     {
         return StatusCode(500, ex.Message);
     }
+}
+
+[HttpPost]
+[Authorize(Roles ="Mentor")]
+[DisableRequestSizeLimit]
+[Route("GetAllBatches")]
+public async Task<ActionResult>  GetAllBatches([FromBody]dynamic data)//Try [FromBody]
+{
+    try{
+int MentorId=data.GetProperty("MentorId").GetInt32();
+        var res = await BatchService.GetAllBatches(MentorId);
+        if(res == null)
+        {
+            return BadRequest();
+        }
+        return Ok(new{message=res});
+    
+    }
+    catch (Exception ex)
+    {
+        return StatusCode(500, ex.Message);
+    }
+
 }
 
 

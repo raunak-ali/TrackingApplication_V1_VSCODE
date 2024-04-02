@@ -327,10 +327,11 @@ namespace TravkingApplicationAPI.Migrations
                     b.Property<int>("BatchId")
                         .HasColumnType("int");
 
-                    b.Property<long>("Comments")
-                        .HasColumnType("bigint");
+                    b.Property<string>("Comments")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DeadLine")
@@ -343,9 +344,8 @@ namespace TravkingApplicationAPI.Migrations
                     b.Property<long>("Priority")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("TaskName")
                         .IsRequired()
@@ -478,17 +478,15 @@ namespace TravkingApplicationAPI.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("TravkingApplicationAPI.Models.Batch", "Batches")
+                    b.HasOne("TravkingApplicationAPI.Models.Batch", null)
                         .WithMany("UserTask")
                         .HasForeignKey("BatchId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("AssignedByUser");
 
                     b.Navigation("AssignedToUser");
-
-                    b.Navigation("Batches");
                 });
 
             modelBuilder.Entity("TravkingApplicationAPI.Models.Batch", b =>
@@ -508,8 +506,7 @@ namespace TravkingApplicationAPI.Migrations
 
             modelBuilder.Entity("TravkingApplicationAPI.Models.UserTask", b =>
                 {
-                    b.Navigation("FeedBack")
-                        .IsRequired();
+                    b.Navigation("FeedBack");
 
                     b.Navigation("SubTasks");
                 });

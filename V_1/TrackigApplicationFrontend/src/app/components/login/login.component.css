@@ -1,0 +1,47 @@
+body {
+  background-color: lightblue;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.form-control {
+  background-color: lightblue;
+  border: none;
+  border-bottom: 1px solid green;
+  border-radius: 0;
+  margin-bottom: 20px;
+}
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: green;
+}
+
+.btn-primary {
+  background-color: green;
+  border: none;
+  border-radius: 5px;
+}
+
+.btn-primary:hover {
+  background-color: darkgreen;
+}
+
+.glyphicon {
+  margin-right: 10px;
+}
+
+.text-danger {
+  color: red;
+}

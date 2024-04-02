@@ -27,6 +27,7 @@ private tokenKey = 'auth_token';
         }
         if(response && response.userProfile){
           this.saveUser(response.userProfile);
+          this.savecurrentUser(response.userProfile);
         }
       })
     );
@@ -54,5 +55,19 @@ private tokenKey = 'auth_token';
 
   clearToken(): void {
     sessionStorage.removeItem(this.tokenKey);
+  }
+
+
+  private savecurrentUser(user: any): void {
+    sessionStorage.setItem('current_User', JSON.stringify(user));
+  }
+
+  getcurrentUser(): any | null {
+    const userJson = sessionStorage.getItem('current_User');
+    return userJson ? JSON.parse(userJson) : null;
+  }
+
+  clearcurrentUser(): void {
+    sessionStorage.removeItem('current_User');
   }
 }

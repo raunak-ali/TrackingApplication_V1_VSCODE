@@ -65,11 +65,6 @@ namespace TravkingApplicationAPI.Data
         .HasForeignKey(t => t.AssignedTo)
         .OnDelete(DeleteBehavior.Restrict); // Specify the OnDelete behavior
 
-    modelBuilder.Entity<UserTask>()
-        .HasOne(t => t.Batches)
-        .WithMany(b => b.UserTask)
-        .HasForeignKey(t => t.BatchId)
-        .OnDelete(DeleteBehavior.Restrict); // Specify the OnDelete behavior
 
     // Define relationship between Task and SubTask
     modelBuilder.Entity<SubTask>()

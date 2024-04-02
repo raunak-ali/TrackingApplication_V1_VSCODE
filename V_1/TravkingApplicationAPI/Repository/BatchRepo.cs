@@ -176,5 +176,24 @@ private async Task InsertDataIntoDatabaseAsync(List<List<string>> extractedData,
         throw;
     }
 }
+
+        public async Task<List<Batch>> GetAllBatches(int MentorId)
+        {
+try{
+var existing_mentor=context.Users.FirstOrDefault(s=>s.UserId==MentorId && s.Role==Role.Mentor);
+if(existing_mentor!=null){
+    var existing_batches=context.Batches.Where(b=>b.MentorId==MentorId).ToList();
+    if(existing_batches!=null && existing_batches.Count>0){
+        return existing_batches;
+    }
+    return null;
+}
+return null;
+}
+catch(Exception e ){
+    throw;
+}
+
+        }
     }
     }

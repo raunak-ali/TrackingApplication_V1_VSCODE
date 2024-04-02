@@ -44,6 +44,9 @@ builder.Services.AddScoped<UserService,UserService>();
 builder.Services.AddScoped<IBatch,BatchRepo>();
 builder.Services.AddScoped<BatchService,BatchService>();
 
+builder.Services.AddScoped<ITask,TaskRepo>();
+builder.Services.AddScoped<TaskServices,TaskServices>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -63,10 +66,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthentication();//For Authentication
-    app.UseAuthorization();
 // Configure Kestrel server options to adjust maximum request body size
 
 app.UseRouting();
+app.UseAuthorization();
 
 app.UseHttpsRedirection();
 
