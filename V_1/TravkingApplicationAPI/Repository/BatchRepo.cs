@@ -74,7 +74,7 @@ private async Task<List<List<string>>> ExtractSpecificColumnsAsync(Stream fileSt
         {
             try{
 if(batch!=null){
-    var existing_mentor=context.Users.FirstOrDefault(s=>s.UserId==batch.MentorId&& s.Role==Role.Mentor);
+    var existing_mentor=context.Users.FirstOrDefault(s=>s.UserId==batch.MentorId);
     
     if(existing_mentor!=null){
         Batch newbatch=new Batch();
@@ -82,6 +82,7 @@ newbatch.BatchName=DateTime.Now.Month+"_"+(DateTime.Now.Date)+"_"+existing_mento
 newbatch.Description=batch.Description;
 newbatch.Domain=batch.Domain;
 newbatch.Employee_info_Excel=batch.Employee_info_Excel;
+//RE-CHECK THE LOGIC 
 newbatch.Mentor=existing_mentor;
 newbatch.MentorId=batch.MentorId;
 //Lets save this Batch first
@@ -158,6 +159,8 @@ private async Task InsertDataIntoDatabaseAsync(List<List<string>> extractedData,
                 users.Add(user);
                 //Send an eamil to Allm these Users indiviually
             }
+//Check if the user with the same personalEmialId Already exixts, if they do just update that User object 
+
 
             // Assign newbatch to each user if needed
             foreach (var user in users)
@@ -194,6 +197,21 @@ catch(Exception e ){
     throw;
 }
 
+        }
+
+        public async Task<List<Batch>> GetAllBatchesForEmployees(int UserId)
+        {
+            var batchIdsForUser = context.Users
+    .Where(u => u.UserId == UserId) // Filter by the specific user ID
+    .SelectMany(u => u.Batches.Select(b => b.BatchId)) // Select all BatchIds associated with the user
+    .ToList();
+    var batchObjectsForUser = context.Batches
+    .Where(b => batchIdsForUser.Contains(b.BatchId)) // Filter by the BatchIds
+    .ToList();
+    
+            return batchObjectsForUser;
+            //First find the the user object and retirved its Batches property
+            //return this batches property.
         }
     }
     }

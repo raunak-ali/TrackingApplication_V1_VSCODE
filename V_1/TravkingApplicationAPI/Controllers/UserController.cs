@@ -23,9 +23,9 @@ namespace TravkingApplicationAPI.Controllers
 
 
  [HttpPost]
-[Authorize(Roles ="Admin")]
+//[Authorize(Roles ="Admin")]
 [Route("AddMentor")]
-
+[AllowAnonymous]
 public async Task<ActionResult>  AddUser([FromBody]AddUser user)//Try [FromBody]
 {
 try{ 
@@ -70,6 +70,27 @@ public async Task<ActionResult>  LoginUserProfile([FromBody]Login user)//Try [Fr
         return StatusCode(500, ex.Message);
     }
 }
+[HttpPost]
+[Authorize(Roles ="Mentor")]
+[Route("GetUserByBatch")]
+
+public async Task<ActionResult>  GetUserByBatch([FromBody]dynamic data)//Try [FromBody]
+{
+try{ 
+    var BatchId=data.GetProperty("BatchId").GetInt32();
+    var res = await UserService.GetUserByBatch(BatchId);
+        if(res == null)
+        {
+            return BadRequest();
+        }
+        return Ok(new{message=res});
+    }
+    catch (Exception ex)
+    {
+        return StatusCode(500, ex.Message);
+    }
+}
+
 
     }
 }

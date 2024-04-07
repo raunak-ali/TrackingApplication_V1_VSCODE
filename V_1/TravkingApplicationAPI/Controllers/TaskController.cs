@@ -28,11 +28,11 @@ namespace TravkingApplicationAPI.Controllers
 //[Authorize(Roles ="Mentor")]
 [DisableRequestSizeLimit]
 [Route("AddTask")]
-public async Task<ActionResult>  AddTask([FromBody]AddTask task)//Try [FromBody]
+public async Task<ActionResult>  AddTask([FromBody]dynamic data)//Try [FromBody]
 {
 try{ 
-    //var temp=data.GetProperty("batch").GetRawText();
-    //var batch = JsonSerializer.Deserialize<Addbatch>(temp);
+    var temp=data.GetProperty("task").GetRawText();
+    var task = JsonSerializer.Deserialize<AddTask>(temp);
     var res = await taskService.AddnewTask(task);
         if(res == null)
         {
@@ -68,7 +68,56 @@ try{
         return StatusCode(500, ex.Message);
     }
 }
+[HttpPost]
+[AllowAnonymous]
+//[Authorize(Roles ="Mentor")]
+[DisableRequestSizeLimit]
+[Route("AddnewSubtask")]
+public async Task<ActionResult>  AddnewSubtask([FromBody]dynamic data)//Try [FromBody]
+{
+try{
 
+    var temp=data.GetProperty("Subtask").GetRawText();
+    var Subtask = JsonSerializer.Deserialize<AddSubTask>(temp);
+    var res = await taskService.AddNewSubtask(Subtask);
+        if(res == null)
+        {
+            return BadRequest();
+        }
+        return Ok(new{message=res});
+ }
+catch(Exception ex){
+            return StatusCode(500, ex.Message);
+
+}
+
+
+}
+
+
+[HttpPost]
+[AllowAnonymous]
+//[Authorize(Roles ="Mentor")]
+[DisableRequestSizeLimit]
+[Route("GetSubtaskByTask")]
+public async Task<ActionResult>  GetSubtaskByTask([FromBody]dynamic data)//Try [FromBody]
+{
+try{
+
+    var TaskId=data.GetProperty("TaskId").GetInt32();
+   // var Subtask = JsonSerializer.Deserialize<AddSubTask>(temp);
+    var res = await taskService.GetAllSubtask(TaskId);
+        if(res == null)
+        {
+            return BadRequest();
+        }
+        return Ok(new{message=res});
+ }
+catch(Exception ex){
+            return StatusCode(500, ex.Message);
+
+}
+}
 
     }
 }

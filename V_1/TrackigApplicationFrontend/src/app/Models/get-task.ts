@@ -4,8 +4,8 @@ import { User } from "./user";
 export class GetTask {
     userTaskID!: number;
     taskName!: string;
-    description!: string;
-    priority!: number;
+    Description!: string;
+    Priority!: number;
     deadLine!: Date;
     status!: number;
     assignedBy!: number;

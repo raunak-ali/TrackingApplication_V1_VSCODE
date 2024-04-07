@@ -13,6 +13,14 @@ import { AddBatchesComponent } from './components/add-batches/add-batches.compon
 import { GetBatchComponent } from './components/get-batch/get-batch.component';
 import { MentorDashboardComponent } from './components/mentor-dashboard/mentor-dashboard.component';
 import { BatchDashboardComponent } from './components/batch-dashboard/batch-dashboard.component';
+import { TaskboardComponent } from './components/taskboard/taskboard.component';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { EmployeeDashBoardComponent } from './components/employee-dash-board/employee-dash-board.component';
+import { TaskSubmissionsComponent } from './components/task-submissions/task-submissions.component';
+// Import jQuery
+
+
 
 @NgModule({
   declarations: [
@@ -22,7 +30,10 @@ import { BatchDashboardComponent } from './components/batch-dashboard/batch-dash
     AddBatchesComponent,
     GetBatchComponent,
     MentorDashboardComponent,
-    BatchDashboardComponent
+    BatchDashboardComponent,
+    TaskboardComponent,
+    EmployeeDashBoardComponent,
+    TaskSubmissionsComponent
   ],
   imports: [
     BrowserModule,
@@ -30,6 +41,9 @@ import { BatchDashboardComponent } from './components/batch-dashboard/batch-dash
     ReactiveFormsModule,
     HttpClientModule,
     FormsModule,
+    NgSelectModule,
+    NgMultiSelectDropDownModule.forRoot()
+
   ],
   providers: [LoginService,
     {

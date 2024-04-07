@@ -29,7 +29,9 @@ export class LoginComponent  implements OnInit {
     });
 
   }
-
+  setRole(role: string): void {
+    sessionStorage.setItem('Role', role);
+  }
   onSubmit(): void {
     if (this.loginForm.valid) {
       const formData = this.loginForm.value;
@@ -39,10 +41,16 @@ export class LoginComponent  implements OnInit {
           var User=this.loginservice.getcurrentUser();
           if(User&&User.Role==1){
             this.jwtToken="IT IS A MENTOR";
+            this.setRole("Mentor");
             this.router.navigate(['/Mentor_dashboard']);
           }
-          else{
+          else if(User&&User.Role==0){
+            this.setRole("Employee");
             this.jwtToken="IT IS Not a Mentor";
+            this.router.navigate(['Employee_DashBoard']);
+          }
+          else{
+            this.setRole("Admin");
           }
 
           this.error = undefined;

@@ -41,7 +41,7 @@ namespace TravkingApplicationAPI.Repository
         _config["Jwt:Issuer"],
         _config["Jwt:Audience"],
         claims,
-        expires: DateTime.Now.AddMinutes(1),
+        expires: DateTime.Now.AddMinutes(10),
         signingCredentials: credentials
     );
 return new JwtSecurityTokenHandler().WriteToken(token);}
@@ -74,9 +74,11 @@ string Token=GenerateToken(existing_user);
             try{
                 if(user!=null){
                     //Generate a username
-                    string username=user.Name.Substring(0,3)+"_"+user.Domain.Substring(3,user.Domain.Length);
+                    string username=user.Name.Substring(0,3)+"_"+user.Domain.Substring(0, Math.Min(3, user.Domain.Length));
                     string password = Convert.ToBase64String(System.Security.Cryptography.RandomNumberGenerator.GetBytes(10)).Substring(0, 12);
 //Adding the generateed Username and Password to the existing user
+
+//
 User newuser=new User();
 newuser.UserName=username;
 newuser.Password=password;
@@ -86,18 +88,17 @@ newuser.Domain=user.Domain;
 newuser.JobTitle=user.JobTitle;
 newuser.Location=user.Location;
 newuser.Phone=user.Phone;
-newuser.IsCr=user.IsCr;
+newuser.IsCr=user.IsCr;//Dont take it from excel
 newuser.Batches=user.Batches;
 newuser.Gender=user.Gender;
 newuser.Doj=user.Doj;
 newuser.CapgeminiEmailId=user.CapgeminiEmailId;
-newuser.Grade=user.Gender;
 newuser.Total_Average_RatingStatus=0;//Default value starts at 0
 newuser.PersonalEmailId=user.PersonalEmailId;
 newuser.EarlierMentorName=user.EarlierMentorName;
 newuser.FinalMentorName=user.FinalMentorName;
 newuser.Attendance_Count=0;//Initailzed to zero by defult
-newuser.DailyUpdates=null;
+newuser.DailyUpdates=null;//No no
 
 //Now lets add this to the our db
 context.Users.Add(newuser);
@@ -109,6 +110,29 @@ return "User sucessfully added";
             catch(Exception e){
                 throw;
             }
+        }
+
+        public async Task<List<User>> GetUserByBatch(int BatchId)
+        {
+           try{
+            if(BatchId!=null){
+                var existing_batch=context.Batches.FirstOrDefault(b=>b.BatchId==BatchId);
+                if(existing_batch!=null){
+                    var Batch_Employees=context.Users.Where(u=>u.Batches.Any(b => b == existing_batch) && u.Role==Role.Employee).ToList();
+                if(Batch_Employees!=null && Batch_Employees.Count>0){
+                    return Batch_Employees;
+
+
+                }
+                //NO Employyes in this batch
+                }
+            }
+            return null;
+           }
+           catch(Exception ex){
+            throw;
+           }
+
         }
     }
 }

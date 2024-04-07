@@ -12,8 +12,8 @@ using TravkingApplicationAPI.Data;
 namespace TravkingApplicationAPI.Migrations
 {
     [DbContext(typeof(TrackingApplicationDbContext))]
-    [Migration("20240402030524_Sec")]
-    partial class Sec
+    [Migration("20240405094941_tttrrrrrrrrr")]
+    partial class tttrrrrrrrrr
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -161,9 +161,8 @@ namespace TravkingApplicationAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("RatingId"));
 
-                    b.Property<string>("Comments")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Comments")
+                        .HasColumnType("int");
 
                     b.Property<int>("FeedbackId")
                         .HasColumnType("int");
@@ -174,10 +173,10 @@ namespace TravkingApplicationAPI.Migrations
                     b.Property<int>("RatedTo")
                         .HasColumnType("int");
 
-                    b.Property<long>("RatingValue")
-                        .HasColumnType("bigint");
+                    b.Property<int>("RatingValue")
+                        .HasColumnType("int");
 
-                    b.Property<int>("SubTaskId")
+                    b.Property<int>("TaskSubmissionId")
                         .HasColumnType("int");
 
                     b.HasKey("RatingId");
@@ -188,7 +187,7 @@ namespace TravkingApplicationAPI.Migrations
 
                     b.HasIndex("RatedTo");
 
-                    b.HasIndex("SubTaskId");
+                    b.HasIndex("TaskSubmissionId");
 
                     b.ToTable("Rating");
                 });
@@ -208,20 +207,11 @@ namespace TravkingApplicationAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("FileUploadDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte[]>("FileUploadSubmission")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("FileName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("FileUploadTaskPdf")
-                        .IsRequired()
                         .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TaskId")
                         .HasColumnType("int");
@@ -235,6 +225,37 @@ namespace TravkingApplicationAPI.Migrations
                     b.HasIndex("TaskId");
 
                     b.ToTable("SubTask");
+                });
+
+            modelBuilder.Entity("TravkingApplicationAPI.Models.TaskSubmissions", b =>
+                {
+                    b.Property<int>("TaskSubmissionsId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskSubmissionsId"));
+
+                    b.Property<byte[]>("FileUploadSubmission")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<DateTime?>("SubTaskSubmitteddOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("submittedFileName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("subtaskid")
+                        .HasColumnType("int");
+
+                    b.HasKey("TaskSubmissionsId");
+
+                    b.ToTable("TaskSubmissions");
                 });
 
             modelBuilder.Entity("TravkingApplicationAPI.Models.User", b =>
@@ -308,7 +329,12 @@ namespace TravkingApplicationAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("UserTaskID")
+                        .HasColumnType("int");
+
                     b.HasKey("UserId");
+
+                    b.HasIndex("UserTaskID");
 
                     b.ToTable("Users");
                 });
@@ -324,8 +350,9 @@ namespace TravkingApplicationAPI.Migrations
                     b.Property<int>("AssignedBy")
                         .HasColumnType("int");
 
-                    b.Property<int>("AssignedTo")
-                        .HasColumnType("int");
+                    b.Property<string>("AssignedTo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("BatchId")
                         .HasColumnType("int");
@@ -344,8 +371,8 @@ namespace TravkingApplicationAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("Priority")
-                        .HasColumnType("bigint");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -357,8 +384,6 @@ namespace TravkingApplicationAPI.Migrations
                     b.HasKey("UserTaskID");
 
                     b.HasIndex("AssignedBy");
-
-                    b.HasIndex("AssignedTo");
 
                     b.HasIndex("BatchId");
 
@@ -396,7 +421,7 @@ namespace TravkingApplicationAPI.Migrations
                     b.HasOne("TravkingApplicationAPI.Models.User", "User")
                         .WithMany("DailyUpdates")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -441,9 +466,9 @@ namespace TravkingApplicationAPI.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("TravkingApplicationAPI.Models.SubTask", "SubTask")
+                    b.HasOne("TravkingApplicationAPI.Models.TaskSubmissions", "TaskSubmissions")
                         .WithMany()
-                        .HasForeignKey("SubTaskId")
+                        .HasForeignKey("TaskSubmissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -453,7 +478,7 @@ namespace TravkingApplicationAPI.Migrations
 
                     b.Navigation("RatedToUser");
 
-                    b.Navigation("SubTask");
+                    b.Navigation("TaskSubmissions");
                 });
 
             modelBuilder.Entity("TravkingApplicationAPI.Models.SubTask", b =>
@@ -467,6 +492,13 @@ namespace TravkingApplicationAPI.Migrations
                     b.Navigation("UserTask");
                 });
 
+            modelBuilder.Entity("TravkingApplicationAPI.Models.User", b =>
+                {
+                    b.HasOne("TravkingApplicationAPI.Models.UserTask", null)
+                        .WithMany("AssignedToUser")
+                        .HasForeignKey("UserTaskID");
+                });
+
             modelBuilder.Entity("TravkingApplicationAPI.Models.UserTask", b =>
                 {
                     b.HasOne("TravkingApplicationAPI.Models.User", "AssignedByUser")
@@ -475,23 +507,13 @@ namespace TravkingApplicationAPI.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("TravkingApplicationAPI.Models.User", "AssignedToUser")
-                        .WithMany()
-                        .HasForeignKey("AssignedTo")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("TravkingApplicationAPI.Models.Batch", "Batches")
+                    b.HasOne("TravkingApplicationAPI.Models.Batch", null)
                         .WithMany("UserTask")
                         .HasForeignKey("BatchId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("AssignedByUser");
-
-                    b.Navigation("AssignedToUser");
-
-                    b.Navigation("Batches");
                 });
 
             modelBuilder.Entity("TravkingApplicationAPI.Models.Batch", b =>
@@ -511,6 +533,8 @@ namespace TravkingApplicationAPI.Migrations
 
             modelBuilder.Entity("TravkingApplicationAPI.Models.UserTask", b =>
                 {
+                    b.Navigation("AssignedToUser");
+
                     b.Navigation("FeedBack");
 
                     b.Navigation("SubTasks");

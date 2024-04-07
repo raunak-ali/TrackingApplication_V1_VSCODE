@@ -12,5 +12,7 @@ namespace TravkingApplicationAPI.Interfaces
 Task<string> LoginUser(Login user);
 Task<string> AddUser(AddUser user);
 
+Task<List<User>> GetUserByBatch(int BatchId);
+
     }
 }

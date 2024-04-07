@@ -21,6 +21,10 @@ namespace TravkingApplicationAPI.Data
                                 public DbSet<FeedBack> FeedBacks { get; set; }
                 public DbSet<DailyUpdate> DailyUpdates { get; set; }
 
+                public DbSet<TaskSubmissions> TaskSubmissions{get;set;}
+
+                public DbSet<Rating>Ratings {get;set;}
+
 
 
 
@@ -53,78 +57,77 @@ namespace TravkingApplicationAPI.Data
                 j.HasKey("UserId", "BatchId"); // Define the composite primary key
             });
 
-         modelBuilder.Entity<UserTask>()
+          // Define the relationship between UserTask and AssignedByUser (User)
+    modelBuilder.Entity<UserTask>()
         .HasOne(t => t.AssignedByUser)
         .WithMany()
         .HasForeignKey(t => t.AssignedBy)
-        .OnDelete(DeleteBehavior.Restrict); // Specify the OnDelete behavior
+        .OnDelete(DeleteBehavior.Restrict);
 
-    modelBuilder.Entity<UserTask>()
-        .HasOne(t => t.AssignedToUser)
-        .WithMany()
-        .HasForeignKey(t => t.AssignedTo)
-        .OnDelete(DeleteBehavior.Restrict); // Specify the OnDelete behavior
+    
 
-
-    // Define relationship between Task and SubTask
+    // Define the relationship between SubTask and UserTask
     modelBuilder.Entity<SubTask>()
         .HasOne(st => st.UserTask)
         .WithMany(t => t.SubTasks)
         .HasForeignKey(st => st.TaskId)
-        .OnDelete(DeleteBehavior.Cascade); // Specify the OnDelete behavior if needed
+        .OnDelete(DeleteBehavior.Cascade);
 
-    // Define relationship between Rating and User for RatedBy
-    modelBuilder.Entity<Rating>()
-        .HasOne(r => r.RatedByUser)
-        .WithMany()
-        .HasForeignKey(r => r.RatedBy)
-        .OnDelete(DeleteBehavior.Restrict); // Specify the OnDelete behavior if needed
-
-    // Define relationship between Rating and User for RatedTo
-    modelBuilder.Entity<Rating>()
-        .HasOne(r => r.RatedToUser)
-        .WithMany()
-        .HasForeignKey(r => r.RatedTo)
-        .OnDelete(DeleteBehavior.Restrict); // Specify the OnDelete behavior if needed
-
-    // Define relationship between Rating and SubTask
-    modelBuilder.Entity<Rating>()
-        .HasOne(r => r.SubTask)
-        .WithMany()
-        .HasForeignKey(r => r.SubTaskId)
-        .OnDelete(DeleteBehavior.Cascade); // Specify the OnDelete behavior if needed
-// Define relationship between Feedback and Task
+    // Define the relationship between FeedBack and UserTask
     modelBuilder.Entity<FeedBack>()
-        .HasOne(f => f.UserTask) // Specify the navigation property for Task in Feedback
-        .WithOne(t => t.FeedBack) // Specify the navigation property for Feedback in Task
-        .HasForeignKey<FeedBack>(f => f.TaskId) // Specify the foreign key property in Feedback
-        .OnDelete(DeleteBehavior.Cascade);// Specify the OnDelete behavior if needed
+        .HasOne(f => f.UserTask)
+        .WithOne(t => t.FeedBack)
+        .HasForeignKey<FeedBack>(f => f.TaskId)
+        .OnDelete(DeleteBehavior.Cascade);
 
-    // Define relationship between Feedback and User
+    // Define the relationship between FeedBack and User
     modelBuilder.Entity<FeedBack>()
         .HasOne(f => f.User)
         .WithMany()
         .HasForeignKey(f => f.UserId)
-        .OnDelete(DeleteBehavior.Restrict); // Specify the OnDelete behavior if needed
+        .OnDelete(DeleteBehavior.Restrict);
 
-    // Define relationship between Feedback and Rating (assuming one-to-many)
+    // Define the relationship between FeedBack and Rating
     modelBuilder.Entity<FeedBack>()
         .HasMany(f => f.Ratings)
-        .WithOne(f=>f.FeedBack) // Assuming there's no navigation property in Rating pointing back to Feedback
+        .WithOne(r => r.FeedBack)
         .HasForeignKey(r => r.FeedbackId)
-.OnDelete(DeleteBehavior.Restrict); 
+        .OnDelete(DeleteBehavior.Restrict);
 
-     // Define the relationship between DailyUpdate and User
+    // Define the relationship between DailyUpdate and User
     modelBuilder.Entity<DailyUpdate>()
-        .HasOne(d => d.User)                    // DailyUpdate has one User
-        .WithMany(u => u.DailyUpdates)          // User can have many DailyUpdates
-        .HasForeignKey(d => d.UserId); 
+        .HasOne(d => d.User)
+        .WithMany(u => u.DailyUpdates)
+        .HasForeignKey(d => d.UserId)
+        .OnDelete(DeleteBehavior.Restrict);
+// Define the relationship between Rating and RatedByUser (User)
+modelBuilder.Entity<Rating>()
+    .HasOne(r => r.RatedByUser)
+    .WithMany()
+    .HasForeignKey(r => r.RatedBy)
+    .OnDelete(DeleteBehavior.Restrict);
 
+// Define the relationship between Rating and RatedToUser (User)
+modelBuilder.Entity<Rating>()
+    .HasOne(r => r.RatedToUser)
+    .WithMany()
+    .HasForeignKey(r => r.RatedTo)
+    .OnDelete(DeleteBehavior.Restrict);
 
+// Define the relationship between Rating and TaskSubmissions
+modelBuilder.Entity<Rating>()
+    .HasOne(r => r.TaskSubmissions)
+    .WithMany() // Assuming TaskSubmissions can have multiple ratings
+    .HasForeignKey(r => r.TaskSubmissionId)
+    .OnDelete(DeleteBehavior.Cascade); // Specify the OnDelete behavior if needed
 
-
-        base.OnModelCreating(modelBuilder);
-
-    }
+// Define the relationship between Rating and FeedBack
+modelBuilder.Entity<Rating>()
+    .HasOne(r => r.FeedBack)
+    .WithMany(f => f.Ratings)
+    .HasForeignKey(r => r.FeedbackId)
+    .OnDelete(DeleteBehavior.Restrict);
+    base.OnModelCreating(modelBuilder);
+}
 }
 }

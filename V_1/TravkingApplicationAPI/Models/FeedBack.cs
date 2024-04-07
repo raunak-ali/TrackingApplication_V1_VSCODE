@@ -10,11 +10,13 @@ namespace TravkingApplicationAPI.Models
     
     public int FeedbackId { get; set; }
     public int TaskId { get; set; }
-    public string TotalAverageRating { get; set; }
-    public string Comments { get; set; }
+    public int TotalAverageRating { get; set; }
+
+    
+    public Comments Comments { get; set; }
     public int UserId { get; set; }
-    public UserTask UserTask { get; set; } // Navigation property for Task
-    public User User { get; set; } // Navigation property for User
-    public List<Rating> Ratings { get; set; } // Navigation property for Ratings
+    public UserTask? UserTask { get; set; } // Navigation property for Task
+    public User? User { get; set; } // Navigation property for User
+    public List<Rating>? Ratings { get; set; } // Navigation property for Ratings
 }
     }

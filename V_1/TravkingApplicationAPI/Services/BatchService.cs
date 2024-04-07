@@ -32,6 +32,16 @@ public async Task<List<Batch>>  GetAllBatches(int MentorId){
             throw;
         }
        }
+    
+    public async Task<List<Batch>> GetAllBatchesForEmployees(int UserId){
+        try{
+            return await Batch.GetAllBatchesForEmployees(UserId);
+        }
+        catch(Exception ex){
+            throw;
+        }
+       }
+
     }
 
 }

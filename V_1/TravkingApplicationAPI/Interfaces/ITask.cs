@@ -11,6 +11,12 @@ namespace TravkingApplicationAPI.Interfaces
     {
                Task<string> AddnewTask(AddTask usertask);
                 Task<List<UserTask>> GetAllTask(int BatchId);
+
+                Task<string> AddNewSubtask(AddSubTask subtask);
+
+                Task<List<SubTask>> GetAllSubtask(int TaskId);
+
+                
                 
  
     }

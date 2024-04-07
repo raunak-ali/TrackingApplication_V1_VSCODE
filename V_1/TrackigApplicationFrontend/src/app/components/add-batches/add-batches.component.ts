@@ -37,6 +37,7 @@ export class AddBatchesComponent implements OnInit {
     if (this.AddBatchForm.valid) {
 
       const formData = this.AddBatchForm.value;
+      console.log(formData);
       if (this.existing_mentor != null) {
         // Check if this.existing_mentor is a valid number string
         const mentorId = Number(this.existing_mentor);

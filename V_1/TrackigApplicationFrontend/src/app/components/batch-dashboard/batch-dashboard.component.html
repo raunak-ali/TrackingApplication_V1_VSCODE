@@ -1,7 +1,55 @@
 <p>batch-dashboard works!</p>
 <div class="container">
+  <button (click)="showForm = !showForm">AddNewTask</button>
+  <div *ngIf="showForm">
+    <form [formGroup]="AddNewTaskForm" (ngSubmit)="AddNewTask()">
+
+      <label for="taskName">Task Name:</label>
+      <input type="text" formControlName="TaskName" id="taskName">
+
+
+      <label for="description">Description:</label>
+      <input type="text" formControlName="Description" id="description">
+
+
+      <label for="priority">Priority:</label>
+      <input type="number" formControlName="Priority" id="priority">
+
+
+      <label for="deadLine">Deadline:</label>
+      <input type="date" formControlName="DeadLine" id="deadLine">
+
+      <label for="assignedTo">Assigned To:</label>
+
+      <!-- Multiselect dropdown -->
+      <div class="modal-box">
+        <div class="sd-multiSelect form-group">
+          <label>Assigned To</label>
+          <div class="checkbox-options">
+            <div *ngFor="let user of AllEmployyes">
+              <label class="checkbox-label">
+                <input type="checkbox" (change)="updateAssignedTo(user.userId, $event)" [checked]="AddNewTaskForm.get('AssignedTo')?.value.includes(user.userId)">
+                {{ user.name }}
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input box to display selected users -->
+
+
+      <label for="comments">Comments:</label>
+      <input type="text" formControlName="Comments" id="comments">
+
+
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
   <div *ngIf="AllTasks.length > 0; else noTransactions">
-    <h2>All Batches</h2>
+    <h2>All Tasks</h2>
     <div class="table-responsive">
       <table class="table table-striped">
         <thead>
@@ -19,6 +67,9 @@
             <td>{{ task.assignedBy }}</td>
             <td>{{ task.assignedTo }}</td>
             <td>{{ task.taskName }}</td>
+            <td>
+              <button class="btn btn-primary" (click)="viewBatch(task.userTaskID)">View SubTasks</button>
+          </td>
 
             <!-- Add more table cells as needed -->
           </tr>

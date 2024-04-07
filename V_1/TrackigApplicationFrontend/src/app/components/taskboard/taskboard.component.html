@@ -1,0 +1,64 @@
+<p>taskboard works!</p>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="title">Title:</label>
+    <input type="text" id="title" formControlName="Title">
+  </div>
+  <div>
+    <label for="description">Description:</label>
+    <textarea id="description" formControlName="Description"></textarea>
+  </div>
+  <div>
+    <label for="status">Status:</label>
+    <input type="number" id="status" formControlName="Status">
+  </div>
+
+  <div>
+    <label for="FileName">FileName:</label>
+    <p>TYPE THE FULL FILE NAME WITH THE CORRECT EXTENSION PLEASE</p>
+    <input type="text" id="status" formControlName="FileName">
+  </div>
+
+  <div>
+    <label for="fileUploadTaskFileUpload">File (if any):</label>
+    <input type="file" (change)="onFileChange($event)" id="fileUploadTaskFileUpload"
+      formControlName="FileUploadTaskFileUpload">
+  </div>
+  <button type="submit" [disabled]="!form.valid">Submit</button>
+</form>
+<div>
+  <h2>All SubTasks</h2>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>taskId</th>
+          <th>title</th>
+          <th>description</th>
+          <th>status</th>
+          <!-- Add more table headers as needed -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let subtask of AllSubtasks">
+          <td>{{ subtask.taskId }}</td>
+          <td>{{ subtask.title }}</td>
+          <td>{{ subtask.description }}</td>
+          <td>{{ subtask.status }}</td>
+          <td>
+            <button (click)="downloadFile(subtask.fileUploadTaskPdf, subtask.fileName)">Download</button>
+            <!-- Button to trigger file download -->
+          </td>
+          <td>
+            <button (click)="SubTaskSubmissions(subtask.subTaskId)">SubTask Submissions</button>
+            <!-- Button to trigger file download -->
+          </td>
+          <td>
+          </td>
+
+          <!-- Add more table cells as needed -->
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

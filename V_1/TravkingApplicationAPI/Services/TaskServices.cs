@@ -30,6 +30,23 @@ namespace TravkingApplicationAPI.Services
             throw;
         }
        }
+       public async Task<string> AddNewSubtask(AddSubTask subtask)
+        {
+            try{
+                return await task.AddNewSubtask(subtask);
+            }
+            catch(Exception e){
+                throw;
+            }}
+         public async Task<List<SubTask>> GetAllSubtask(int TaskId)
+        {
+try{
+    return await task.GetAllSubtask(TaskId);
+}
+catch(Exception e){
+    throw;
+}
+}
     
     
     

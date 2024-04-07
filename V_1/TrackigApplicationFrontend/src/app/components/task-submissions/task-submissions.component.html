@@ -1,0 +1,125 @@
+<p>task-submissions works!</p>
+
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Task Submission Details</th>
+        <th>Rating</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of combinedData">
+        <td>
+          <h2>Submission Details</h2>
+          <table class="table">
+            <tr>
+              <td>TaskSubmissionsId:</td>
+              <td>{{ item.submissionDetails.TaskSubmissionsId }}</td>
+            </tr>
+            <tr>
+              <td>User Id:</td>
+              <td>{{ item.submissionDetails.UserId }}</td>
+            </tr>
+            <tr>
+              <td>Subtask ID:</td>
+              <td>{{ item.submissionDetails.subtaskid }}</td>
+            </tr>
+            <tr>
+              <td>Status:</td>
+              <td>{{ item.submissionDetails.status }}</td>
+            </tr>
+            <tr>
+              <td>Submitted File Name:</td>
+              <td>{{ item.submissionDetails.submittedFileName }}</td>
+            </tr>
+          </table>
+        </td>
+        <td>
+          <h2>Rating</h2>
+          <div *ngIf="item.rating">{{ item.rating.RatingValue}}</div>
+          <div *ngIf="!item.rating">No rating available
+            <form [formGroup]="ratingform" (ngSubmit)="submitRating(item.submissionDetails.TaskSubmissionsId, item.submissionDetails.UserId)">
+              <div class="form-group">
+                <label for="ratingValue">Rating Value:</label>
+                <input type="number" class="form-control" id="ratingValue" formControlName="RatingValue" required>
+              </div>
+              <div class="form-group">
+                <label for="comments">Comments:</label>
+                <select class="form-control" id="comments" formControlName="Comments" required>
+                  <option *ngFor="let comment of commentsOptions; let i = index" [value]="i">{{ comment }}</option>
+                </select>
+              </div>
+              <!-- Hidden field to store TaskSubmissionId -->
+              <input type="hidden" formControlName="TaskSubmissionId">
+              <!-- Hidden field to store RatedTo value -->
+              <input type="hidden" formControlName="RatedTo">
+              <button type="submit" class="btn btn-primary">Submit Rating</button>
+            </form>
+            </div>
+
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="table-responsive" *ngIf="submissionDetails">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Submission Details</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <h2>Submission Details</h2>
+          <table class="table">
+            <tr>
+              <td>Task Submissions Id:</td>
+              <td>{{ submissionDetails.TaskSubmissionsId }}</td>
+            </tr>
+            <tr>
+              <td>User Id:</td>
+              <td>{{ submissionDetails.UserId }}</td>
+            </tr>
+            <tr>
+              <td>Subtask Id:</td>
+              <td>{{ submissionDetails.subtaskid }}</td>
+            </tr>
+          </table>
+          <div *ngIf="submissionDetails.FileUploadSubmission == null">
+            <form [formGroup]="addTaskForm" (ngSubmit)="onSubmit()">
+              <div class="form-group">
+                <label for="submittedFileName">Submitted File Name:</label>
+                <input type="text" class="form-control" id="submittedFileName" formControlName="submittedFileName">
+                <div *ngIf="addTaskForm.get('submittedFileName').invalid && (addTaskForm.get('submittedFileName').dirty || addTaskForm.get('submittedFileName').touched)" class="invalid-feedback">
+                  Submitted File Name is required.
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="fileUpload">File Upload:</label>
+                <input type="file" class="form-control-file" id="fileUpload" (change)="onFileChange($event)">
+                <div *ngIf="addTaskForm.get('FileUpload').invalid && (addTaskForm.get('FileUpload').dirty || addTaskForm.get('FileUpload').touched)" class="invalid-feedback">
+                  File Upload is required.
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            <p class="text-muted">INCOMPLETE SUBMIT SOON PLEASE</p>
+          </div>
+        </td>
+        <td>Action Column Content</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="rating">
+  <h2>Rating</h2>
+  <p>{{ rating.RatingValue }}</p>
+  <!-- Display other properties of the Rating object as needed -->
+</div>

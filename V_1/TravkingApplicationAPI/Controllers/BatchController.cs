@@ -24,7 +24,8 @@ namespace TravkingApplicationAPI.Controllers
     this.BatchService = batchService;
 }
 [HttpPost]
-[Authorize(Roles ="Admin")]
+//[Authorize(Roles ="Admin")]
+[AllowAnonymous]
 [DisableRequestSizeLimit]
 [Route("AddBatch")]
 public async Task<ActionResult>  AddBatch([FromBody]dynamic data)//Try [FromBody]
@@ -52,7 +53,7 @@ try{
 public async Task<ActionResult>  GetAllBatches([FromBody]dynamic data)//Try [FromBody]
 {
     try{
-int MentorId=data.GetProperty("MentorId").GetInt32();
+int MentorId=data.GetProperty("UserId").GetInt32();
         var res = await BatchService.GetAllBatches(MentorId);
         if(res == null)
         {
@@ -68,7 +69,30 @@ int MentorId=data.GetProperty("MentorId").GetInt32();
 
 }
 
+//GetAllBatchesForEmployees
 
+[HttpPost]
+[Authorize(Roles ="Employee")]
+[DisableRequestSizeLimit]
+[Route("GetAllBatchesForEmployees")]
+public async Task<ActionResult>  GetAllBatchesForEmployees([FromBody]dynamic data)//Try [FromBody]
+{
+    try{
+int UserId=data.GetProperty("UserId").GetInt32();
+        var res = await BatchService.GetAllBatchesForEmployees(UserId);
+        if(res == null)
+        {
+            return BadRequest();
+        }
+        return Ok(new{message=res});
+    
+    }
+    catch (Exception ex)
+    {
+        return StatusCode(500, ex.Message);
+    }
+
+}
 
     }
 }

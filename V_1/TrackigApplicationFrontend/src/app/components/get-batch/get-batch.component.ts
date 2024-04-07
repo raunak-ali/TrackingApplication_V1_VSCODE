@@ -34,13 +34,17 @@ export class GetBatchComponent implements OnInit {
 
   fetchTransactions(): void {
     this.getbatchesservice.Getall(this.getMentorID).subscribe(
-      (data: GetBatches[]) => {
-        this.allBatches = data;
-        //this.createChart();
-        console.log(this.allBatches);
+      (data: any) => {
+        // Ensure data.$values exists and is an array before accessing it
+        if (Array.isArray(data.$values)) {
+          this.allBatches = data.$values;
+          console.log(this.allBatches);
+        } else {
+          console.error('Unexpected data format:', data);
+        }
       },
       (error) => {
-        console.error('Error fetching transactions:', error);
+        console.error('Error fetching batches:', error);
       }
     );
   }

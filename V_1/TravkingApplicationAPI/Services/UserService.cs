@@ -38,5 +38,17 @@ public async Task<string> LoginUser(Login user){
                 throw;
             }
             }
+        public async Task<List<User>> GetUserByBatch(int BatchId)
+        {
+            try{
+                return await User.GetUserByBatch(BatchId);
+
+
+            }
+            catch(Exception ex){
+                throw;
+            }
+            }
+
     }
 }

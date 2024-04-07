@@ -6,6 +6,9 @@ import { AddBatchesComponent } from './components/add-batches/add-batches.compon
 import { GetBatchComponent } from './components/get-batch/get-batch.component';
 import { MentorDashboardComponent } from './components/mentor-dashboard/mentor-dashboard.component';
 import { BatchDashboardComponent } from './components/batch-dashboard/batch-dashboard.component';
+import { TaskboardComponent } from './components/taskboard/taskboard.component';
+import { EmployeeDashBoardComponent } from './components/employee-dash-board/employee-dash-board.component';
+import { TaskSubmissionsComponent } from './components/task-submissions/task-submissions.component';
 
 const routes: Routes = [
   {
@@ -33,6 +36,18 @@ const routes: Routes = [
       {
         path:"Batch_dashboard/:batchId",
         component:BatchDashboardComponent
+      },
+      {
+        path:"Task_dashboard/:taskiId",
+        component:TaskboardComponent
+      },
+      {
+        path:"Employee_DashBoard",
+        component:EmployeeDashBoardComponent
+      },
+      {
+        path:"SubTaskSubmission/:subtaskid",
+        component:TaskSubmissionsComponent
       }
 
 

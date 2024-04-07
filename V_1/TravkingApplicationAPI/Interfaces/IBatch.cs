@@ -10,7 +10,9 @@ namespace TravkingApplicationAPI.Interfaces
     public interface IBatch
     {
         Task<string> AddnewBatch(Addbatch batch);
-                Task<List<Batch>> GetAllBatches(int MentorId);
+        Task<List<Batch>> GetAllBatches(int MentorId);
+
+        Task<List<Batch>>GetAllBatchesForEmployees(int UserId);
                
 
 
