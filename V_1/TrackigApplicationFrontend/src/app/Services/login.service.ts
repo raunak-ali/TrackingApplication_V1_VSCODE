@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
+import { User } from '../Models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -28,12 +29,22 @@ private tokenKey = 'auth_token';
         if(response && response.userProfile){
           this.saveUser(response.userProfile);
           this.savecurrentUser(response.userProfile);
+          this.setUserInSession(response.userProfile);
         }
       })
     );
   }
   private saveUser(User:any): void {
     sessionStorage.setItem(this.User,User.UserId);
+  }
+
+  setUserInSession(User: any) {
+    sessionStorage.setItem('currentUser', JSON.stringify(User));
+  }
+
+  getUserFromSession() {
+    const userString = sessionStorage.getItem('currentUser');
+    return userString ? JSON.parse(userString) : null;
   }
 
   getUser(): string |null {

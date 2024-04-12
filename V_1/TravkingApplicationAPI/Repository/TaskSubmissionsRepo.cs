@@ -62,6 +62,7 @@ namespace TravkingApplicationAPI.Repository
             {
 
                 var existing_TaskSubmission = context.TaskSubmissions.Where(s => s.subtaskid == subtaskid).ToList();
+                
                 List<object> response = new List<object>();
 
                 if (existing_TaskSubmission != null)
@@ -71,7 +72,8 @@ namespace TravkingApplicationAPI.Repository
                         var existing_rating = context.Ratings
                             .FirstOrDefault(r => r.TaskSubmissionId == submission.TaskSubmissionsId
                             );
-
+var existing_user=context.Users.FirstOrDefault(u=>u.UserId==submission.UserId);
+submission.SubmittedByUser=existing_user;
 
                         // Create an object to hold submission details and rating
                         var submissionData = new
@@ -108,6 +110,8 @@ namespace TravkingApplicationAPI.Repository
                 if (existing_TaskSubmission != null)
                 {
                     var existing_Rating = context.Ratings.FirstOrDefault(r => r.TaskSubmissionId == existing_TaskSubmission.TaskSubmissionsId);
+                    var existing_user=context.Users.FirstOrDefault(u=>u.UserId==existing_TaskSubmission.UserId);
+existing_TaskSubmission.SubmittedByUser=existing_user;
                     var submissionData = new
                     {
 
@@ -169,6 +173,7 @@ namespace TravkingApplicationAPI.Repository
                     var feed = 1;
                     var existing_feedback = context.FeedBacks.FirstOrDefault(
                         f => f.TaskId == taskid && f.UserId==addRating.RatedTo);
+                        
                     if (existing_feedback != null)
                     {
                         feed = existing_feedback.FeedbackId;
@@ -178,6 +183,16 @@ namespace TravkingApplicationAPI.Repository
 
 
                         existing_feedback.TotalAverageRating = ((1 / count_ofsubtasks) * addRating.RatingValue) + existing_feedback.TotalAverageRating;
+                        
+                        //Update the Total Average rating of that user as well 
+                        var existing_user=context.Users.FirstOrDefault(u=>u.UserId==addRating.RatedTo);
+                        var count_tasks_assigned_to_user=context.Tasks
+    .Where(t => t.AssignedTo != null && t.AssignedTo.Contains(addRating.RatedTo))
+    .Count();
+
+
+                        existing_user.Total_Average_RatingStatus=((1 / count_tasks_assigned_to_user) *  existing_feedback.TotalAverageRating) + existing_user.Total_Average_RatingStatus;
+                        
                         var ratingThresholds = new Dictionary<double, Comments>
 {
     { 90, Comments.VeryGood },

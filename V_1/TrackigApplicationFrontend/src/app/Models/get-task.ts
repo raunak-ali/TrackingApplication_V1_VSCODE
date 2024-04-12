@@ -1,10 +1,11 @@
 import { Batch } from "./batch";
+import { SubTask } from "./sub-task";
 import { User } from "./user";
 
 export class GetTask {
     userTaskID!: number;
     taskName!: string;
-    Description!: string;
+    description!: string;
     Priority!: number;
     deadLine!: Date;
     status!: number;
@@ -15,8 +16,8 @@ export class GetTask {
     createdAt!: Date | null;
     assignedByUser!: User | null; // Nav Property
    // batches!: Batch | null; // Nav Property
-    assignedToUser!: User | null; // Nav Property
-    subTasks!:  null; // Nav Property
+    assignedToUser!: User[] | null; // Nav Property
+    subTasks!: SubTask[]; // Nav Property
     feedBack!: null; // Nav Property
 
 

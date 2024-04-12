@@ -50,6 +50,7 @@ export class LoginComponent  implements OnInit {
             this.router.navigate(['Employee_DashBoard']);
           }
           else{
+            this.router.navigate(['/AdminDashboard']);
             this.setRole("Admin");
           }
 

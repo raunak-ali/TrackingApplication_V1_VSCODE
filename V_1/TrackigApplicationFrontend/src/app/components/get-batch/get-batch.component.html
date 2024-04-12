@@ -1,31 +1,22 @@
-<p>get-batch works!</p>
 <div class="container">
+  <button *ngIf="currentUser.Role==2" mat-button color="primary" (click)="addBatch(getMentorID)">Add New Batch</button>
   <div *ngIf="allBatches.length > 0; else noTransactions">
-    <h2>All Batches</h2>
-    <div class="table-responsive">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>batch ID</th>
-            <th>batchName</th>
-            <th>Domain</th>
-            <th>MentorId</th>
-            <!-- Add more table headers as needed -->
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let batch of allBatches">
-            <td>{{ batch.batchId }}</td>
-            <td>{{ batch.batchName }}</td>
-            <td>{{ batch.domain }}</td>
-            <td>{{ batch.mentorId }}</td>
-            <td>
-              <button class="btn btn-primary" (click)="viewBatch(batch.batchId)">View Batch</button>
-          </td>
-            <!-- Add more table cells as needed -->
-          </tr>
-        </tbody>
-      </table>
+    <div class="header">
+      <h2>All Batches</h2>
+    </div>
+    <div class="container">
+      <div class="card-container">
+        <mat-card *ngFor="let batch of allBatches" class="custom-card">
+          <mat-card-header>
+            <mat-card-title>{{ batch.batchName }}</mat-card-title>
+            <mat-card-subtitle>Domain: {{ batch.domain}}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <!-- Add any additional content here -->
+            <button mat-button color="primary" (click)="viewBatch(batch.batchId)">View Batch</button>
+          </mat-card-content>
+        </mat-card>
+      </div>
     </div>
   </div>
 

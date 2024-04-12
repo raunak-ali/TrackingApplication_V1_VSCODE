@@ -1,0 +1,59 @@
+.profile {
+  padding: 20px;
+}
+
+.user-info {
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.toggle-button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.toggle-button:hover {
+  background-color: #0056b3;
+}
+
+.batches,
+.tasks {
+  display: contents;
+}
+
+.batches h2,
+.tasks h2 {
+  margin-bottom: 10px;
+}
+
+.subtasks {
+  margin-left: 20px;
+}
+
+.subtasks ul {
+  list-style-type: none;
+}
+
+.show {
+  display: block;
+}
+
+/* Center the form card */
+.form-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 400px;
+  width: 100%;
+}
+

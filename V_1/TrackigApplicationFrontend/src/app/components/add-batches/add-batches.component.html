@@ -1,29 +1,31 @@
-<p>add-batches works!</p>
-<form [formGroup]="AddBatchForm" (ngSubmit)="onSubmit()">
+<div class="content">
+<form [formGroup]="AddBatchForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
+  <mat-form-field appearance="fill">
+    <mat-label>Domain</mat-label>
+    <input matInput formControlName="Domain" id="Domain" placeholder="Domain"required>
+    <mat-error *ngIf="AddBatchForm.get('Domain')?.invalid">Task name is required.</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Description</mat-label>
+    <input matInput formControlName="Description" id="Description" placeholder="Description of this task">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label> MentorId</mat-label>
+    <mat-select formControlName="MentorId" id=" MentorId">
+      <mat-option *ngFor="let mentor of allMentors" [value]="mentor.userId">Mentor Name:-{{ mentor.name }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+
   <div class="form-group">
-    <label for="MentorId">Mentor ID</label>
-    <input type="number" class="form-control" id="MentorId" formControlName="MentorId">
-  </div>
-  <div class="form-group">
-    <label for="Domain">Domain</label>
-    <input type="text" class="form-control" id="Domain" formControlName="Domain">
-    <div *ngIf="AddBatchForm.get('Domain')?.invalid && AddBatchForm.get('Domain')?.touched" class="text-danger">
-      Domain is required
+    <label for="Employee_info_Excel_File">Employee_info_Excel_File</label>
+    <input type="file" class="form-control-file" id="Employee_info_Excel_File" (change)="onFileChange($event)">
+    <div *ngIf="AddBatchForm.get('Employee_info_Excel_File')?.invalid && (AddBatchForm.get('Employee_info_Excel_File')?.dirty || AddBatchForm.get('Employee_info_Excel_File')?.touched)" class="invalid-feedback">
+      File Upload is required.
     </div>
   </div>
-  <div class="form-group">
-    <label for="Description">Description</label>
-    <textarea class="form-control" id="Description" formControlName="Description"></textarea>
-    <div *ngIf="AddBatchForm.get('Description')?.invalid && AddBatchForm.get('Description')?.touched" class="text-danger">
-      Description is required
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="Employee_info_Excel_File">Employee Info Excel</label>
-    <input type="file" (change)="onFileChange($event)" accept=".xlsx" formControlName="Employee_info_Excel_File" id="Employee_info_Excel_File" class="Employee_info_Excel_File"/>
-    <div *ngIf="AddBatchForm.get('Employee_info_Excel_File')?.invalid && AddBatchForm.get('Employee_info_Excel_File')?.touched" class="text-danger">
-      Employee Info Excel is required
-    </div>
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
+
+  <!-- Add other form fields as needed -->
+  <button type="submit" mat-raised-button color="primary">Submit</button>
 </form>
+</div>

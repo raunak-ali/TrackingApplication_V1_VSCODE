@@ -14,6 +14,7 @@ export class GetBatchComponent implements OnInit {
   error: string | undefined;
   allBatches!: GetBatches[];
   getMentorID!: any;
+  currentUser = this.loginservice.getUserFromSession();
 
 
   constructor( private getbatchesservice: GetBatchesService,
@@ -52,5 +53,17 @@ export class GetBatchComponent implements OnInit {
   viewBatch(batchId: number): void {
     // Navigate to another component with batchId as a parameter
     this.router.navigate(['/Batch_dashboard', batchId]);
+}
+
+addBatch(userid: number): void {
+  // Navigate to another component with batchId as a parameter
+  this.router.navigate(['/AddNewBatch', userid]);
+}
+addMentor(userid: number): void {
+  // Navigate to another component with batchId as a parameter
+  this.router.navigate(['/AddMentor']);
+}
+toggleDetails(batch: any): void {
+  batch.showDetails = !batch.showDetails; // Toggle the showDetails property
 }
 }

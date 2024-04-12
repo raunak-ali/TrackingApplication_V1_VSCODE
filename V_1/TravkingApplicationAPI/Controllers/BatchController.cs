@@ -20,79 +20,82 @@ namespace TravkingApplicationAPI.Controllers
         private readonly BatchService BatchService;
 
         public BatchController(BatchService batchService)
-{
-    this.BatchService = batchService;
-}
-[HttpPost]
-//[Authorize(Roles ="Admin")]
-[AllowAnonymous]
-[DisableRequestSizeLimit]
-[Route("AddBatch")]
-public async Task<ActionResult>  AddBatch([FromBody]dynamic data)//Try [FromBody]
-{
-try{ 
-    var temp=data.GetProperty("batch").GetRawText();
-    var batch = JsonSerializer.Deserialize<Addbatch>(temp);
-    var res = await BatchService.AddnewBatch(batch);
-        if(res == null)
         {
-            return BadRequest();
+            this.BatchService = batchService;
         }
-        return Ok(new{message=res});
-    }
-    catch (Exception ex)
-    {
-        return StatusCode(500, ex.Message);
-    }
-}
-
-[HttpPost]
-[Authorize(Roles ="Mentor")]
-[DisableRequestSizeLimit]
-[Route("GetAllBatches")]
-public async Task<ActionResult>  GetAllBatches([FromBody]dynamic data)//Try [FromBody]
-{
-    try{
-int MentorId=data.GetProperty("UserId").GetInt32();
-        var res = await BatchService.GetAllBatches(MentorId);
-        if(res == null)
+        [HttpPost]
+        //[Authorize(Roles ="Admin")]
+        [AllowAnonymous]
+        [DisableRequestSizeLimit]
+        [Route("AddBatch")]
+        public async Task<ActionResult> AddBatch([FromBody] dynamic data)//Try [FromBody]
         {
-            return BadRequest();
+            try
+            {
+                var temp = data.GetProperty("batch").GetRawText();
+                var batch = JsonSerializer.Deserialize<Addbatch>(temp);
+                var res = await BatchService.AddnewBatch(batch);
+                if (res == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(new { message = res });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
-        return Ok(new{message=res});
-    
-    }
-    catch (Exception ex)
-    {
-        return StatusCode(500, ex.Message);
-    }
 
-}
-
-//GetAllBatchesForEmployees
-
-[HttpPost]
-[Authorize(Roles ="Employee")]
-[DisableRequestSizeLimit]
-[Route("GetAllBatchesForEmployees")]
-public async Task<ActionResult>  GetAllBatchesForEmployees([FromBody]dynamic data)//Try [FromBody]
-{
-    try{
-int UserId=data.GetProperty("UserId").GetInt32();
-        var res = await BatchService.GetAllBatchesForEmployees(UserId);
-        if(res == null)
+        [HttpPost]
+        [Authorize(Roles = "Mentor,Admin")]
+        [DisableRequestSizeLimit]
+        [Route("GetAllBatches")]
+        public async Task<ActionResult> GetAllBatches([FromBody] dynamic data)//Try [FromBody]
         {
-            return BadRequest();
-        }
-        return Ok(new{message=res});
-    
-    }
-    catch (Exception ex)
-    {
-        return StatusCode(500, ex.Message);
-    }
+            try
+            {
+                int MentorId = data.GetProperty("UserId").GetInt32();
+                var res = await BatchService.GetAllBatches(MentorId);
+                if (res == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(new { message = res });
 
-}
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
+        }
+
+        //GetAllBatchesForEmployees
+
+        [HttpPost]
+        [Authorize(Roles = "Employee,Mentor,Admin")]
+        [DisableRequestSizeLimit]
+        [Route("GetAllBatchesForEmployees")]
+        public async Task<ActionResult> GetAllBatchesForEmployees([FromBody] dynamic data)//Try [FromBody]
+        {
+            try
+            {
+                int UserId = data.GetProperty("UserId").GetInt32();
+                var res = await BatchService.GetAllBatchesForEmployees(UserId);
+                if (res == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(new { message = res });
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
+        }
 
     }
 }

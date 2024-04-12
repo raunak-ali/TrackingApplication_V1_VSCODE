@@ -1,125 +1,121 @@
-<p>task-submissions works!</p>
 
-<div class="table-responsive">
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Task Submission Details</th>
-        <th>Rating</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let item of combinedData">
-        <td>
-          <h2>Submission Details</h2>
-          <table class="table">
-            <tr>
-              <td>TaskSubmissionsId:</td>
-              <td>{{ item.submissionDetails.TaskSubmissionsId }}</td>
-            </tr>
-            <tr>
-              <td>User Id:</td>
-              <td>{{ item.submissionDetails.UserId }}</td>
-            </tr>
-            <tr>
-              <td>Subtask ID:</td>
-              <td>{{ item.submissionDetails.subtaskid }}</td>
-            </tr>
-            <tr>
-              <td>Status:</td>
-              <td>{{ item.submissionDetails.status }}</td>
-            </tr>
-            <tr>
-              <td>Submitted File Name:</td>
-              <td>{{ item.submissionDetails.submittedFileName }}</td>
-            </tr>
-          </table>
-        </td>
-        <td>
-          <h2>Rating</h2>
-          <div *ngIf="item.rating">{{ item.rating.RatingValue}}</div>
-          <div *ngIf="!item.rating">No rating available
-            <form [formGroup]="ratingform" (ngSubmit)="submitRating(item.submissionDetails.TaskSubmissionsId, item.submissionDetails.UserId)">
-              <div class="form-group">
-                <label for="ratingValue">Rating Value:</label>
-                <input type="number" class="form-control" id="ratingValue" formControlName="RatingValue" required>
-              </div>
-              <div class="form-group">
-                <label for="comments">Comments:</label>
-                <select class="form-control" id="comments" formControlName="Comments" required>
-                  <option *ngFor="let comment of commentsOptions; let i = index" [value]="i">{{ comment }}</option>
-                </select>
-              </div>
-              <!-- Hidden field to store TaskSubmissionId -->
-              <input type="hidden" formControlName="TaskSubmissionId">
-              <!-- Hidden field to store RatedTo value -->
-              <input type="hidden" formControlName="RatedTo">
-              <button type="submit" class="btn btn-primary">Submit Rating</button>
-            </form>
+
+<!-- Header -->
+<div class="header">
+  <h2>Dashboard <img src="/assets/Mentor_Dashboard_Icon.png" alt="Mentor Dashboard Icon" class="icon"></h2>
+  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu" class="menu-button">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu" class="custom-menu">
+    <button mat-menu-item (click)="navigateTo('dashboard')">Dashboard</button>
+    <button mat-menu-item (click)="navigateTo('batches')">Batches</button>
+    <button mat-menu-item (click)="navigateTo('profile')">Profile</button>
+    <button mat-menu-item (click)="navigateTo('employees')">Employees</button>
+    <button mat-menu-item (click)="logout()">Logout</button>
+  </mat-menu>
+</div>
+
+<!-- Main Content -->
+<div class="content">
+  <div *ngIf="currentUser.Role!=0"  class="excel-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Submitted By</th>
+          <th>The File Uploaded</th>
+          <th>The Rating</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of combinedData">
+          <td>{{ item.submissionDetails.SubmittedByUser.Name }}</td>
+          <td>
+            <div *ngIf="item.submissionDetails.FileUploadSubmission != null">
+              <button class="btn btn-info" (click)="downloadFile(item.submissionDetails.FileUploadSubmission, item.submissionDetails.submittedFileName)">Download Submission File</button>
             </div>
-
-
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<div class="table-responsive" *ngIf="submissionDetails">
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Submission Details</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>
-          <h2>Submission Details</h2>
-          <table class="table">
-            <tr>
-              <td>Task Submissions Id:</td>
-              <td>{{ submissionDetails.TaskSubmissionsId }}</td>
-            </tr>
-            <tr>
-              <td>User Id:</td>
-              <td>{{ submissionDetails.UserId }}</td>
-            </tr>
-            <tr>
-              <td>Subtask Id:</td>
-              <td>{{ submissionDetails.subtaskid }}</td>
-            </tr>
-          </table>
-          <div *ngIf="submissionDetails.FileUploadSubmission == null">
-            <form [formGroup]="addTaskForm" (ngSubmit)="onSubmit()">
-              <div class="form-group">
-                <label for="submittedFileName">Submitted File Name:</label>
-                <input type="text" class="form-control" id="submittedFileName" formControlName="submittedFileName">
-                <div *ngIf="addTaskForm.get('submittedFileName').invalid && (addTaskForm.get('submittedFileName').dirty || addTaskForm.get('submittedFileName').touched)" class="invalid-feedback">
-                  Submitted File Name is required.
+            <div *ngIf="item.submissionDetails.FileUploadSubmission == null">
+              <form [formGroup]="addTaskForm" (ngSubmit)="onSubmit()">
+                <div class="form-group">
+                  <label for="submittedFileName">Submitted File Name:</label>
+                  <input type="text" class="form-control" id="submittedFileName" formControlName="submittedFileName" placeholder="Type the full file name with the correct extension please" required>
+                  <div *ngIf="addTaskForm.get('submittedFileName').invalid && (addTaskForm.get('submittedFileName').dirty || addTaskForm.get('submittedFileName').touched)" class="invalid-feedback">
+                    Submitted File Name is required.
+                  </div>
                 </div>
-              </div>
-              <div class="form-group">
-                <label for="fileUpload">File Upload:</label>
-                <input type="file" class="form-control-file" id="fileUpload" (change)="onFileChange($event)">
-                <div *ngIf="addTaskForm.get('FileUpload').invalid && (addTaskForm.get('FileUpload').dirty || addTaskForm.get('FileUpload').touched)" class="invalid-feedback">
-                  File Upload is required.
+                <div class="form-group">
+                  <label for="fileUpload">File Upload:</label>
+                  <input type="file" class="form-control-file" id="fileUpload" (change)="onFileChange($event)">
+                  <div *ngIf="addTaskForm.get('FileUpload').invalid && (addTaskForm.get('FileUpload').dirty || addTaskForm.get('FileUpload').touched)" class="invalid-feedback">
+                    File Upload is required.
+                  </div>
                 </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+              <p class="text-muted">INCOMPLETE SUBMIT SOON PLEASE</p>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="item.rating != null">
+              {{ item.rating.RatingValue }}
+            </div>
+            <div *ngIf="item.rating == null">
+              <button (click)="showRatingForm(item.submissionDetails.TaskSubmissionsId, item.submissionDetails.UserId)" class="btn btn-primary">Add Rating</button>
+              <div *ngIf="showRatingForms[item.submissionDetails.TaskSubmissionsId + item.submissionDetails.UserId]">
+                <form [formGroup]="ratingform" (ngSubmit)="submitRating(item.submissionDetails.TaskSubmissionsId, item.submissionDetails.UserId)">
+                  <div class="form-group">
+                    <label for="ratingValue">Rating Value:</label>
+                    <input type="number" class="form-control" id="ratingValue" formControlName="RatingValue" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="comments">Comments:</label>
+                    <select class="form-control" id="comments" formControlName="Comments" required>
+                      <option *ngFor="let comment of commentsOptions; let i = index" [value]="i">{{ commentsOptions[i] }}</option>
+                    </select>
+                  </div>
+                  <!-- Hidden fields -->
+                  <input type="hidden" formControlName="TaskSubmissionId">
+                  <input type="hidden" formControlName="RatedTo">
+                  <button type="submit" class="btn btn-primary">Submit Rating</button>
+                </form>
               </div>
-              <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
-            <p class="text-muted">INCOMPLETE SUBMIT SOON PLEASE</p>
-          </div>
-        </td>
-        <td>Action Column Content</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-<div *ngIf="rating">
-  <h2>Rating</h2>
-  <p>{{ rating.RatingValue }}</p>
-  <!-- Display other properties of the Rating object as needed -->
-</div>
+  <!-- Table for Submission Details -->
+  <div  class="excel-table" *ngIf="submissionDetails && currentUser.Role==0">
+    <table>
+      <thead>
+        <tr>
+          <th>Submitted By</th>
+          <th>The File Uploaded</th>
+          <th>The Rating</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ submissionDetails.SubmittedByUser.Name }}</td>
+          <td>
+            <div *ngIf="submissionDetails.FileUploadSubmission != null">
+              Your Submission:
+              <button class="btn btn-info" (click)="downloadFile(submissionDetails.FileUploadSubmission, submissionDetails.submittedFileName)">{{ submissionDetails.submittedFileName }}</button>
+            </div>
+            <div *ngIf="submissionDetails.FileUploadSubmission == null">
+              <p>The User is Yet to make a submission for this</p>
+              <!-- Your form for file upload -->
+            </div>
+          </td>
+          <td>
+            <div *ngIf="rating != null">
+              {{ rating.RatingValue }}
+              <!-- Include comments if needed -->
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>

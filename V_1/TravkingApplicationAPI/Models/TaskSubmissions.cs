@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace TravkingApplicationAPI.Models
 {
-    public enum status {
+    public enum status
+    {
 
         Complted,
         Pending,
@@ -14,15 +15,17 @@ namespace TravkingApplicationAPI.Models
     }
     public class TaskSubmissions
     {
-        public int TaskSubmissionsId{get;set;}
+        public int TaskSubmissionsId { get; set; }
 
-        public int UserId{get;set;}//Fk to user table
+        public int UserId { get; set; }//Fk to user table
 
-        public int subtaskid{get;set;}
-public status status{get;set;}
-public string? submittedFileName{get;set;}
-         public byte[]? FileUploadSubmission { get; set; }
-    public DateTime? SubTaskSubmitteddOn { get; set; }//Date of when The Submission file was submitted
-        
+        public int subtaskid { get; set; }
+        public status status { get; set; }
+        public string? submittedFileName { get; set; }
+        public byte[]? FileUploadSubmission { get; set; }
+        public DateTime? SubTaskSubmitteddOn { get; set; }//Date of when The Submission file was submitted
+
+        public User? SubmittedByUser{get;set;}//nav property
+
     }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Role } from 'src/app/Models/user';
 import { AddMentorService } from 'src/app/Services/add-mentor.service';
 
@@ -17,7 +18,8 @@ export class AddMentorComponent implements OnInit {
 
 
 
-  constructor(private fb: FormBuilder, private AddMentorservice: AddMentorService) { }
+  constructor(private fb: FormBuilder, private AddMentorservice: AddMentorService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.AddMentorForm = this.fb.group({
@@ -46,9 +48,12 @@ export class AddMentorComponent implements OnInit {
   onSubmit(): void {
     if (this.AddMentorForm.valid) {
       const formData = this.AddMentorForm.value;
+      formData.role=Number(formData.role);
       this.AddMentorservice.Addmentor(formData).subscribe(
         (response: any) => {
           console.log('Mentor profile added successfully:', response);
+          const userId = response.userId;
+          this.router.navigate(['AddNewBatch', userId]);
           // Optionally, you can navigate to another page or display a success message here
         },
         (error: any) => {

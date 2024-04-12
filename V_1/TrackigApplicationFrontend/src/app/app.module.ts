@@ -18,6 +18,27 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { EmployeeDashBoardComponent } from './components/employee-dash-board/employee-dash-board.component';
 import { TaskSubmissionsComponent } from './components/task-submissions/task-submissions.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { LayoutComponent } from './components/layout/layout.component';
+import { MatCardModule } from '@angular/material/card';
+
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatMenuModule } from '@angular/material/menu';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // Add this line for animations
+import { MatFormFieldModule } from '@angular/material/form-field'; // Add this line for form fields
+import { MatInputModule } from '@angular/material/input'; // Add this line for input fields
+import { MatDatepickerModule } from '@angular/material/datepicker'; // Add this line for datepicker
+import { MatNativeDateModule } from '@angular/material/core'; // Add this line for datepicker
+import { MatButton, MatButtonModule } from '@angular/material/button'; // Add this line for buttons
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSelectModule } from '@angular/material/select'; // Import MatSelectModule
+import { MatListModule } from '@angular/material/list';
+import { MatTableModule } from '@angular/material/table';
+import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
+
+
+
 // Import jQuery
 
 
@@ -33,7 +54,10 @@ import { TaskSubmissionsComponent } from './components/task-submissions/task-sub
     BatchDashboardComponent,
     TaskboardComponent,
     EmployeeDashBoardComponent,
-    TaskSubmissionsComponent
+    TaskSubmissionsComponent,
+    ProfileComponent,
+    LayoutComponent,
+    AdminDashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +66,27 @@ import { TaskSubmissionsComponent } from './components/task-submissions/task-sub
     HttpClientModule,
     FormsModule,
     NgSelectModule,
-    NgMultiSelectDropDownModule.forRoot()
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatToolbarModule,
+    MatMenuModule,
+    BrowserAnimationsModule,
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule, // Add this line for animations
+    MatFormFieldModule, // Add these lines for Angular Material modules
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatButtonModule,
+    MatExpansionModule,
+    MatSelectModule,
+    MatListModule,
+    MatIconModule, // Add MatSelectModule here
+    MatTableModule
 
   ],
   providers: [LoginService,

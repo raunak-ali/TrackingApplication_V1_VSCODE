@@ -1,64 +1,84 @@
-<p>taskboard works!</p>
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <div>
-    <label for="title">Title:</label>
-    <input type="text" id="title" formControlName="Title">
-  </div>
-  <div>
-    <label for="description">Description:</label>
-    <textarea id="description" formControlName="Description"></textarea>
-  </div>
-  <div>
-    <label for="status">Status:</label>
-    <input type="number" id="status" formControlName="Status">
-  </div>
 
-  <div>
-    <label for="FileName">FileName:</label>
-    <p>TYPE THE FULL FILE NAME WITH THE CORRECT EXTENSION PLEASE</p>
-    <input type="text" id="status" formControlName="FileName">
-  </div>
 
-  <div>
-    <label for="fileUploadTaskFileUpload">File (if any):</label>
-    <input type="file" (change)="onFileChange($event)" id="fileUploadTaskFileUpload"
-      formControlName="FileUploadTaskFileUpload">
-  </div>
-  <button type="submit" [disabled]="!form.valid">Submit</button>
-</form>
-<div>
-  <h2>All SubTasks</h2>
-  <div class="table-responsive">
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>taskId</th>
-          <th>title</th>
-          <th>description</th>
-          <th>status</th>
-          <!-- Add more table headers as needed -->
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let subtask of AllSubtasks">
-          <td>{{ subtask.taskId }}</td>
-          <td>{{ subtask.title }}</td>
-          <td>{{ subtask.description }}</td>
-          <td>{{ subtask.status }}</td>
-          <td>
-            <button (click)="downloadFile(subtask.fileUploadTaskPdf, subtask.fileName)">Download</button>
-            <!-- Button to trigger file download -->
-          </td>
-          <td>
-            <button (click)="SubTaskSubmissions(subtask.subTaskId)">SubTask Submissions</button>
-            <!-- Button to trigger file download -->
-          </td>
-          <td>
-          </td>
-
-          <!-- Add more table cells as needed -->
-        </tr>
-      </tbody>
-    </table>
-  </div>
+<!-- Header -->
+<div class="header">
+  <h2>Dashboard <img src="/assets/Mentor_Dashboard_Icon.png" alt="Mentor Dashboard Icon" class="icon"></h2>
+  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu" class="menu-button">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu" class="custom-menu">
+    <button mat-menu-item (click)="navigateTo('dashboard')">Dashboard</button>
+    <button mat-menu-item (click)="navigateTo('batches')">Batches</button>
+    <button mat-menu-item (click)="navigateTo('profile')">Profile</button>
+    <button mat-menu-item (click)="navigateTo('employees')">Employees</button>
+    <button mat-menu-item (click)="logout()">Logout</button>
+  </mat-menu>
 </div>
+
+<!-- Main Content -->
+<div class="content">
+  <!-- Task Container -->
+  <div class="task-container">
+    <div  class="task-container">
+      <button *ngIf="currentUser.Role!=0" mat-raised-button (click)="showForm = !showForm" class="btn btn-primary">Add New Task</button>
+      <!-- Add New Task Form -->
+      <div *ngIf="showForm" class="form-card">
+        <!-- Your Add New Task Form content -->
+        <h2>Add New SubTask</h2>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
+          <mat-form-field appearance="fill">
+            <mat-label>Title</mat-label>
+            <input matInput formControlName="Title" placeholder="Title" required>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="Description" placeholder="Description"></textarea>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Status</mat-label>
+            <input matInput type="number" formControlName="Status" placeholder="Status">
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>FileName</mat-label>
+            <input matInput formControlName="FileName" placeholder="FileName" required>
+          </mat-form-field>
+          <div class="form-group">
+            <label for="fileUploadTaskFileUpload">File (if any)</label>
+            <input type="file" (change)="onFileChange($event)" id="fileUploadTaskFileUpload" class="form-control-file">
+          </div>
+          <button type="submit" mat-raised-button color="primary">Submit</button>
+        </form>
+      </div>
+
+      <!-- Display Task List as Accordion -->
+      <div *ngIf="AllSubtasks!=null; else noTransactions">
+        <!-- Your Task List content -->
+        <h2>All SubTasks Of the Task</h2>
+        <mat-accordion>
+          <mat-expansion-panel *ngFor="let task of AllSubtasks">
+            <mat-expansion-panel-header>
+              <mat-panel-title>{{ task.title }}</mat-panel-title>
+            </mat-expansion-panel-header>
+            <p>{{ task.description }}</p>
+            <button mat-button (click)="downloadFile(task.fileUploadTaskPdf,task.fileName)">Download the Refrence File</button>
+            <button mat-button (click)="SubTaskSubmissions(task.subTaskId)">SubTask Submissions</button>
+
+            <!-- Add more details and subtask link as needed -->
+          </mat-expansion-panel>
+        </mat-accordion>
+
+      </div>
+      <!-- Placeholder for no transactions -->
+      <ng-template #noTransactions>
+        <p>No Tasks have been added Yet.</p>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- Employee List -->
+</div>
+
+<!-- Angular Material Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular/12.2.8/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/12.2.8/angular-material.min.js"></script>
+

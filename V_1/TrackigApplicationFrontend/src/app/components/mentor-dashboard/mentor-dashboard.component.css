@@ -1,33 +1,76 @@
 body {
-  background-color: #f0f8ff; /* Super light blue background */
+background-color:white;
+}
+.spacer {
+  flex: 1 1 auto;
 }
 
 .navbar {
-  background-color: #212529; /* Dark background color for navbar */
-  color: blue; /* Blue text color for navbar links */
-  width: 200px; /* Width of the navbar */
-  height: 100%; /* Full height */
-  position: fixed; /* Fixed position */
-  top: 0; /* Position at the top */
-  left: 0; /* Position at the left */
-  overflow-x: hidden; /* Hide horizontal scrollbar */
-  padding-top: 20px; /* Add top padding */
+  background-color: #000000;
+  opacity: 50%;
+  color: #fff;
+  width: 80px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .navbar a {
-  padding: 6px 8px 6px 16px;
+  padding: 10px 0;
+  text-align: center;
   text-decoration: none;
-  font-size: 20px;
-  color: blue; /* Blue text color for navbar links */
+  font-size: 14px;
+  color: #fff;
   display: block;
 }
 
 .navbar a:hover {
-  background-color: #555; /* Darken background on hover */
-  color: white; /* White text color on hover */
+  background-color: #03045e;
 }
 
 .content {
-  margin-left: 220px; /* Adjust content margin to account for navbar width */
-  padding: 20px; /* Add padding */
+  background-color:transparent;
+  margin-left: 100px;
+  padding: 20px;
 }
+.content {
+  padding: 20px;
+}
+
+.header {
+  background-color: #ffffff; /* Set background color to white */
+  color: #000000; /* Set text color to black */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+
+}
+
+.icon {
+
+  margin-right: 10px;
+  width: 40px; /* Larger icon width */
+  height: auto;
+  vertical-align: middle;
+  margin-left: 10px; /* Add margin to the left of the icon */
+}
+
+.menu-button {
+  color: #00b4d8; /* Set menu button color to light blue */
+}
+
+.mat-menu-panel {
+  background-color: #ffffff; /* Set menu background color to white */
+}
+.custom-menu {
+  background-color: rgba(255, 255, 255, 0.9); /* Adjust opacity as needed */
+}
+
+

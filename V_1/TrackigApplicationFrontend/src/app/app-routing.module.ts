@@ -9,8 +9,20 @@ import { BatchDashboardComponent } from './components/batch-dashboard/batch-dash
 import { TaskboardComponent } from './components/taskboard/taskboard.component';
 import { EmployeeDashBoardComponent } from './components/employee-dash-board/employee-dash-board.component';
 import { TaskSubmissionsComponent } from './components/task-submissions/task-submissions.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { LayoutComponent } from './components/layout/layout.component';
+import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 
 const routes: Routes = [
+  {
+    path: "Mentor_dashboard",
+    component: MentorDashboardComponent, // Use the layout component as the root component
+    children: [
+      { path: "Batch_dashboard/:batchId", component:BatchDashboardComponent  },
+      //Add other compoenents, i wanna show the header in
+
+    ]
+  },
   {
     path:"Login",
     component:LoginComponent
@@ -18,11 +30,15 @@ const routes: Routes = [
 
     },
     {
+      path:"AdminDashboard",
+      component:AdminDashboardComponent
+    },
+    {
     path:"AddMentor",
     component:AddMentorComponent
     },
     {
-      path:"AddNewBatch",
+      path:"AddNewBatch/:UserId",
       component:AddBatchesComponent
       },
       {
@@ -48,7 +64,11 @@ const routes: Routes = [
       {
         path:"SubTaskSubmission/:subtaskid",
         component:TaskSubmissionsComponent
-      }
+      },
+      {
+        path:"UserProfile/:UserId",
+        component:ProfileComponent
+        },
 
 
 

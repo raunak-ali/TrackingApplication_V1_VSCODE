@@ -23,6 +23,8 @@ export class TaskboardComponent implements OnInit {
   selectedFile: any;
   AllSubtasks!:SubTask[];
   userid!:any;
+  showForm: boolean = false;
+  currentUser = this.loginservice.getUserFromSession();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -38,7 +40,17 @@ export class TaskboardComponent implements OnInit {
     this.initializeForm();
     this.getSubTaskByTask();
   }
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
+  }
 
+  logout(): void {
+    this.loginservice.clearUser();
+    this.loginservice.clearToken();
+    this.loginservice.clearcurrentUser();
+    this.router.navigate(["Login"]);
+    // Implement logout functionality
+  }
   initializeForm(): void {
 
     this.form = this.formBuilder.group({
@@ -165,5 +177,8 @@ export class TaskboardComponent implements OnInit {
     this.router.navigate(['/SubTaskSubmission',subTaskId]);
 
 
+  }
+  toggleForm(): void {
+    this.showForm = !this.showForm;
   }
 }

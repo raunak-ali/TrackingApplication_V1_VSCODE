@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AddTask } from 'src/app/Models/add-task';
+import { AddTask, priority } from 'src/app/Models/add-task';
 import { GetTask } from 'src/app/Models/get-task';
 import { GetUser } from 'src/app/Models/get-user';
 import { User } from 'src/app/Models/user';
@@ -18,7 +18,9 @@ import { LoginService } from 'src/app/Services/login.service';
   styleUrls: ['./batch-dashboard.component.css']
 })
 export class BatchDashboardComponent implements OnInit {
+
   @ViewChild('assignedTo')assignedToSelect!: ElementRef;
+  priorities :string[]= Object.keys(priority).filter(key => !isNaN(Number(priority[key as keyof typeof priority]))) as string[];
   batchId!: number;
   AllTasks!:GetTask[];
   AllEmployyes!:GetUser[];
@@ -26,6 +28,23 @@ export class BatchDashboardComponent implements OnInit {
   getMentorID!: any;
   showForm: boolean = false;
   addTask!:AddTask;
+  isDropdownOpen: boolean = false;
+  currentUser = this.loginservice.getUserFromSession();
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
+  }
+
+  logout(): void {
+    this.loginservice.clearUser();
+    this.loginservice.clearToken();
+    this.loginservice.clearcurrentUser();
+    this.router.navigate(["Login"]);
+    // Implement logout functionality
+  }
+
+  toggleDropdown(): void {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
 
 
   constructor(private route: ActivatedRoute,
@@ -37,7 +56,7 @@ export class BatchDashboardComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
-
+    console.log(this.currentUser);
 
     // Retrieve the batchId parameter from the route
     this.batchId = +this.route.snapshot.params['batchId'];
@@ -71,7 +90,7 @@ export class BatchDashboardComponent implements OnInit {
       DeadLine: ['', Validators.required],
       Status: [0],
       AssignedBy: [this.getMentorID],
-      AssignedTo: this.fb.array([]),
+      AssignedTo: [[], Validators.required],
       BatchId: [this.batchId],
       Comments: ['']
     })
@@ -153,5 +172,12 @@ updateAssignedTo(userId: number, event: Event) {
     assignedToControl.removeAt(index);
   }
 }
+
+viewEmployee(userid:number) {
+  this.router.navigate(['/UserProfile', userid]);
+  }
+
+//functions purely for ui
+
 
 }

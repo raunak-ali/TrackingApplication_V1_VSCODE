@@ -1,85 +1,121 @@
-<p>batch-dashboard works!</p>
-<div class="container">
-  <button (click)="showForm = !showForm">AddNewTask</button>
-  <div *ngIf="showForm">
-    <form [formGroup]="AddNewTaskForm" (ngSubmit)="AddNewTask()">
-
-      <label for="taskName">Task Name:</label>
-      <input type="text" formControlName="TaskName" id="taskName">
 
 
-      <label for="description">Description:</label>
-      <input type="text" formControlName="Description" id="description">
+<!-- Header -->
+<div class="header">
+  <h2>Dashboard <img src="/assets/Mentor_Dashboard_Icon.png" alt="Mentor Dashboard Icon" class="icon"></h2>
+  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu" class="menu-button">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu" class="custom-menu">
+    <button mat-menu-item (click)="navigateTo('dashboard')">Dashboard</button>
+    <button mat-menu-item (click)="navigateTo('batches')">Batches</button>
+    <button mat-menu-item (click)="navigateTo('profile')">Profile</button>
+    <button mat-menu-item (click)="navigateTo('employees')">Employees</button>
+    <button mat-menu-item (click)="logout()">Logout</button>
+  </mat-menu>
+</div>
 
+<!-- Main Content -->
+<div class="content">
+  <!-- Task Container -->
+  <div class="task-container">
+    <div  class="task-container">
+      <button *ngIf="currentUser.Role!=0" mat-raised-button (click)="showForm = !showForm" class="btn btn-primary">Add New Task</button>
+      <!-- Add New Task Form -->
+      <div *ngIf="showForm" class="form-card">
+        <!-- Your Add New Task Form content -->
+        <h2>Add New Task</h2>
+        <form [formGroup]="AddNewTaskForm" (ngSubmit)="AddNewTask()" class="needs-validation" novalidate>
+          <mat-form-field appearance="fill">
+            <mat-label>Task Name</mat-label>
+            <input matInput formControlName="TaskName" id="taskName" placeholder="TaskName"required>
+            <mat-error *ngIf="AddNewTaskForm.get('TaskName')?.invalid">Task name is required.</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Description</mat-label>
+            <input matInput formControlName="Description" id="description" placeholder="Description of this task">
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Priority</mat-label>
+            <mat-select formControlName="Priority" id="priority">
+              <mat-option *ngFor="let priority of priorities" [value]="priority">{{ priority }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Deadline</mat-label>
+            <input matInput type="date" formControlName="DeadLine" id="deadLine" placeholder="DeadLine">
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Assigned To</mat-label>
+            <mat-select formControlName="AssignedTo" multiple>
+              <mat-option *ngFor="let employee of AllEmployyes" [value]="employee.userId">
+                {{ employee.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="AddNewTaskForm.get('AssignedTo')?.invalid">At least one employee must be assigned.</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Comments</mat-label>
+            <input matInput formControlName="Comments" id="comments" placeholder="Comments">
+          </mat-form-field>
+          <!-- Add other form fields as needed -->
+          <button type="submit" mat-raised-button color="primary">Submit</button>
+        </form>
 
-      <label for="priority">Priority:</label>
-      <input type="number" formControlName="Priority" id="priority">
-
-
-      <label for="deadLine">Deadline:</label>
-      <input type="date" formControlName="DeadLine" id="deadLine">
-
-      <label for="assignedTo">Assigned To:</label>
-
-      <!-- Multiselect dropdown -->
-      <div class="modal-box">
-        <div class="sd-multiSelect form-group">
-          <label>Assigned To</label>
-          <div class="checkbox-options">
-            <div *ngFor="let user of AllEmployyes">
-              <label class="checkbox-label">
-                <input type="checkbox" (change)="updateAssignedTo(user.userId, $event)" [checked]="AddNewTaskForm.get('AssignedTo')?.value.includes(user.userId)">
-                {{ user.name }}
-              </label>
-            </div>
-          </div>
-        </div>
       </div>
 
-      <!-- Input box to display selected users -->
+      <!-- Display Task List as Accordion -->
+      <div *ngIf="AllTasks!=null; else noTransactions">
+        <!-- Your Task List content -->
+        <h2>All Tasks</h2>
+        <mat-accordion>
+          <mat-expansion-panel *ngFor="let task of AllTasks">
+            <mat-expansion-panel-header>
+              <mat-panel-title>{{ task.taskName }}</mat-panel-title>
+            </mat-expansion-panel-header>
+            <p>{{ task.description }}</p>
+            <p>Deadline: {{ task.deadLine }}</p>
+            <button class="btn btn-primary" (click)="viewBatch(task.userTaskID)">View SubTasks</button>
+            <!-- Add more details and subtask link as needed -->
+          </mat-expansion-panel>
+        </mat-accordion>
 
-
-      <label for="comments">Comments:</label>
-      <input type="text" formControlName="Comments" id="comments">
-
-
-
-      <button type="submit">Submit</button>
-    </form>
-  </div>
-
-  <div *ngIf="AllTasks.length > 0; else noTransactions">
-    <h2>All Tasks</h2>
-    <div class="table-responsive">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>batch ID</th>
-            <th>assignedBy</th>
-            <th>assignedTo</th>
-            <th>taskName</th>
-            <!-- Add more table headers as needed -->
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let task of AllTasks">
-            <td>{{ task.batchId }}</td>
-            <td>{{ task.assignedBy }}</td>
-            <td>{{ task.assignedTo }}</td>
-            <td>{{ task.taskName }}</td>
-            <td>
-              <button class="btn btn-primary" (click)="viewBatch(task.userTaskID)">View SubTasks</button>
-          </td>
-
-            <!-- Add more table cells as needed -->
-          </tr>
-        </tbody>
-      </table>
+      </div>
+      <!-- Placeholder for no transactions -->
+      <ng-template #noTransactions>
+        <p>No Tasks have been added Yet.</p>
+      </ng-template>
     </div>
   </div>
 
-  <ng-template #noTransactions>
-    <p>No batches available.</p>
-  </ng-template>
+  <!-- Employee List -->
+  <div class="employee-list">
+    <h2>List of Employees</h2>
+    <!-- Your Employee List content -->
+
+      <table mat-table class="employee-table">
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let employee">{{ employee.name }}</td>
+        </ng-container>
+
+        <!-- Score Column -->
+        <ng-container matColumnDef="score">
+          <th mat-header-cell *matHeaderCellDef>Score</th>
+          <td mat-cell *matCellDef="let employee">{{ employee.score }}</td>
+        </ng-container>
+
+        <tr mat-row *ngFor="let employee of AllEmployyes">
+          <td mat-cell (click)="viewEmployee(employee.userId)">{{ employee.name }}</td>
+          <td mat-cell>{{ employee.totalAverageRatingStatus }}</td>
+        </tr>
+      </table>
+
+  </div>
 </div>
+
+<!-- Angular Material Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular/12.2.8/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/12.2.8/angular-material.min.js"></script>
 

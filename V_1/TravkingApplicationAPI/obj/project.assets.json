@@ -4900,11 +4900,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\rauali\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\TravkingApplicationAPI.csproj",
+      "projectUniqueName": "c:\\Users\\rauali\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\TravkingApplicationAPI.csproj",
       "projectName": "TravkingApplicationAPI",
-      "projectPath": "C:\\Users\\rauali\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\TravkingApplicationAPI.csproj",
+      "projectPath": "c:\\Users\\rauali\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\TravkingApplicationAPI.csproj",
       "packagesPath": "C:\\Users\\rauali\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\rauali\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\obj\\",
+      "outputPath": "c:\\Users\\rauali\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\rauali\\AppData\\Roaming\\NuGet\\NuGet.Config",

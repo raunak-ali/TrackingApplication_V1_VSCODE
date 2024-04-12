@@ -6,6 +6,7 @@ export class GetBatches {
   //employees!: User[] | null; // Navigation property for the employees
   domain!: string;
   description!: string;
+showDetails: any=false;
   //attendanceExcel?: ArrayBuffer | null; // Used for File upload
   //employeeInfoExcel?: ArrayBuffer | null;
   //userTasks!: UserTask[];

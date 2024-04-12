@@ -79,15 +79,37 @@ namespace TravkingApplicationAPI.Repository
             try
             {
                 if (BatchId != null)
-                {
-                    var existing_batch = context.Batches.FirstOrDefault(b => b.BatchId == BatchId);
-                    if (existing_batch != null)
-                    {
-                        var all_task = context.Tasks.Where(t => t.BatchId == BatchId).ToList();
-                        return all_task;
+{
+    var existing_batch = context.Batches.FirstOrDefault(b => b.BatchId == BatchId);
+    
+    if (existing_batch != null)
+    {
+        var all_tasks = context.Tasks
+                                .Include(t => t.AssignedToUser)
+                                .Where(t => t.BatchId == BatchId)
+                                .ToList();
+        
+        if(all_tasks != null)
+        {
+            foreach (var task in all_tasks)
+            {
+                task.AssignedToUser.Clear(); // Clear existing assigned users
+                var assignedUserIds = task.AssignedTo;
 
-                    }
+                if (assignedUserIds != null && assignedUserIds.Any())
+                {
+                    var assignedUsers = context.Users
+                                                .Where(u => assignedUserIds.Contains(u.UserId))
+                                                .ToList();
+                    
+                    task.AssignedToUser.AddRange(assignedUsers);
                 }
+            }
+        }
+        
+        return all_tasks;
+    }
+}
                 return null;
             }
             catch (Exception e)
@@ -130,7 +152,7 @@ namespace TravkingApplicationAPI.Repository
                             newtasksub.SubTaskSubmitteddOn = null;
                             context.TaskSubmissions.Add(newtasksub);
                             await context.SaveChangesAsync();
-                            
+
 
                         }
                         return "SUBTASK SAVED SUCESSFULLY";
@@ -171,6 +193,28 @@ namespace TravkingApplicationAPI.Repository
                 throw;
             }
 
+        }
+
+        public async Task<List<Models.UserTask>> GetTaskforUser(int userid)
+        {
+          try{
+
+            var existing_user=context.Users.FirstOrDefault(u=>u.UserId==userid);
+            if(existing_user!=null){
+
+var existing_task=context.Tasks.Where(t=>t.AssignedTo.Contains(userid)).ToList();
+foreach (var task in existing_task){
+    var existing_subtasks=context.SubTask.Where(u=>u.TaskId==task.UserTaskID).ToList();
+    task.SubTasks=existing_subtasks;
+     
+}
+return existing_task;
+            }
+            return null;
+          }
+          catch(Exception e){
+            throw;
+          }
         }
     }
 }
