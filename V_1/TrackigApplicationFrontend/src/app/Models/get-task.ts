@@ -6,7 +6,7 @@ export class GetTask {
     userTaskID!: number;
     taskName!: string;
     description!: string;
-    Priority!: number;
+    priority!: number;
     deadLine!: Date;
     status!: number;
     assignedBy!: number;

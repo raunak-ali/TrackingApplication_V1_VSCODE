@@ -19,8 +19,10 @@
 <div class="content">
   <!-- Task Container -->
   <div class="task-container">
-    <div  class="task-container">
+
+      <h2>All SubTasks Of the Task</h2>
       <button *ngIf="currentUser.Role!=0" mat-raised-button (click)="showForm = !showForm" class="btn btn-primary">Add New Task</button>
+      <br>
       <!-- Add New Task Form -->
       <div *ngIf="showForm" class="form-card">
         <!-- Your Add New Task Form content -->
@@ -34,10 +36,7 @@
             <mat-label>Description</mat-label>
             <textarea matInput formControlName="Description" placeholder="Description"></textarea>
           </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Status</mat-label>
-            <input matInput type="number" formControlName="Status" placeholder="Status">
-          </mat-form-field>
+
           <mat-form-field appearance="fill">
             <mat-label>FileName</mat-label>
             <input matInput formControlName="FileName" placeholder="FileName" required>
@@ -49,15 +48,22 @@
           <button type="submit" mat-raised-button color="primary">Submit</button>
         </form>
       </div>
+<br>
 
       <!-- Display Task List as Accordion -->
       <div *ngIf="AllSubtasks!=null; else noTransactions">
         <!-- Your Task List content -->
-        <h2>All SubTasks Of the Task</h2>
+
         <mat-accordion>
           <mat-expansion-panel *ngFor="let task of AllSubtasks">
+
             <mat-expansion-panel-header>
-              <mat-panel-title>{{ task.title }}</mat-panel-title>
+
+              <mat-panel-title
+
+              >
+              <i class="fa-solid fa-thumbtack"></i>
+              {{ task.title }}</mat-panel-title>
             </mat-expansion-panel-header>
             <p>{{ task.description }}</p>
             <button mat-button (click)="downloadFile(task.fileUploadTaskPdf,task.fileName)">Download the Refrence File</button>
@@ -73,10 +79,10 @@
         <p>No Tasks have been added Yet.</p>
       </ng-template>
     </div>
-  </div>
+
 
   <!-- Employee List -->
-</div>
+
 
 <!-- Angular Material Scripts -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular/12.2.8/angular.min.js"></script>

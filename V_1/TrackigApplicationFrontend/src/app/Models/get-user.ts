@@ -14,7 +14,7 @@ export class GetUser {
     doj!: Date;
     capgeminiEmailId!: string;
     grade!: string;
-    totalAverageRatingStatus: number = 0;
+    total_Average_RatingStatus: number = 0;
     personalEmailId?: string;
     earlierMentorName?: string;
     finalMentorName?: string;

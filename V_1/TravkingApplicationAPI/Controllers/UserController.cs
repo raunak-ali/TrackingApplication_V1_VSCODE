@@ -185,5 +185,28 @@ string capgeminiid= data.GetProperty("capgeminiid").ToString();
             }
         }
 
+
+           [HttpGet]
+        [Authorize(Roles = "Mentor,Employee,Admin")]
+        [Route("GetEmployees")]
+
+        public async Task<ActionResult> GetEmployees()//Try [FromBody]
+        {
+            try
+            {
+                
+                var res = await UserService.FetchEmployees();
+                if (res == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(new { message = res });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
     }
 }

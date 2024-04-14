@@ -67,14 +67,23 @@
 }
 
 .header {
-  background-color: #ffffff; /* Set background color to white */
+  width: auto;
   color: #000000; /* Set text color to black */
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
+  left:10px;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  height: 200px;
+  margin-top: 50px;
+  align-self: center;
+  margin-left: 85px;
+  margin-right: 85px;
+  background-image: url('/assets/DashBoard_Banner.jpeg');
+  background-size: cover; /* This makes the background image cover the entire header */
+  background-position: center; /* This centers the background image */
 
 }
 

@@ -9,6 +9,8 @@ namespace TravkingApplicationAPI.Models
     {
     
     public int FeedbackId { get; set; }
+
+    
     public int TaskId { get; set; }
     public int TotalAverageRating { get; set; }
 

@@ -107,6 +107,20 @@ namespace TravkingApplicationAPI.Services
                 throw;
             }
         }
+         public async Task<List<User>> FetchEmployees(){
+
+              try
+            {
+                return await User.FetchEmployees();
+
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+         }
 
 
     }

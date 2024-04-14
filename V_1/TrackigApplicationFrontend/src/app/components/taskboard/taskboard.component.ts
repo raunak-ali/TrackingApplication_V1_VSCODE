@@ -56,7 +56,6 @@ export class TaskboardComponent implements OnInit {
     this.form = this.formBuilder.group({
       Title: ['', Validators.required],
       Description: ['', Validators.required],
-      Status: ['', Validators.required],
       TaskId: this.taskId,
       FileUploadTaskFileUpload: [null], // Assuming this is for file uploads in Angular
       FileUploadTaskPdf: [null], // Assuming this is for binary data or string (like base64) for PDFs

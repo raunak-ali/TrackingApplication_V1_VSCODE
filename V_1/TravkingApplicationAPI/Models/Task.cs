@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace TravkingApplicationAPI.Models
 {
 public enum priority{
-    high,low,medium
+    low,medium,high
 }
         public class UserTask
 {
@@ -20,11 +20,13 @@ public enum priority{
     public List<int> AssignedTo { get; set; }//Fk 
     public int BatchId { get; set; }//Fk
     public string Comments { get; set; }
+
+    
     public DateTime? CreatedAt { get; set; }
         public User? AssignedByUser { get;set; }//Nav Property
         //public Batch? Batches{get;set;}//Nav Property
         public List<User>? AssignedToUser { get; internal set; }//Nav Property
         public List<SubTask>? SubTasks { get; set; }//Nav Property
-        public FeedBack? FeedBack { get; internal set; }//Nav Property
+        public List<FeedBack>? FeedBack { get; set; }//Nav Property
     }
     }

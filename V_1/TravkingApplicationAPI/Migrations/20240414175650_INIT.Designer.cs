@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TravkingApplicationAPI.Data;
 
@@ -11,9 +12,11 @@ using TravkingApplicationAPI.Data;
 namespace TravkingApplicationAPI.Migrations
 {
     [DbContext(typeof(TrackingApplicationDbContext))]
-    partial class TrackingApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240414175650_INIT")]
+    partial class INIT
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -140,7 +143,8 @@ namespace TravkingApplicationAPI.Migrations
 
                     b.HasKey("FeedbackId");
 
-                    b.HasIndex("TaskId");
+                    b.HasIndex("TaskId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -426,8 +430,8 @@ namespace TravkingApplicationAPI.Migrations
             modelBuilder.Entity("TravkingApplicationAPI.Models.FeedBack", b =>
                 {
                     b.HasOne("TravkingApplicationAPI.Models.UserTask", "UserTask")
-                        .WithMany("FeedBack")
-                        .HasForeignKey("TaskId")
+                        .WithOne("FeedBack")
+                        .HasForeignKey("TravkingApplicationAPI.Models.FeedBack", "TaskId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

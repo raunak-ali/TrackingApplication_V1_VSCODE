@@ -11,6 +11,17 @@ import { catchError, map, throwError } from "rxjs";
 export class GetBatchesService {
   private apiUrl = 'http://localhost:5138/Batch/GetAllBatches';
   private anotherApiUrl="http://localhost:5138/Batch/GetAllBatchesForEmployees";
+  private geturl='http://localhost:5138/Batch/GetAllBatch';
+  getBatch(): Observable<any> {
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+    return this.http.post<any>(this.geturl, httpOptions)
+    .pipe(
+      map(response => response.message));}
   constructor(private http: HttpClient) { }
   Getall(UserId:any): Observable<any> {
 

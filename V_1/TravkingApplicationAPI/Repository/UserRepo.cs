@@ -257,5 +257,16 @@ if(existing_user!=null){
            catch(Exception e){
             throw;}
         }
+
+        public async Task<List<User>> FetchEmployees()
+        {
+           try{
+var existing_Users=context.Users.ToList();
+return existing_Users;
+           }
+           catch(Exception e){
+            throw;
+           }
+        }
     }
 }

@@ -34,9 +34,12 @@
               </div>
               <p style="color: rgb(255, 13, 13);" *ngIf="error != null">{{ error }}</p>
               <button type="submit" class="btn btn-primary btn-block">Login</button>
+            <br>
             </form>
-
+<br>
+<p style="color: white;" (click)="showemailform=!showemailform">Forgot Password?</p>
             <!-- Forgotten Password Form -->
+            <div *ngIf="showemailform">
             <form [formGroup]="emailForm" (ngSubmit)="SendResetPasswordEmail()" *ngIf="!resetPasswordFormVisible">
               <div class="form-group">
                 <input formControlName="capgeminiid" type="text" class="form-control" placeholder="Enter your email"/>
@@ -46,7 +49,10 @@
                 </div>
               </div>
               <button type="submit" class="btn btn-primary btn-block">Submit</button>
+              <br>
+
             </form>
+            </div>
 
             <!-- Password Reset Form -->
             <form [formGroup]="resetPasswordForm" (ngSubmit)="ChecksForResetPassword()" *ngIf="resetPasswordFormVisible">

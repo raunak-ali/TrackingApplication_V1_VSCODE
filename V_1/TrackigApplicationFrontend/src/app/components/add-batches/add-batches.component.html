@@ -25,7 +25,9 @@
         <button mat-menu-item (click)="logout()">Logout</button>
       </mat-menu>
     </div>
-    <p>Welcome to the dashboard!</p>
+    <br>
+    <br>
+
     <div class="container-fluid">
       <div class="card">
         <div class="card-header">
@@ -48,7 +50,7 @@
             <mat-form-field appearance="fill">
               <mat-label>MentorId</mat-label>
               <mat-select formControlName="MentorId" id="MentorId">
-                <mat-option *ngFor="let mentor of allMentors" [value]="mentor.userId">Mentor Name: {{ mentor.name }}</mat-option>
+                <mat-option *ngFor="let mentor of allMentors" [value]="mentor.userId">{{ mentor.name }}</mat-option>
               </mat-select>
             </mat-form-field>
 

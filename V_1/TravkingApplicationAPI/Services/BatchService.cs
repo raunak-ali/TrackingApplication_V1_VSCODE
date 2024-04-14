@@ -52,6 +52,38 @@ namespace TravkingApplicationAPI.Services
             }
         }
 
+        public async  Task<string>AddBatchToUser(AddUserAddUser User,int BatchId){
+         try
+            {
+                return await Batch.AddBatchToUser(User,BatchId);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }   
+        }
+
+         public async Task<List<Batch>> GetAllBatch(){
+
+             try
+            {
+                return await Batch.GetAllBatch();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }   
+
+         }
+         public async Task<string>  RemoveUSerFromABatch(int Userid, int Batchid){
+
+            try{
+                return await Batch.RemoveUSerFromABatch(Userid,Batchid);
+                
+            }
+            catch(Exception es){throw;}
+         }
+
     }
 
 }

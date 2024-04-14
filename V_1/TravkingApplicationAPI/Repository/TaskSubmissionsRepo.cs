@@ -159,6 +159,14 @@ existing_TaskSubmission.SubmittedByUser=existing_user;
                 }
                 else
                 {
+                     var ratingThresholds = new Dictionary<double, Comments>
+{
+    { 90, Comments.VeryGood },
+    { 70, Comments.Good },
+    { 50, Comments.Average },
+    { 30, Comments.BelowAverage },
+    { double.MinValue, Comments.Bad } // Default comment for ratings below 30
+};
                     //Check if a feedback object for that task already exists
                     //Get TaskSubmissedId=>SubTaskId=>TaskId=>Feedback Table 
                     //If yes update that object
@@ -168,6 +176,10 @@ existing_TaskSubmission.SubmittedByUser=existing_user;
                     var count_ofsubtasks = existing_Sub_task.Count();
                     var Add = (1 / count_ofsubtasks) * 100;
                     var taskid = existing_Sub_task.FirstOrDefault().TaskId;
+                     var existing_user=context.Users.FirstOrDefault(u=>u.UserId==addRating.RatedTo);
+                        var count_tasks_assigned_to_user=context.Tasks
+    .Where(t => t.AssignedTo != null && t.AssignedTo.Contains(addRating.RatedTo))
+    .Count();
 
 
                     var feed = 1;
@@ -185,22 +197,13 @@ existing_TaskSubmission.SubmittedByUser=existing_user;
                         existing_feedback.TotalAverageRating = ((1 / count_ofsubtasks) * addRating.RatingValue) + existing_feedback.TotalAverageRating;
                         
                         //Update the Total Average rating of that user as well 
-                        var existing_user=context.Users.FirstOrDefault(u=>u.UserId==addRating.RatedTo);
-                        var count_tasks_assigned_to_user=context.Tasks
-    .Where(t => t.AssignedTo != null && t.AssignedTo.Contains(addRating.RatedTo))
-    .Count();
+                       
+                     
 
 
                         existing_user.Total_Average_RatingStatus=((1 / count_tasks_assigned_to_user) *  existing_feedback.TotalAverageRating) + existing_user.Total_Average_RatingStatus;
                         
-                        var ratingThresholds = new Dictionary<double, Comments>
-{
-    { 90, Comments.VeryGood },
-    { 70, Comments.Good },
-    { 50, Comments.Average },
-    { 30, Comments.BelowAverage },
-    { double.MinValue, Comments.Bad } // Default comment for ratings below 30
-};
+                       
 
                         // Determine the comment based on the updated total average rating
                         existing_feedback.Comments = ratingThresholds.FirstOrDefault(kv => existing_feedback.TotalAverageRating >= kv.Key).Value;
@@ -213,11 +216,12 @@ existing_TaskSubmission.SubmittedByUser=existing_user;
                         feedback.TotalAverageRating = (1 / count_ofsubtasks) * addRating.RatingValue;
                         feedback.TaskId = taskid;
                         feedback.UserId = addRating.RatedTo;
-                        feedback.Comments = Comments.Bad;
+                        feedback.Comments = ratingThresholds.FirstOrDefault(kv => feedback.TotalAverageRating >= kv.Key).Value;
 
-                        context.FeedBacks.Add(feedback);
-                        context.SaveChanges();
+                        context.FeedBacks.AddAsync(feedback);
+                        await context.SaveChangesAsync();
                         feed = feedback.FeedbackId;
+                        existing_user.Total_Average_RatingStatus=((1 / count_tasks_assigned_to_user) *  feedback.TotalAverageRating) + existing_user.Total_Average_RatingStatus;
 
 
                     }
@@ -228,8 +232,8 @@ existing_TaskSubmission.SubmittedByUser=existing_user;
                     newrating.RatingValue = addRating.RatingValue;
                     newrating.TaskSubmissionId = addRating.TaskSubmissionId;
                     newrating.Comments = addRating.Comments;
-                    context.Ratings.Add(newrating);
-                    context.SaveChanges();
+                    context.Ratings.AddAsync(newrating);
+                    await context.SaveChangesAsync();
                     return "SubTask rated";
 
                 }
@@ -238,6 +242,39 @@ existing_TaskSubmission.SubmittedByUser=existing_user;
             }
             catch (Exception e)
             {
+                throw;
+            }
+        }
+
+        public async Task<List<TaskSubmissions>> GetAllSubmissionsofATask(int taskid, int Userid)
+        {
+            var existing_user=context.Users.FirstOrDefault(u=>u.UserId==Userid);
+            var existing_task=context.Tasks.FirstOrDefault(t=>t.UserTaskID==taskid);
+            if(existing_user!=null && existing_task!=null){
+                var existing_subtasks=context.SubTask.Where(s=>s.TaskId==taskid).ToList();
+                List<TaskSubmissions> tasksub=new List<TaskSubmissions>();
+            foreach(var subtask in existing_subtasks){
+                var existing_submission=context.TaskSubmissions.Where(t=>t.subtaskid==subtask.SubTaskId).ToList();
+tasksub.Concat(existing_submission);
+            }
+            return tasksub;
+            
+            }
+            return null;
+
+        }
+
+        public async Task<List<TaskSubmissions>> GetAllSubmissionsofAUser(int Userid)
+        {
+
+            try{
+                var existing_user=context.Users.FirstOrDefault(u=>u.UserId==Userid);
+                if(existing_user!=null){
+                    var existing_submissions=context.TaskSubmissions.Where(t=>t.UserId==Userid).ToList();
+                    return existing_submissions;
+                }return null;
+            }
+            catch(Exception e){
                 throw;
             }
         }

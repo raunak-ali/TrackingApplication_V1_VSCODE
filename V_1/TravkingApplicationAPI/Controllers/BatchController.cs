@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using TravkingApplicationAPI.DTO;
 using TravkingApplicationAPI.Models;
 using TravkingApplicationAPI.Services;
+using Newtonsoft.Json;
 
 namespace TravkingApplicationAPI.Controllers
 {
@@ -33,7 +34,7 @@ namespace TravkingApplicationAPI.Controllers
             try
             {
                 var temp = data.GetProperty("batch").GetRawText();
-                var batch = JsonSerializer.Deserialize<Addbatch>(temp);
+                var batch = System.Text.Json.JsonSerializer.Deserialize<Addbatch>(temp);
                 var res = await BatchService.AddnewBatch(batch);
                 if (res == null)
                 {
@@ -96,6 +97,95 @@ namespace TravkingApplicationAPI.Controllers
             }
 
         }
+ [HttpPost]
+        //[Authorize(Roles = "Mentor,Admin")]
+        [AllowAnonymous]
+        [DisableRequestSizeLimit]
+        [Route("AddBatchToUser")]
+        public async Task<ActionResult>AddBatchToUser([FromBody]dynamic data)//Try [FromBody]
+        {
+            try
+            {
+
+
+            var User = data.GetProperty("User").GetRawText();
+                AddUserAddUser UserObj =JsonConvert.DeserializeObject<AddUserAddUser>(User);
+                
+                int BatchId=data.GetProperty("BatchId").GetInt32();
+                var res = await BatchService.AddBatchToUser(UserObj,BatchId);
+                if (res == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(new { message = res });
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
+        }
+
+
+
+        [HttpPost]
+        //[Authorize(Roles = "Mentor,Admin")]
+        [AllowAnonymous]
+        [DisableRequestSizeLimit]
+        [Route("GetAllBatch")]
+        public async Task<ActionResult>GetAllBatch()//Try [FromBody]
+        {
+            try
+            {
+
+
+      
+                var res = await BatchService.GetAllBatch();
+                if (res == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(new { message = res });
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
+        }
+
+         [HttpPost]
+        //[Authorize(Roles = "Mentor,Admin")]
+        [AllowAnonymous]
+        [DisableRequestSizeLimit]
+        [Route("RemoveUserFromABatch")]
+        public async Task<ActionResult>RemoveUserFromABatch([FromBody]dynamic data)//Try [FromBody]
+        {
+            try
+            {
+
+
+           var Userid = data.GetProperty("Userid").GetInt32();
+                
+                int BatchId=data.GetProperty("BatchId").GetInt32();
+                var res = await BatchService.RemoveUSerFromABatch(Userid,BatchId);
+                if (res == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(new { message = res });
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
+        }
+
+
 
     }
 }

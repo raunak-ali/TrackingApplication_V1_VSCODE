@@ -39,13 +39,13 @@ import { AdminDashboardComponent } from './components/admin-dashboard/admin-dash
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
-
 // Import jQuery
 
 
 
 @NgModule({
   declarations: [
+
     AppComponent,
     LoginComponent,
     AddMentorComponent,
@@ -58,9 +58,12 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     TaskSubmissionsComponent,
     ProfileComponent,
     LayoutComponent,
-    AdminDashboardComponent
+    AdminDashboardComponent,
+
+
   ],
   imports: [
+
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,

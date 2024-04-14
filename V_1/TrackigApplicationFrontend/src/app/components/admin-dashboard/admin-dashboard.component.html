@@ -27,12 +27,11 @@
         <button mat-menu-item (click)="logout()">Logout</button>
       </mat-menu>
     </div>
-    <p>Welcome to the  dashboard!</p>
     <app-get-batch></app-get-batch>
     <div *ngIf="allMentors!=null;">
-      <div class="header">
+
         <h2>All Mentors</h2>
-      </div>
+
       <div class="container">
         <div class="card-container">
           <mat-card *ngFor="let Mentors of allMentors" class="custom-card">

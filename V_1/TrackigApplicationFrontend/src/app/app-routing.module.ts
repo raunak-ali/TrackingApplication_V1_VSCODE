@@ -37,6 +37,7 @@ const routes: Routes = [
     path:"AddMentor",
     component:AddMentorComponent
     },
+
     {
       path:"AddNewBatch/:UserId",
       component:AddBatchesComponent

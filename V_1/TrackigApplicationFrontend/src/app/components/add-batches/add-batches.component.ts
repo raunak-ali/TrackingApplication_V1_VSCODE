@@ -91,6 +91,7 @@ this.fetchmentors();
       this.Addbatchesservice.Addmentor(formData).subscribe(
         (response: any) => {
           console.log('Batches profile added successfully:', response);
+          this.router.navigate(['AdminDashboard']);
           // Optionally, you can navigate to another page or display a success message here
         },
         (error: any) => {

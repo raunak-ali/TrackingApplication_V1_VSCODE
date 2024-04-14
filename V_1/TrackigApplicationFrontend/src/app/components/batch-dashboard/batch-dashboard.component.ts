@@ -5,11 +5,14 @@ import { AddTask, priority } from 'src/app/Models/add-task';
 import { GetTask } from 'src/app/Models/get-task';
 import { GetUser } from 'src/app/Models/get-user';
 import { User } from 'src/app/Models/user';
+import { AddEmployeesToBatchService } from 'src/app/Services/add-employees-to-batch.service';
 import { AddnewTaskService } from 'src/app/Services/addnew-task.service';
+import { GetAllEmployeesService } from 'src/app/Services/get-all-employees.service';
 import { GetBatchesService } from 'src/app/Services/get-batches.service';
 import { GetTasksService } from 'src/app/Services/get-tasks.service';
 import { GetUserByBatchService } from 'src/app/Services/get-user-by-batch.service';
 import { LoginService } from 'src/app/Services/login.service';
+import { RemoveEmployeesFromBatchService } from 'src/app/Services/remove-employees-from-batch.service';
 
 
 @Component({
@@ -18,6 +21,9 @@ import { LoginService } from 'src/app/Services/login.service';
   styleUrls: ['./batch-dashboard.component.css']
 })
 export class BatchDashboardComponent implements OnInit {
+
+showEmployee: boolean=false;
+
 
   @ViewChild('assignedTo')assignedToSelect!: ElementRef;
   priorities :string[]= Object.keys(priority).filter(key => !isNaN(Number(priority[key as keyof typeof priority]))) as string[];
@@ -30,6 +36,10 @@ export class BatchDashboardComponent implements OnInit {
   addTask!:AddTask;
   isDropdownOpen: boolean = false;
   currentUser = this.loginservice.getUserFromSession();
+  FetchedEmployees!: User[];
+  USeExistingUser: boolean=false;
+  AddUserToBatchForm!: FormGroup;
+AddnewEmpoyee: any;
   navigateTo(route: string): void {
     this.router.navigate([route]);
   }
@@ -53,9 +63,13 @@ export class BatchDashboardComponent implements OnInit {
     private fb: FormBuilder,
     private loginservice :LoginService,
     private addnewTaskService:AddnewTaskService,
-    private router: Router) { }
-
+    private router: Router,
+    private getAllEmployees:GetAllEmployeesService,
+    private addnewemployeetoBatch:AddEmployeesToBatchService,
+    private removeEmployeesFromBatchService:RemoveEmployeesFromBatchService) { }
+    AddMentorForm!: FormGroup;
   ngOnInit(): void {
+    this.GetAllEmployees();
     console.log(this.currentUser);
 
     // Retrieve the batchId parameter from the route
@@ -68,6 +82,28 @@ export class BatchDashboardComponent implements OnInit {
         this.getMentorID=this.getMentorID;
       }
     }
+    this.AddUserToBatchForm=this.fb.group({
+      EmplloyeesToAdd:['']
+    })
+    this.AddMentorForm = this.fb.group({
+      name: ['', Validators.required], // Required field
+      role: [0],
+      domain: ['', Validators.required], // Required field
+      jobTitle: [''],
+      location: [''],
+      phone: [''],
+      isCr: [false],
+      gender: [''],
+      doj: [new Date(), Validators.required], // Required field
+      capgeminiEmailId: ['', [Validators.required, Validators.email]], // Required and valid email
+      grade: [''],
+      totalAverageRatingStatus: [0],
+      personalEmailId: [''],
+      earlierMentorName: ['None'],
+      finalMentorName: ['None'],
+      attendanceCount: [0],
+      batches: [null]
+    });
     if (this.assignedToSelect) {
       // Apply the custom logic
       this.assignedToSelect.nativeElement.addEventListener('change', (event: { target: HTMLOptionElement; }) => {
@@ -104,6 +140,7 @@ export class BatchDashboardComponent implements OnInit {
         // Ensure data.$values exists and is an array before accessing it
         if (Array.isArray(data.$values)) {
           this.AllTasks = data.$values;
+          this.AllTasks=this.AllTasks.sort((a, b) => b.priority - a.priority);
           console.log(this.AllTasks);
         } else {
           console.error('Unexpected data format:', data);
@@ -146,6 +183,7 @@ export class BatchDashboardComponent implements OnInit {
         // Ensure data.$values exists and is an array before accessing it
         if (Array.isArray(data.$values)) {
           this.AllEmployyes = data.$values;
+          this.AllEmployyes=this.AllEmployyes.sort((a, b) => b.total_Average_RatingStatus - a.total_Average_RatingStatus);
           console.log(this.AllEmployyes);
         } else {
           console.error('Unexpected data format:', data);
@@ -176,6 +214,74 @@ updateAssignedTo(userId: number, event: Event) {
 viewEmployee(userid:number) {
   this.router.navigate(['/UserProfile', userid]);
   }
+  AddEmployee() {
+    let formData=null;
+    if (this.AddMentorForm.valid) {
+    formData = this.AddMentorForm.value;
+      formData.role=Number(formData.role);
+
+}
+    else {
+      formData=this.AddUserToBatchForm.value;
+      formData=formData.EmplloyeesToAdd;
+      delete formData.$id;
+      delete formData.userId;
+      delete formData.userName;
+      delete formData.password;
+      const user: User = Object.assign({}, formData);
+      formData=user;
+
+
+
+
+    }
+
+    this.addnewemployeetoBatch.addEmployee(formData,this.batchId).subscribe(
+      (response: any) => {
+        console.log('New Employee added successfully:', response);
+        // Optionally, you can navigate to another page or display a success message here
+      },
+      (error: any) => {
+        console.log('Employee Not added Error:', error);
+        // Handle error appropriately, such as displaying error messages to the user
+      }
+    );
+//Call The Service here and send the batchid and the form data
+
+
+    }
+
+    GetAllEmployees(){
+      this.getAllEmployees.GetEmp().subscribe(
+        (data: any) => {
+          // Ensure data.$values exists and is an array before accessing it
+          if (Array.isArray(data.$values)) {
+            this.FetchedEmployees = data.$values;
+            console.log('All Employees',this.FetchedEmployees);
+          } else {
+            console.error('Unexpected data format:', data);
+          }
+        },
+        (error) => {
+          console.error('Error fetching batches:', error);
+        }
+      );
+
+      //Code to fetch all employees
+    }
+    RemoveEmployee(Userid: number) {
+      this.removeEmployeesFromBatchService.RemoveEmployee(Userid,this.batchId).subscribe(
+        (response: any) => {
+          console.log('Employee Removed successfully:', response);
+          // Optionally, you can navigate to another page or display a success message here
+        },
+        (error: any) => {
+          console.log('Employee Removed added Error:', error);
+          // Handle error appropriately, such as displaying error messages to the user
+        }
+      );
+
+      }
 
 //functions purely for ui
 

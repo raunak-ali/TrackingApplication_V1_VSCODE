@@ -52,6 +52,7 @@
 }
 
 .card-container {
+
   display: flex;
   flex-wrap: wrap;
 }
@@ -70,7 +71,11 @@
 .custom-card:hover {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Add hover effect */
 }
+.mat-mdc-card-title{
+  background: linear-gradient(to bottom, #c1d8f0, white);
+}
 .mat-mdc-card-title, .mat-mdc-card-subtitle {
+
   display: block;
   margin: 0;
   color: black;

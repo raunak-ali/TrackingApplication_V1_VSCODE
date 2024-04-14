@@ -13,6 +13,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class LoginComponent  implements OnInit {
   loginForm!: FormGroup;
+  showemailform:boolean=false;
   //checkotp!:FormGroup;
   jwtToken: string | undefined;
   error: string | undefined;

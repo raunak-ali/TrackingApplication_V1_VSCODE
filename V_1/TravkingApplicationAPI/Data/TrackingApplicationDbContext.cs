@@ -74,11 +74,12 @@ namespace TravkingApplicationAPI.Data
         .OnDelete(DeleteBehavior.Cascade);
 
     // Define the relationship between FeedBack and UserTask
-    modelBuilder.Entity<FeedBack>()
-        .HasOne(f => f.UserTask)
-        .WithOne(t => t.FeedBack)
-        .HasForeignKey<FeedBack>(f => f.TaskId)
-        .OnDelete(DeleteBehavior.Cascade);
+   // Define the relationship between FeedBack and UserTask
+   modelBuilder.Entity<UserTask>()
+    .HasMany(t => t.FeedBack) // Assuming FeedBacks is a navigation property in UserTask representing the collection of feedbacks
+    .WithOne(f => f.UserTask) // Assuming UserTask is a navigation property in FeedBack representing the parent task
+    .HasForeignKey(f => f.TaskId) // Assuming TaskId is the foreign key in FeedBack referencing UserTask
+    .OnDelete(DeleteBehavior.Restrict); // Adjust the delete behavior as needed
 
     // Define the relationship between FeedBack and User
     modelBuilder.Entity<FeedBack>()

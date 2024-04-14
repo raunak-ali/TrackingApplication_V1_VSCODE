@@ -14,9 +14,10 @@ export class AddTask {
 
 }
 export enum priority{
+
+  low
+  ,medium,
   high
-  ,low
-  ,medium
 }
 
 

@@ -18,9 +18,13 @@
 <!-- Main Content -->
 <div class="content">
   <!-- Task Container -->
-  <div class="task-container">
+  <div class="content">
     <div  class="task-container">
+      <div *ngIf="AllTasks!=null; else noTransactions">
+        <!-- Your Task List content -->
+        <h2>All Tasks</h2>
       <button *ngIf="currentUser.Role!=0" mat-raised-button (click)="showForm = !showForm" class="btn btn-primary">Add New Task</button>
+      <br>
       <!-- Add New Task Form -->
       <div *ngIf="showForm" class="form-card">
         <!-- Your Add New Task Form content -->
@@ -65,13 +69,23 @@
       </div>
 
       <!-- Display Task List as Accordion -->
-      <div *ngIf="AllTasks!=null; else noTransactions">
-        <!-- Your Task List content -->
-        <h2>All Tasks</h2>
+<br>
         <mat-accordion>
           <mat-expansion-panel *ngFor="let task of AllTasks">
             <mat-expansion-panel-header>
-              <mat-panel-title>{{ task.taskName }}</mat-panel-title>
+
+              <mat-panel-title>
+
+                <i class="fa-sharp fa-solid fa-file-pen" [ngStyle]="{
+                  'color': task.priority === 0 ? 'lightgreen' : task.priority === 1 ? 'lightyellow' : task.priority === 2 ? 'lightcoral' : 'black'
+                }"></i>
+
+
+              <h3><b>{{ task.taskName }} </b></h3>
+              <!-- Add colored symbol based on priority -->
+
+
+              </mat-panel-title>
             </mat-expansion-panel-header>
             <p>{{ task.description }}</p>
             <p>Deadline: {{ task.deadLine }}</p>
@@ -89,14 +103,116 @@
   </div>
   <div class="employee-list">
     <h2>List of Employees</h2>
+    <button *ngIf="currentUser.Role!=0" mat-raised-button (click)="showEmployee = !showEmployee" class="btn btn-primary">Add More Members</button>
+    <br>
+    <div *ngIf="showEmployee" class="form-card">
+      <!-- Your Add New Task Form content -->
+      <h2>Add New Employee</h2>
+      <form [formGroup]="AddUserToBatchForm" (ngSubmit)="AddEmployee()" class="needs-validation" novalidate>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Employees to Add</mat-label>
+          <mat-select formControlName="EmplloyeesToAdd" id="EmplloyeesToAdd">
+            <mat-option *ngFor="let Employees of FetchedEmployees" [value]="Employees">{{ Employees.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button type="submit" mat-raised-button  class="btn btn-primary">Submit</button>
+        </form>
+        <p *ngIf="currentUser.Role!=0" mat-raised-button (click)="AddnewEmpoyee = !AddnewEmpoyee" class="btn btn-primary">Add New Employee</p>
+<div *ngIf ="AddnewEmpoyee">
+       <form [formGroup]="AddMentorForm" (ngSubmit)="AddEmployee()">
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Name</mat-label>
+            <input placeholder="Email" matInput formControlName="name" id="name">
+            <mat-error *ngIf="AddMentorForm.get('name')?.hasError('required')" class="error-message">Name is required</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Domain</mat-label>
+            <input placeholder="Email" matInput formControlName="domain" id="domain">
+            <mat-error *ngIf="AddMentorForm.get('domain')?.hasError('required')" class="error-message">Domain is required</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Job Title</mat-label>
+            <input placeholder="Email" matInput formControlName="jobTitle" id="jobTitle">
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Location</mat-label>
+            <input placeholder="Email" matInput formControlName="location" id="location">
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Phone</mat-label>
+            <input placeholder="Email" matInput formControlName="phone" id="phone">
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-checkbox formControlName="isCr">Is CR</mat-checkbox>
+        </div>
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Gender</mat-label>
+            <input placeholder="Email" matInput formControlName="gender" id="gender">
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Date of Joining</mat-label>
+            <input placeholder="Email" matInput type="date" formControlName="doj" id="doj">
+            <mat-error *ngIf="AddMentorForm.get('doj')?.hasError('required')" class="error-message">Date of Joining is required</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Capgemini Email ID</mat-label>
+            <input placeholder="Email" matInput type="email" formControlName="capgeminiEmailId" id="capgeminiEmailId">
+            <mat-error *ngIf="AddMentorForm.get('capgeminiEmailId')?.hasError('required')" class="error-message">Capgemini Email ID is required</mat-error>
+            <mat-error *ngIf="AddMentorForm.get('capgeminiEmailId')?.hasError('email')" class="error-message">Invalid email format</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Grade</mat-label>
+            <input placeholder="Email" matInput formControlName="grade" id="grade">
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Personal Email ID</mat-label>
+            <input placeholder="Email" matInput type="email" formControlName="personalEmailId" id="personalEmailId">
+          </mat-form-field>
+        </div>
+   <!-- Add other form fields as needed -->
+   <button type="submit" mat-raised-button  class="btn btn-primary">Submit</button>
+      </form>
+      </div>
+      </div>
+
+
+
+
+
+
+    <!--Aplly ngif here and display a form in the center if true-->
+
+<br>
     <table class="mat-table employee-table">
       <tr>
         <th>Name</th>
         <th>Score</th>
+        <th>Remove User</th>
       </tr>
       <tr *ngFor="let employee of AllEmployyes">
         <td (click)="viewEmployee(employee.userId)">{{ employee.name }}</td>
-        <td>{{ employee.totalAverageRatingStatus }}</td>
+        <td>{{ employee.total_Average_RatingStatus }}</td>
+        <td (click)="RemoveEmployee(employee.userId)">Remove</td>
       </tr>
     </table>
   </div>

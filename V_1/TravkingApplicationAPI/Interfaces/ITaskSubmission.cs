@@ -18,5 +18,8 @@ namespace TravkingApplicationAPI.Interfaces
 //Update or Add A Rating for a particular SubtAskSubmission
         Task<string> RateASubmittedTask(AddRating addRating);
 
+        Task<List<TaskSubmissions>>GetAllSubmissionsofATask(int taskid,int Userid);
+         Task<List<TaskSubmissions>>GetAllSubmissionsofAUser(int Userid);
+
     }
     }

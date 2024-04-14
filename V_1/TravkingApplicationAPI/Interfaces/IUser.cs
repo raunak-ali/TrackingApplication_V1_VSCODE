@@ -18,6 +18,7 @@ Task<User> GetUser(int Userid);
 
 Task<List<User>>FetchMentors();
 
+Task<List<User>>FetchEmployees();
 Task<List<User>>FetchAllEmployeesUnderAMentor(int Userid);
 
 Task<string>ResetPasswordOtp(string capgeminiid);
