@@ -26,7 +26,7 @@ namespace TravkingApplicationAPI.Controllers
         [Authorize(Roles ="Admin")]
         [Route("AddMentor")]
       
-        public async Task<ActionResult> AddUser([FromBody] AddUser user)//Try [FromBody]
+        public async Task<ActionResult> AddUser([FromBody] AddUserAddUser user)//Try [FromBody]
         {
             try
             {
@@ -62,7 +62,7 @@ namespace TravkingApplicationAPI.Controllers
                 var res = await UserService.LoginUser(user);
                 if (res == null)
                 {
-                    return BadRequest();
+                    return BadRequest(new {message="Username or password is incorrect"});
                 }
                 return Ok(res);
             }
@@ -137,6 +137,53 @@ namespace TravkingApplicationAPI.Controllers
             }
         }
 
+
+         [HttpPost]
+        [AllowAnonymous]
+        [Route("ResetPasswordOtp")]
+
+        public async Task<ActionResult> ResetPasswordOtp([FromBody] dynamic data)//Try [FromBody]
+        {
+            try
+            {
+string capgeminiid= data.GetProperty("capgeminiid").ToString();
+
+                var res = await UserService.ResetPasswordOtp(capgeminiid);
+                if (res == null)
+                {
+                    return BadRequest(new {message="User with that email does not exist"});
+                }
+                return Ok(new {message=res});
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+[HttpPost]
+        [AllowAnonymous]
+        [Route("ResetPassword")]
+
+        public async Task<ActionResult> ResetPassword([FromBody] dynamic data)//Try [FromBody]
+        {
+            try
+            {
+                var username= data.GetProperty("username").ToString();
+                var oldpassword=data.GetProperty("oldpassword").ToString();
+                var newpassword=data.GetProperty("newpassword").ToString();
+
+                var res = await UserService.ResetPassword(username,oldpassword,newpassword);
+                if (res == null)
+                {
+                    return BadRequest(new {message="User does not exist,Recheck the username and old password"});
+                }
+                return Ok(new {message=res});
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
 
     }
 }

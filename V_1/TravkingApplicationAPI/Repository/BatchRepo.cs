@@ -16,6 +16,8 @@ namespace TravkingApplicationAPI.Repository
         TrackingApplicationDbContext context;
         static IConfiguration? _config;
 
+        public UserRepo userrepo;
+
 
         public BatchRepo(DbContextOptions<TrackingApplicationDbContext> options, IConfiguration configuration)
         {
@@ -94,12 +96,12 @@ namespace TravkingApplicationAPI.Repository
 
                         //Add the new batch to the existing mentor
                         if (existing_mentor.Batches == null)
-        {
-            existing_mentor.Batches = new List<Batch>();
-        }
-        existing_mentor.Batches.Add(newbatch);
-         await context.SaveChangesAsync();
-         
+                        {
+                            existing_mentor.Batches = new List<Batch>();
+                        }
+                        existing_mentor.Batches.Add(newbatch);
+                        await context.SaveChangesAsync();
+
                         //Lets use this File_Stream to Add new Employees
 
                         if (newbatch.Employee_info_Excel != null || newbatch.Employee_info_Excel.Length != 0)
@@ -153,7 +155,7 @@ namespace TravkingApplicationAPI.Repository
                     var user = new User
                     {
                         Name = rowData[0], // Assuming Name corresponds to the first column
-                        UserName = rowData[0].Substring(0, 2) + "_" + newbatch.Domain.Substring(0, 3)+"_"+Convert.ToBase64String(System.Security.Cryptography.RandomNumberGenerator.GetBytes(2)).Substring(0,1),
+                        UserName = rowData[0].Substring(0, 2) + "_" + newbatch.Domain.Substring(0, 3) + "_" + Convert.ToBase64String(System.Security.Cryptography.RandomNumberGenerator.GetBytes(2)).Substring(0, 1),
                         Password = Convert.ToBase64String(System.Security.Cryptography.RandomNumberGenerator.GetBytes(10)).Substring(0, 12),
                         Role = Role.Employee,
                         Domain = newbatch.Domain,
@@ -176,45 +178,46 @@ namespace TravkingApplicationAPI.Repository
                 //Check if the user with the same personalEmialId Already exixts, if they do just update that User object 
 
 
-               var usersToAddOrUpdate = new List<User>(); // Create a new list to store users to be added or updated
+                var usersToAddOrUpdate = new List<User>(); // Create a new list to store users to be added or updated
 
-// Assign newbatch to each user if needed
-foreach (var user in users)
-{
-    var existingUser = context.Users.FirstOrDefault(u => u.Phone == user.Phone || u.CapgeminiEmailId == user.CapgeminiEmailId);
+                // Assign newbatch to each user if needed
+                foreach (var user in users)
+                {
+                    var existingUser = context.Users.FirstOrDefault(u => u.Phone == user.Phone || u.CapgeminiEmailId == user.CapgeminiEmailId);
 
-    if(existingUser != null)
-    {
-        // Update existing user with new batch
-        if (existingUser.Batches == null)
-        {
-            existingUser.Batches = new List<Batch>();
-        }
-        existingUser.Batches.Add(newbatch);
-        usersToAddOrUpdate.Add(existingUser); // Add existing user with updated batch to the list of users to add or update
-    }
-    else
-    {
-        user.Batches = new List<Batch>() { newbatch }; // Add batch to new user
-        usersToAddOrUpdate.Add(user); // Add new user to the list of users to add or update
-    }
-}
+                    if (existingUser != null)
+                    {
+                        // Update existing user with new batch
+                        if (existingUser.Batches == null)
+                        {
+                            existingUser.Batches = new List<Batch>();
+                        }
+                        existingUser.Batches.Add(newbatch);
+                        usersToAddOrUpdate.Add(existingUser); // Add existing user with updated batch to the list of users to add or update
+                    }
+                    else
+                    {
+                        user.Batches = new List<Batch>() { newbatch }; // Add batch to new user
+                        usersToAddOrUpdate.Add(user); // Add new user to the list of users to add or update
+                    }
+                }
 
-// Use Entity Framework to add or update users in the database
-foreach (var userToAddOrUpdate in usersToAddOrUpdate)
-{
-    if (userToAddOrUpdate.UserId == 0) // If Id is 0, it's a new user
-    {
-        context.Users.Add(userToAddOrUpdate); // Add new user to the context
-    }
-    else
-    {
-        // If Id is not 0, it's an existing user, Entity Framework will track changes and update the user
-        context.Entry(userToAddOrUpdate).State = EntityState.Modified;
-    }
-}
+                // Use Entity Framework to add or update users in the database
+                foreach (var userToAddOrUpdate in usersToAddOrUpdate)
+                {
+                    if (userToAddOrUpdate.UserId == 0) // If Id is 0, it's a new user
+                    {
+                        context.Users.Add(userToAddOrUpdate); // Add new user to the context
+                    }
+                    else
+                    {
+                        // If Id is not 0, it's an existing user, Entity Framework will track changes and update the user
+                        context.Entry(userToAddOrUpdate).State = EntityState.Modified;
+                    }
+                }
 
-await context.SaveChangesAsync();} // Save changes to the database
+                await context.SaveChangesAsync();
+            } // Save changes to the database
 
             catch (Exception e)
             {
@@ -226,7 +229,7 @@ await context.SaveChangesAsync();} // Save changes to the database
         {
             try
             {
-                var existing_mentor = context.Users.FirstOrDefault(s => s.UserId == MentorId && (s.Role == Role.Mentor || s.Role==Role.Admin));
+                var existing_mentor = context.Users.FirstOrDefault(s => s.UserId == MentorId && (s.Role == Role.Mentor || s.Role == Role.Admin));
                 if (existing_mentor != null)
                 {
                     var existing_batches = context.Batches.Where(b => b.MentorId == MentorId).ToList();
@@ -255,10 +258,38 @@ await context.SaveChangesAsync();} // Save changes to the database
             .Where(b => batchIdsForUser.Contains(b.BatchId)) // Filter by the BatchIds
             .ToList();
 
-//Later on order this according to thier total average rating please
+            //Later on order this according to thier total average rating please
             return batchObjectsForUser;
             //First find the the user object and retirved its Batches property
             //return this batches property.
+        }
+
+        public async Task<string>AddBatchToUser(AddUserAddUser User,int BatchId)
+        {
+            //Check if the User object is already present
+            //If yes just update its batches field and do savechanges
+            //if Not call the AddUser method, once that one returns Ok, Then add batches to it and savechanges
+           try{
+var existing_user=context.Users.FirstOrDefault(u=>u.CapgeminiEmailId==User.CapgeminiEmailId);
+if(existing_user==null){
+//Add a new User
+
+}
+var existing_batch=context.Batches.FirstOrDefault(b=>b.BatchId==BatchId);
+if(existing_user.Batches==null){
+    existing_user.Batches=new List<Batch>();
+}
+    existing_user.Batches.Add(existing_batch);
+    context.SaveChanges();
+
+return"Batch Added to the User sucessfully";
+           }
+           catch(Exception e){throw;}
+        }
+
+        public Task<string> DeleteBatch(int BatchId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

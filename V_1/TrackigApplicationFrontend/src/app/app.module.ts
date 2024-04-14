@@ -36,6 +36,7 @@ import { MatSelectModule } from '@angular/material/select'; // Import MatSelectM
 import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 
@@ -86,7 +87,8 @@ import { AdminDashboardComponent } from './components/admin-dashboard/admin-dash
     MatSelectModule,
     MatListModule,
     MatIconModule, // Add MatSelectModule here
-    MatTableModule
+    MatTableModule,
+    MatSnackBarModule
 
   ],
   providers: [LoginService,

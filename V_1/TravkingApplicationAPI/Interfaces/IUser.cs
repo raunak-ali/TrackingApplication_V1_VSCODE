@@ -10,7 +10,7 @@ namespace TravkingApplicationAPI.Interfaces
     public interface IUser
     {
 Task<string> LoginUser(Login user);
-Task<User> AddUser(AddUser user);
+Task<User> AddUser(AddUserAddUser user);
 
 Task<List<User>> GetUserByBatch(int BatchId);
 
@@ -20,5 +20,8 @@ Task<List<User>>FetchMentors();
 
 Task<List<User>>FetchAllEmployeesUnderAMentor(int Userid);
 
+Task<string>ResetPasswordOtp(string capgeminiid);
+
+Task<string>ResetPassword(string username,string oldpassword,string newpassword);
     }
 }

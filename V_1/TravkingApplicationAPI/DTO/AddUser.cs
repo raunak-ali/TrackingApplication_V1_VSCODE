@@ -7,7 +7,7 @@ using TravkingApplicationAPI.Models;
 namespace TravkingApplicationAPI.DTO
 {
 
-    public class AddUser
+    public class AddUserAddUser
     {
          public string Name { get; set;}
     public Role Role { get; set; }

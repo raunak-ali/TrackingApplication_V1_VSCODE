@@ -12,6 +12,9 @@ using TravkingApplicationAPI.DTO;
 using TravkingApplicationAPI.Interfaces;
 using TravkingApplicationAPI.Models;
 using Newtonsoft.Json;
+using System.Security.Claims;
+using System.Net.Mail;
+using System.Net;
 
 namespace TravkingApplicationAPI.Repository
 {
@@ -75,7 +78,7 @@ namespace TravkingApplicationAPI.Repository
             }
         }
 
-        public async Task<User> AddUser(AddUser user)
+        public async Task<User> AddUser(AddUserAddUser user)
         {
             try
             {
@@ -184,6 +187,75 @@ return null;
         public Task<List<User>> FetchAllEmployeesUnderAMentor(int Userid)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<string> ResetPasswordOtp(string capgeminiid)
+        {
+            try{
+var existing_user=context.Users.FirstOrDefault(u=>u.CapgeminiEmailId==capgeminiid);
+if(existing_user!=null){
+    var reset_password=Convert.ToBase64String(System.Security.Cryptography.RandomNumberGenerator.GetBytes(10)).Substring(0, 12);
+    existing_user.Password=reset_password;
+    context.SaveChanges();
+    //SendEmail(capgeminiid,existing_user.UserName,"Password reset",reset_password); ->FOr now commented out as i dont wanna send actual emails on capgemini id's
+    return "OneTime Password has been sent to your email";
+}
+                return "User with this email id is not registered";
+            }
+            catch(Exception e){throw;}
+            return null;
+
+           //First check if a user with that capgemini email id is registered, if so then send an otp to thier email address
+           //Generate a onetimepassword with which they can use the reset password option
+           //
+
+        }
+
+         public void SendEmail(string toEmail,string username, string subject,string password)
+        {
+            try{
+            // Set up SMTP client
+            SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+            client.EnableSsl = true;
+            client.UseDefaultCredentials = false;
+            
+            client.Credentials = new NetworkCredential("netasp709@gmail.com", "ndeq qwol oyew bxxr");
+
+            // Create email message
+            MailMessage mailMessage = new MailMessage();
+            mailMessage.From = new MailAddress("netasp709@gmail.com");
+            mailMessage.To.Add(toEmail);
+            mailMessage.Subject = subject;
+            mailMessage.IsBodyHtml = true;
+            StringBuilder mailBody = new StringBuilder();
+            mailBody.AppendFormat("<h1>Reset Password</h1>");
+            mailBody.AppendFormat("<br />");
+            mailBody.AppendFormat("<p>You can Reset your password, By entering this in the past password </p>");
+            mailBody.AppendFormat("<p>Username : {0}</p>", username);
+            mailBody.AppendFormat("<p>Password : {0}</p>", password); // Include Account Number
+    mailMessage.Body = mailBody.ToString();
+
+    // Send email
+    client.Send(mailMessage);}
+    catch(Exception ex){
+        //Lets not throw an exception here since this will not work on office VPN
+        return;
+    }
+        }
+
+        public async Task<string> ResetPassword(string username, string oldpassword, string newpassword)
+        {
+           try{
+            var existing_user=context.Users.FirstOrDefault(u=>u.UserName==username && u.Password==oldpassword);
+            if(existing_user!=null){
+                existing_user.Password=newpassword;
+                context.SaveChanges();
+            }
+
+            return "User with that username and password does not exist";
+           }
+           catch(Exception e){
+            throw;}
         }
     }
 }

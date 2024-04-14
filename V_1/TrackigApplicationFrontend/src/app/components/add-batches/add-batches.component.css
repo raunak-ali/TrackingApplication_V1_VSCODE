@@ -1,287 +1,40 @@
-.container-fluid {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-.card {
-  width: 400px;
+.content {
+  background-color: #ffffff;
+  margin-left: 100px;
   padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.card-header {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-.mat-form-field {
-  width: 100%;
-}
-
-button {
-  width: 100%;
-}
-
-/* Navbar */
-.mat-toolbar {
-  background-color: #000000;
-  opacity: 50%;
-  color: #fff;
-  width: 80px;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  overflow-x: hidden;
-  padding-top: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.mat-toolbar a {
-  padding: 10px 0;
-  text-align: center;
-  text-decoration: none;
-  font-size: 14px;
-  color: #fff;
-  display: block;
-}
-
-.mat-toolbar a:hover {
-  background-color: #03045e;
-}
-
-/* Form Card */
-.form-card {
-  background-color: #ffffff; /* Set form card background color */
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  padding: 20px;
-  position: absolute;
-  top: 2%;
-  left: 18%;
-  width: 300px; /* Adjust card width as needed */
-  z-index: 1000;
-}
-
-.form-card h2 {
-  margin-bottom: 20px;
-}
-
-.task-image {
-  width: 200px;
-  height: auto;
-  border-radius: 5px;
-  margin-left: auto;
-}
-
-/* Main Content */
-.main-content {
-  background-color: transparent; /* Set main content background color to transparent */
-  margin-top: 100px; /* Adjust top margin to prevent overlap with navbar */
-}
-
-/* Table styles */
-table {
-  background-color: rgba(117, 140, 166, 0.83);
-  width: 100%;
-  border-collapse: collapse;
-  color: #fff;
-}
-
-th, td {
-  background-color: rgba(117, 140, 166, 0.83);
-  padding: 8px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-  color: #fff;
-}
-
-th {
-  background-color: rgba(117, 140, 166, 0.83); /* Table header background color */
-  color: #fff; /* Table header text color */
-}
-
-/* Button styles */
-.mat-raised-button {
-  background-color: #0077b6; /* Button background color */
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.mat-raised-button:hover {
-  background-color: #03045e; /* Button hover background color */
-}
-.mat-expansion-panel-header:not([aria-disabled=true]) {
-  cursor: pointer;
-  color:#ddd;
-  background-color: #ddd;
-}
-body, html {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-.container {
-  display: flex;
-  height: 100%;
-}
-
-.task-container {
-  flex: 1;
-  padding: 20px;
-  border-left: 2px solid #ccc; /* Add border to left side */
-  padding-left: 20px; /* Add padding to space content away from border */
-  margin-left: 20px; /* Add margin to space content away from header */
-  flex-grow: 1; /* Allow container to grow and fill available space */
-}
-
-.employee-list {
-  margin-left: 20px;
-  width: 200px; /* Adjust width as needed */
-  padding: 20px;
-  height: max-content;
-  margin-top: 20px;
-}
-
-.task-card {
-  width: 200px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc; /* Add border */
-  border-radius: 5px;
-  padding: 10px;
-}
-
-
-.employee-item {
-  background-color: #ffffff; /* Card background color */
-  border-radius: 5px; /* Card border radius */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Card box shadow */
-  padding: 20px; /* Card padding */
-  margin-bottom: 20px; /* Spacing between employee items */
-}
-
-.employee-name {
-  background-color: #000000;
-  font-size: 18px; /* Employee name font size */
-  font-weight: bold; /* Employee name font weight */
-  margin-bottom: 10px; /* Spacing below employee name */
-}
-
-.employee-info {
-  height: max-content;
-  font-size: 14px; /* Employee info font size */
-  color: #6c757d; /* Employee info color */
-}
-
-.employee-average-score {
-  font-weight: bold; /* Employee average score font weight */
-  color: #007bff; /* Employee average score color */
-}
-.mat-mdc-list-item:not(.mat-mdc-list-item-interactive), .mat-mdc-list-option:not(.mat-mdc-list-item-interactive) {
-  cursor: default;
-  height: max-content;
-}
-.employee-table {
-  background-color: #f8f9fa; /* Off-white background color */
 }
 
 .content {
-  background-color:transparent;
-  margin-left: 100px;
   padding: 20px;
-  display: flex;
-  flex-direction: row;
 }
 
 .header {
-  width: 2000px;
-  background-color: #ffffff; /* Set background color to white */
-  color: #000000; /* Set text color to black */
+  background-color: #ffffff;
+  color: #000000;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  left:10px;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .icon {
-
   margin-right: 10px;
-  width: 40px; /* Larger icon width */
+  width: 40px;
   height: auto;
   vertical-align: middle;
-  margin-left: 10px; /* Add margin to the left of the icon */
+  margin-left: 10px;
 }
 
 .menu-button {
-  color: #00b4d8; /* Set menu button color to light blue */
+  color: #00b4d8;
 }
 
 .mat-menu-panel {
-  background-color: #ffffff; /* Set menu background color to white */
+  background-color: #ffffff;
 }
+
 .custom-menu {
-  background-color: rgba(255, 255, 255, 0.9); /* Adjust opacity as needed */
-}
-.content {
-  display: flex;
-  flex-direction: row;
-}
-
-.header {
-  margin-top: 50px;
-  align-self: center;
-margin-left:200px;
-  width: 800px; /* Adjust width as needed */
-}
-
-.task-container {
-  border-left: 2px solid #ccc; /* Add border to left side */
-  padding-left: 20px; /* Add padding to space content away from border */
-  margin-left: 20px; /* Add margin to space content away from header */
-  flex-grow: 1; /* Allow container to grow and fill available space */
-}
-
-.employee-list {
-  margin-left: 20px; /* Add margin to space content away from task container */
-  width: 200px; /* Adjust width as needed */
-}
-.excel-table {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-.excel-table th, .excel-table td {
-  border: 1px solid #dddddd;
-  padding: 8px;
-}
-
-.excel-table th {
-  background-color: #f2f2f2;
-}
-
-.excel-table td.submission-details {
-  width: 70%;
-}
-
-.excel-table td.rating {
-  width: 30%;
+  background-color: rgba(255, 255, 255, 0.9);
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { GetUser } from 'src/app/Models/get-user';
 import { User } from 'src/app/Models/user';
@@ -25,7 +25,8 @@ export class AddBatchesComponent implements OnInit {
 
 
   constructor(private fb: FormBuilder, private Addbatchesservice: AddBatchesService, private loginservice: LoginService
-    ,private route: ActivatedRoute,private getMentorsService:GetMentorsService){}
+    ,private route: ActivatedRoute,private getMentorsService:GetMentorsService,
+    private router: Router){}
   private existing_mentor?=this.loginservice.getUser();
 
   ngOnInit(): void {
@@ -38,6 +39,17 @@ this.fetchmentors();
       Employee_info_Excel:[null]// A
     });
 
+  }
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
+  }
+
+  logout(): void {
+    this.loginservice.clearUser();
+    this.loginservice.clearToken();
+    this.loginservice.clearcurrentUser();
+    this.router.navigate(["Login"]);
+    // Implement logout functionality
   }
   fetchmentors() {
     this.getMentorsService. GetMentors().subscribe(

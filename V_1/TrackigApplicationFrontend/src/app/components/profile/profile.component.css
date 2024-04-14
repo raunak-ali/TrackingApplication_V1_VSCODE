@@ -1,59 +1,102 @@
-.profile {
-  padding: 20px;
+/* User Profile Container */
+.profile-container {
+  display: flex;
+  flex-direction: row;
 }
 
+/* User Information Section */
 .user-info {
-  margin-bottom: 20px;
-  color: #fff;
+  flex: 1;
+  margin-right: 20px;
 }
 
-.toggle-button {
-  background-color: #007bff;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
+/* Batches Section */
+.batches-section {
+  flex: 1;
+}
+
+/* Batch Cards */
+.batch-cards {
+  display: flex;
+  flex-direction: column;
+}
+
+.batch-card {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  padding: 10px;
   margin-bottom: 10px;
   cursor: pointer;
 }
 
-.toggle-button:hover {
-  background-color: #0056b3;
+/* Tasks Section */
+.tasks-section {
+  flex: 1;
 }
 
-.batches,
-.tasks {
-  display: contents;
+/* Task List */
+.task-list ul {
+  list-style-type: none;
+  padding: 0;
 }
 
-.batches h2,
-.tasks h2 {
+.task-list li {
   margin-bottom: 10px;
+  cursor: pointer;
 }
 
-.subtasks {
-  margin-left: 20px;
-}
-
+/* Subtasks */
 .subtasks ul {
   list-style-type: none;
+  padding-left: 20px;
 }
 
-.show {
-  display: block;
+/* Hover effect */
+.batch-card:hover,
+.task-list li:hover {
+  background-color: #ddd;
 }
 
-/* Center the form card */
-.form-card {
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.content {
+  background-color:transparent;
+  margin-left: 100px;
   padding: 20px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  max-width: 400px;
-  width: 100%;
 }
+.content {
+  padding: 20px;
+}
+
+.header {
+  background-color: #ffffff; /* Set background color to white */
+  color: #000000; /* Set text color to black */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+
+}
+
+.icon {
+
+  margin-right: 10px;
+  width: 40px; /* Larger icon width */
+  height: auto;
+  vertical-align: middle;
+  margin-left: 10px; /* Add margin to the left of the icon */
+}
+
+.menu-button {
+  color: #00b4d8; /* Set menu button color to light blue */
+}
+
+.mat-menu-panel {
+  background-color: #ffffff; /* Set menu background color to white */
+}
+.custom-menu {
+  background-color: rgba(255, 255, 255, 0.9); /* Adjust opacity as needed */
+}
+
+
 

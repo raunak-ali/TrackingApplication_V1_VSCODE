@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Role } from 'src/app/Models/user';
 import { AddMentorService } from 'src/app/Services/add-mentor.service';
+import { LoginService } from 'src/app/Services/login.service';
 
 @Component({
   selector: 'app-add-mentor',
@@ -19,12 +20,12 @@ export class AddMentorComponent implements OnInit {
 
 
   constructor(private fb: FormBuilder, private AddMentorservice: AddMentorService,
-    private router: Router) { }
+    private router: Router, private loginservice :LoginService,) { }
 
   ngOnInit(): void {
     this.AddMentorForm = this.fb.group({
       name: ['', Validators.required], // Required field
-      role: [Role.Employee],
+      role: [1],
       domain: ['', Validators.required], // Required field
       jobTitle: [''],
       location: [''],
@@ -36,15 +37,25 @@ export class AddMentorComponent implements OnInit {
       grade: [''],
       totalAverageRatingStatus: [0],
       personalEmailId: [''],
-      earlierMentorName: [''],
-      finalMentorName: [''],
+      earlierMentorName: ['None'],
+      finalMentorName: ['None'],
       attendanceCount: [0],
       batches: [null]
     });
 
   }
 
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
+  }
 
+  logout(): void {
+    this.loginservice.clearUser();
+    this.loginservice.clearToken();
+    this.loginservice.clearcurrentUser();
+    this.router.navigate(["Login"]);
+    // Implement logout functionality
+  }
   onSubmit(): void {
     if (this.AddMentorForm.valid) {
       const formData = this.AddMentorForm.value;

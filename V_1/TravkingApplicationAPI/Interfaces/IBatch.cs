@@ -13,8 +13,14 @@ namespace TravkingApplicationAPI.Interfaces
         Task<List<Batch>> GetAllBatches(int MentorId);
 
         Task<List<Batch>>GetAllBatchesForEmployees(int UserId);
+
+        Task<string>AddBatchToUser(AddUserAddUser User,int BatchId);
+
+        Task<string>DeleteBatch(int BatchId);
                
 
 
     }
+
+    
 }

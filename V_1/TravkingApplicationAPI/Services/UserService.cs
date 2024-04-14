@@ -30,7 +30,7 @@ namespace TravkingApplicationAPI.Services
             }
         }
 
-        public async Task<User> AddUser(AddUser user)
+        public async Task<User> AddUser(AddUserAddUser user)
         {
             try
             {
@@ -74,6 +74,31 @@ namespace TravkingApplicationAPI.Services
         { try
             {
                 return await User.FetchMentors();
+
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<string> ResetPasswordOtp(string capgeminiid){
+            try
+            {
+                return await User.ResetPasswordOtp(capgeminiid);
+
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<string> ResetPassword(string username, string oldpassword, string newpassword)
+        {
+              try
+            {
+                return await User.ResetPassword(username,oldpassword,newpassword);
 
 
             }

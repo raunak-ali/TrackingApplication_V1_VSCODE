@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./get-batch.component.css']
 })
 export class GetBatchComponent implements OnInit {
+
   error: string | undefined;
   allBatches!: GetBatches[];
   getMentorID!: any;
@@ -59,11 +60,43 @@ addBatch(userid: number): void {
   // Navigate to another component with batchId as a parameter
   this.router.navigate(['/AddNewBatch', userid]);
 }
-addMentor(userid: number): void {
+addMentor(): void {
   // Navigate to another component with batchId as a parameter
   this.router.navigate(['/AddMentor']);
 }
 toggleDetails(batch: any): void {
   batch.showDetails = !batch.showDetails; // Toggle the showDetails property
+}
+
+downloadFileFromByteArrayString(byteArrayString: string, fileName: string | null) {
+  const byteArray = Uint8Array.from(atob(byteArrayString), c => c.charCodeAt(0));
+  const blob = new Blob([byteArray]);
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  if (fileName) { // Check if fileName is not null or undefined
+    link.download = fileName;
+  }
+  document.body.appendChild(link);
+  link.click();
+  URL.revokeObjectURL(url);
+  document.body.removeChild(link);
+}
+
+downloadFile(byteArray: string | Uint8Array | undefined, fileName: string) {
+  if (byteArray) {
+    const byteArrayString = typeof byteArray === 'string' ? byteArray : this.uint8ArrayToBase64(byteArray);
+    this.downloadFileFromByteArrayString(byteArrayString, fileName);
+  } else {
+    console.error("Byte array is undefined.");
+  }
+}
+
+uint8ArrayToBase64(array: Uint8Array): string {
+  let binary = '';
+  for (let i = 0; i < array.length; i++) {
+    binary += String.fromCharCode(array[i]);
+  }
+  return window.btoa(binary);
 }
 }

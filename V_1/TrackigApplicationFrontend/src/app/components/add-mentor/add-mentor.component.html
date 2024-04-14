@@ -5,113 +5,171 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Add Mentor</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/12.2.8/angular-material.min.css" rel="stylesheet">
 
+  <style>
+    .content {
+      background-color: #ffffff; /* Set background color to white */
+      margin-left: 100px;
+      padding: 20px;
+    }
+
+    .header {
+      background-color: #ffffff; /* Set background color to white */
+      color: #000000; /* Set text color to black */
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .icon {
+      margin-right: 10px;
+      width: 40px; /* Larger icon width */
+      height: auto;
+      vertical-align: middle;
+      margin-left: 10px; /* Add margin to the left of the icon */
+    }
+
+    .menu-button {
+      color: #00b4d8; /* Set menu button color to light blue */
+    }
+
+    .mat-menu-panel {
+      background-color: #ffffff; /* Set menu background color to white */
+    }
+
+    .custom-menu {
+      background-color: rgba(255, 255, 255, 0.9); /* Adjust opacity as needed */
+    }
+
+    .card {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .error-message {
+      color: red;
+    }
+  </style>
 </head>
 
 <body>
+  <div class="content">
+    <div class="header">
+      <h2> Dashboard <img src="/assets/Mentor_Dashboard_Icon.png" alt="Mentor Dashboard Icon" class="icon"></h2>
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu" class="menu-button">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu" class="custom-menu">
+        <button mat-menu-item (click)="navigateTo('dashboard')">Dashboard</button>
+        <button mat-menu-item (click)="navigateTo('batches')">Batches</button>
+        <button mat-menu-item (click)="navigateTo('profile')">Profile</button>
+        <button mat-menu-item (click)="navigateTo('employees')">Employees</button>
+        <button mat-menu-item (click)="logout()">Logout</button>
+      </mat-menu>
+    </div>
+    <p>Welcome to the dashboard!</p>
+    <div class="container-fluid">
+      <div class="card">
+        <div class="card-header">
+          <h2>Add Mentor</h2>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="AddMentorForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Name</mat-label>
+                <input placeholder="Email" matInput formControlName="name" id="name">
+                <mat-error *ngIf="AddMentorForm.get('name')?.hasError('required')" class="error-message">Name is required</mat-error>
+              </mat-form-field>
+            </div>
 
 
 
-  <div class="container-fluid">
-    <div class="card">
-      <div class="card-header">
-        <h2>Add Mentor</h2>
-      </div>
-      <div class="card-body">
-        <form [formGroup]="AddMentorForm" (ngSubmit)="onSubmit()">
-          <div class="form-group">
-            <label for="name">Name:</label>
-            <input type="text" id="name" formControlName="name" class="form-control">
-            <div *ngIf="AddMentorForm.get('name')?.errors?.['required']" class="error">Name is required</div>
-          </div>
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Domain</mat-label>
+                <input placeholder="Email" matInput formControlName="domain" id="domain">
+                <mat-error *ngIf="AddMentorForm.get('domain')?.hasError('required')" class="error-message">Domain is required</mat-error>
+              </mat-form-field>
+            </div>
 
-          <div class="form-group">
-            <label for="role">Role:</label>
-            <select id="role" formControlName="role" class="form-control">
-              <option [value]="Role.Mentor">Mentor</option>
-              <!-- Add more options for other roles -->
-            </select>
-          </div>
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Job Title</mat-label>
+                <input placeholder="Email" matInput formControlName="jobTitle" id="jobTitle">
+              </mat-form-field>
+            </div>
 
-          <div class="form-group">
-            <label for="domain">Domain:</label>
-            <input type="text" id="domain" formControlName="domain" class="form-control">
-            <div *ngIf="AddMentorForm.get('domain')?.errors?.['required']" class="error">Domain is required</div>
-          </div>
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Location</mat-label>
+                <input placeholder="Email" matInput formControlName="location" id="location">
+              </mat-form-field>
+            </div>
 
-          <div class="form-group">
-            <label for="jobTitle">Job Title:</label>
-            <input type="text" id="jobTitle" formControlName="jobTitle" class="form-control">
-          </div>
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Phone</mat-label>
+                <input placeholder="Email" matInput formControlName="phone" id="phone">
+              </mat-form-field>
+            </div>
 
-          <div class="form-group">
-            <label for="location">Location:</label>
-            <input type="text" id="location" formControlName="location" class="form-control">
-          </div>
+            <div class="form-group">
+              <mat-checkbox formControlName="isCr">Is CR</mat-checkbox>
+            </div>
 
-          <div class="form-group">
-            <label for="phone">Phone:</label>
-            <input type="text" id="phone" formControlName="phone" class="form-control">
-          </div>
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Gender</mat-label>
+                <input placeholder="Email" matInput formControlName="gender" id="gender">
+              </mat-form-field>
+            </div>
 
-          <div class="form-group">
-            <label for="isCr">Is CR:</label>
-            <input type="checkbox" id="isCr" formControlName="isCr">
-          </div>
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Date of Joining</mat-label>
+                <input placeholder="Email" matInput type="date" formControlName="doj" id="doj">
+                <mat-error *ngIf="AddMentorForm.get('doj')?.hasError('required')" class="error-message">Date of Joining is required</mat-error>
+              </mat-form-field>
+            </div>
 
-          <div class="form-group">
-            <label for="gender">Gender:</label>
-            <input type="text" id="gender" formControlName="gender" class="form-control">
-          </div>
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Capgemini Email ID</mat-label>
+                <input placeholder="Email" matInput type="email" formControlName="capgeminiEmailId" id="capgeminiEmailId">
+                <mat-error *ngIf="AddMentorForm.get('capgeminiEmailId')?.hasError('required')" class="error-message">Capgemini Email ID is required</mat-error>
+                <mat-error *ngIf="AddMentorForm.get('capgeminiEmailId')?.hasError('email')" class="error-message">Invalid email format</mat-error>
+              </mat-form-field>
+            </div>
 
-          <div class="form-group">
-            <label for="doj">Date of Joining:</label>
-            <input type="date" id="doj" formControlName="doj" class="form-control">
-            <div *ngIf="AddMentorForm.get('doj')?.errors?.['required']" class="error">Date of Joining is required</div>
-          </div>
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Grade</mat-label>
+                <input placeholder="Email" matInput formControlName="grade" id="grade">
+              </mat-form-field>
+            </div>
 
-          <div class="form-group">
-            <label for="capgeminiEmailId">Capgemini Email ID:</label>
-            <input type="email" id="capgeminiEmailId" formControlName="capgeminiEmailId" class="form-control">
-            <div *ngIf="AddMentorForm.get('capgeminiEmailId')?.errors?.['required']" class="error">Capgemini Email ID is required</div>
-            <div *ngIf="AddMentorForm.get('capgeminiEmailId')?.errors?.['email']" class="error">Invalid email format</div>
-          </div>
+            <div class="form-group">
+              <mat-form-field appearance="fill">
+                <mat-label>Personal Email ID</mat-label>
+                <input placeholder="Email" matInput type="email" formControlName="personalEmailId" id="personalEmailId">
+              </mat-form-field>
+            </div>
 
-          <div class="form-group">
-            <label for="grade">Grade:</label>
-            <input type="text" id="grade" formControlName="grade" class="form-control">
-          </div>
-
-          <div class="form-group">
-            <label for="totalAverageRatingStatus">Total Average Rating Status:</label>
-            <input type="number" id="totalAverageRatingStatus" formControlName="totalAverageRatingStatus"
-              class="form-control">
-          </div>
-
-          <div class="form-group">
-            <label for="personalEmailId">Personal Email ID:</label>
-            <input type="email" id="personalEmailId" formControlName="personalEmailId" class="form-control">
-          </div>
-
-          <div class="form-group">
-            <label for="earlierMentorName">Earlier Mentor Name:</label>
-            <input type="text" id="earlierMentorName" formControlName="earlierMentorName" class="form-control">
-          </div>
-
-          <div class="form-group">
-            <label for="finalMentorName">Final Mentor Name:</label>
-            <input type="text" id="finalMentorName" formControlName="finalMentorName" class="form-control">
-          </div>
-
-          <div class="form-group">
-            <label for="attendanceCount">Attendance Count:</label>
-            <input type="number" id="attendanceCount" formControlName="attendanceCount" class="form-control">
-          </div>
-
-          <!-- Add more form fields for other properties -->
-
-          <button type="submit" [disabled]="!AddMentorForm.valid" class="btn btn-primary">Submit</button>
-        </form>
+            <button type="submit" [disabled]="!AddMentorForm.valid" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>

@@ -38,7 +38,7 @@
           <mat-form-field appearance="fill">
             <mat-label>Priority</mat-label>
             <mat-select formControlName="Priority" id="priority">
-              <mat-option *ngFor="let priority of priorities" [value]="priority">{{ priority }}</mat-option>
+              <mat-option *ngFor="let priority of priorities" [value]="priorities.indexOf(priority)">{{ priority }}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field appearance="fill">
@@ -87,33 +87,19 @@
       </ng-template>
     </div>
   </div>
-
-  <!-- Employee List -->
   <div class="employee-list">
     <h2>List of Employees</h2>
-    <!-- Your Employee List content -->
-
-      <table mat-table class="employee-table">
-        <!-- Name Column -->
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef>Name</th>
-          <td mat-cell *matCellDef="let employee">{{ employee.name }}</td>
-        </ng-container>
-
-        <!-- Score Column -->
-        <ng-container matColumnDef="score">
-          <th mat-header-cell *matHeaderCellDef>Score</th>
-          <td mat-cell *matCellDef="let employee">{{ employee.score }}</td>
-        </ng-container>
-
-        <tr mat-row *ngFor="let employee of AllEmployyes">
-          <td mat-cell (click)="viewEmployee(employee.userId)">{{ employee.name }}</td>
-          <td mat-cell>{{ employee.totalAverageRatingStatus }}</td>
-        </tr>
-      </table>
-
+    <table class="mat-table employee-table">
+      <tr>
+        <th>Name</th>
+        <th>Score</th>
+      </tr>
+      <tr *ngFor="let employee of AllEmployyes">
+        <td (click)="viewEmployee(employee.userId)">{{ employee.name }}</td>
+        <td>{{ employee.totalAverageRatingStatus }}</td>
+      </tr>
+    </table>
   </div>
-</div>
 
 <!-- Angular Material Scripts -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular/12.2.8/angular.min.js"></script>

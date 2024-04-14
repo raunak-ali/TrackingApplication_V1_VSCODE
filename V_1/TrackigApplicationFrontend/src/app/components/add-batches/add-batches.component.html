@@ -1,31 +1,73 @@
-<div class="content">
-<form [formGroup]="AddBatchForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
-  <mat-form-field appearance="fill">
-    <mat-label>Domain</mat-label>
-    <input matInput formControlName="Domain" id="Domain" placeholder="Domain"required>
-    <mat-error *ngIf="AddBatchForm.get('Domain')?.invalid">Task name is required.</mat-error>
-  </mat-form-field>
-  <mat-form-field appearance="fill">
-    <mat-label>Description</mat-label>
-    <input matInput formControlName="Description" id="Description" placeholder="Description of this task">
-  </mat-form-field>
-  <mat-form-field appearance="fill">
-    <mat-label> MentorId</mat-label>
-    <mat-select formControlName="MentorId" id=" MentorId">
-      <mat-option *ngFor="let mentor of allMentors" [value]="mentor.userId">Mentor Name:-{{ mentor.name }}</mat-option>
-    </mat-select>
-  </mat-form-field>
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Mentor</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/12.2.8/angular-material.min.css" rel="stylesheet">
 
-  <div class="form-group">
-    <label for="Employee_info_Excel_File">Employee_info_Excel_File</label>
-    <input type="file" class="form-control-file" id="Employee_info_Excel_File" (change)="onFileChange($event)">
-    <div *ngIf="AddBatchForm.get('Employee_info_Excel_File')?.invalid && (AddBatchForm.get('Employee_info_Excel_File')?.dirty || AddBatchForm.get('Employee_info_Excel_File')?.touched)" class="invalid-feedback">
-      File Upload is required.
+</head>
+
+<body>
+  <div class="content">
+    <div class="header">
+      <h2> Dashboard <img src="/assets/Mentor_Dashboard_Icon.png" alt="Mentor Dashboard Icon" class="icon"></h2>
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu" class="menu-button">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu" class="custom-menu">
+        <button mat-menu-item (click)="navigateTo('dashboard')">Dashboard</button>
+        <button mat-menu-item (click)="navigateTo('batches')">Batches</button>
+        <button mat-menu-item (click)="navigateTo('profile')">Profile</button>
+        <button mat-menu-item (click)="navigateTo('employees')">Employees</button>
+        <button mat-menu-item (click)="logout()">Logout</button>
+      </mat-menu>
+    </div>
+    <p>Welcome to the dashboard!</p>
+    <div class="container-fluid">
+      <div class="card">
+        <div class="card-header">
+          <h2>Add Mentor</h2>
+        </div>
+        <div class="card-body">
+          <!-- Replace with provided form -->
+          <form [formGroup]="AddBatchForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
+            <mat-form-field appearance="fill">
+              <mat-label>Domain</mat-label>
+              <input matInput formControlName="Domain" id="Domain" placeholder="Domain" required>
+              <mat-error *ngIf="AddBatchForm.get('Domain')?.invalid">Domain is required.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Description</mat-label>
+              <input matInput formControlName="Description" id="Description" placeholder="Description of this task">
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>MentorId</mat-label>
+              <mat-select formControlName="MentorId" id="MentorId">
+                <mat-option *ngFor="let mentor of allMentors" [value]="mentor.userId">Mentor Name: {{ mentor.name }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <div class="form-group">
+              <label for="Employee_info_Excel_File">Employee_info_Excel_File</label>
+              <input type="file" class="form-control-file" id="Employee_info_Excel_File" (change)="onFileChange($event)">
+              <div *ngIf="AddBatchForm.get('Employee_info_Excel_File')?.invalid && (AddBatchForm.get('Employee_info_Excel_File')?.dirty || AddBatchForm.get('Employee_info_Excel_File')?.touched)"
+                class="invalid-feedback">
+                File Upload is required.
+              </div>
+            </div>
+
+            <!-- Add other form fields as needed -->
+            <button type="submit" mat-raised-button color="primary">Submit</button>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
+</body>
 
-  <!-- Add other form fields as needed -->
-  <button type="submit" mat-raised-button color="primary">Submit</button>
-</form>
-</div>
+</html>

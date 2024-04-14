@@ -103,7 +103,17 @@ export class ProfileComponent  implements OnInit {
         );
 
       }
+      navigateTo(route: string): void {
+        this.router.navigate([route]);
+      }
 
+      logout(): void {
+        this.loginservice.clearUser();
+        this.loginservice.clearToken();
+        this.loginservice.clearcurrentUser();
+        this.router.navigate(["Login"]);
+        // Implement logout functionality
+      }
 
       //get-batch->Using userid now
       fetchTransactions(): void {

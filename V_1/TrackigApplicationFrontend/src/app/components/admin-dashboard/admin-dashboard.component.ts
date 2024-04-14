@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { GetUser } from 'src/app/Models/get-user';
 import { GetBatchesService } from 'src/app/Services/get-batches.service';
+import { GetMentorsService } from 'src/app/Services/get-mentors.service';
 import { LoginService } from 'src/app/Services/login.service';
 
 @Component({
@@ -8,10 +10,31 @@ import { LoginService } from 'src/app/Services/login.service';
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.css']
 })
-export class AdminDashboardComponent {
+export class AdminDashboardComponent implements OnInit {
+  allMentors!: GetUser[];
   constructor(private getbatchesservice: GetBatchesService,
     private loginservice :LoginService,
-    private router: Router){}
+    private router: Router,
+    private getMentorsService:GetMentorsService,){}
+  ngOnInit(): void {
+    this.fetchmentors();
+  }
+  fetchmentors() {
+    this.getMentorsService. GetMentors().subscribe(
+      (data: any) => {
+        // Ensure data.$values exists and is an array before accessing it
+        if (Array.isArray(data.$values)) {
+          this.allMentors = data.$values;
+          console.log("All Mentors",this.allMentors);
+        } else {
+          console.error('Unexpected data format:', data);
+        }
+      },
+      (error) => {
+        console.error('Error fetching batches:', error);
+      }
+    );
+  }
   navigateTo(route: string): void {
     this.router.navigate([route]);
   }
@@ -23,4 +46,7 @@ export class AdminDashboardComponent {
     this.router.navigate(["Login"]);
     // Implement logout functionality
   }
+  viewEmployee(userid:number) {
+    this.router.navigate(['/UserProfile', userid]);
+    }
 }

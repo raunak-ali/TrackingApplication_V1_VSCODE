@@ -7,6 +7,7 @@ export class GetBatches {
   domain!: string;
   description!: string;
 showDetails: any=false;
+employee_info_Excel!:Uint8Array;
   //attendanceExcel?: ArrayBuffer | null; // Used for File upload
   //employeeInfoExcel?: ArrayBuffer | null;
   //userTasks!: UserTask[];

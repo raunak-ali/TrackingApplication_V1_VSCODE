@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LoginService } from 'src/app/Services/login.service';
 import { Role } from '../../Models/user';
 import { Router } from '@angular/router';
+import { ResetPasswordService } from 'src/app/Services/reset-password.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -14,18 +16,36 @@ export class LoginComponent  implements OnInit {
   //checkotp!:FormGroup;
   jwtToken: string | undefined;
   error: string | undefined;
+  resetPasswordForm!: FormGroup;
   //isPasswordRequired: boolean = false; // Add this line
   //otpResponse!: string;
+  resetPanelExpanded = false;
+  resetPasswordFormVisible = false;
+
+  emailForm!: FormGroup;
 
 
   constructor(private fb: FormBuilder,
     private loginservice: LoginService,
-    private router: Router) { }
+    private router: Router,
+    private resetPasswordService :ResetPasswordService,
+
+
+    private snackBar: MatSnackBar
+    ) { }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       UserName: ['', Validators.required],
       Password: ['', Validators.required]
+    });
+    this.resetPasswordForm = this.fb.group({
+      username: ['', Validators.required],
+      oldpassword: ['', Validators.required],
+      newpassword: ['', Validators.required]
+    });
+    this.emailForm = this.fb.group({
+      capgeminiid: ['', [Validators.required, Validators.email]]
     });
 
   }
@@ -65,5 +85,43 @@ export class LoginComponent  implements OnInit {
       );
     }
   }
+SendResetPasswordEmail():void{
+  const { capgeminiid } = this.emailForm.value;
+  this.resetPasswordService.sendemail(capgeminiid).subscribe(
+    (response: any) => {
+      // Optionally, you can navigate to another page or display a success message here
+      console.log(response);
+      this.resetPasswordFormVisible = true;
+    },
+    (error: any) => {
+      console.log(error);
+      this.snackBar.open('Error sending reset password email', 'Close', { duration: 3000 });
+      // Handle error appropriately, such as displaying error messages to the user
+    }
+  );
 }
 
+
+ChecksForResetPassword():void{
+  const { username, oldpassword, newpassword } = this.resetPasswordForm.value;
+  this.resetPasswordService.resetpassword(username, oldpassword, newpassword).subscribe(
+    (response: any) => {
+      this.snackBar.open('Password changed successfully', 'Close', { duration: 3000 });
+      // Optionally, you can navigate to another page or display a success message here
+      this.collapseResetPanel();
+    },
+    (error: any) => {
+      this.snackBar.open('Password not changed', 'Close', { duration: 3000 });
+      // Handle error appropriately, such as displaying error messages to the user
+    }
+  );
+}
+expandResetPanel(): void {
+  this.resetPanelExpanded = true;
+}
+
+collapseResetPanel(): void {
+  this.resetPanelExpanded = false;
+}
+
+}
