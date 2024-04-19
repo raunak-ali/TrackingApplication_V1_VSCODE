@@ -21,5 +21,7 @@ namespace TravkingApplicationAPI.Interfaces
         Task<List<TaskSubmissions>>GetAllSubmissionsofATask(int taskid,int Userid);
          Task<List<TaskSubmissions>>GetAllSubmissionsofAUser(int Userid);
 
+         Task<string>UpdateFeedbacks(List<AddFeedback> feedback);
+
     }
     }

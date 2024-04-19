@@ -47,6 +47,8 @@ namespace TravkingApplicationAPI.Models
     public string? EarlierMentorName { get; set; }
     public string? FinalMentorName { get; set; }
 
+    public Comments? FeedbackComment{get;set;}=Comments.Bad;
+
 
     public double Attendance_Count{get;set;}=0;//Initailzed to zero by defult
 

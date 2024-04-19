@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.JsonPatch.Internal;
 using Microsoft.AspNetCore.Mvc.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
@@ -10,6 +11,7 @@ using TravkingApplicationAPI.Data;
 using TravkingApplicationAPI.DTO;
 using TravkingApplicationAPI.Interfaces;
 using TravkingApplicationAPI.Models;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace TravkingApplicationAPI.Repository
 {
@@ -62,7 +64,7 @@ namespace TravkingApplicationAPI.Repository
             {
 
                 var existing_TaskSubmission = context.TaskSubmissions.Where(s => s.subtaskid == subtaskid).ToList();
-                
+
                 List<object> response = new List<object>();
 
                 if (existing_TaskSubmission != null)
@@ -72,8 +74,8 @@ namespace TravkingApplicationAPI.Repository
                         var existing_rating = context.Ratings
                             .FirstOrDefault(r => r.TaskSubmissionId == submission.TaskSubmissionsId
                             );
-var existing_user=context.Users.FirstOrDefault(u=>u.UserId==submission.UserId);
-submission.SubmittedByUser=existing_user;
+                        var existing_user = context.Users.FirstOrDefault(u => u.UserId == submission.UserId);
+                        submission.SubmittedByUser = existing_user;
 
                         // Create an object to hold submission details and rating
                         var submissionData = new
@@ -110,8 +112,8 @@ submission.SubmittedByUser=existing_user;
                 if (existing_TaskSubmission != null)
                 {
                     var existing_Rating = context.Ratings.FirstOrDefault(r => r.TaskSubmissionId == existing_TaskSubmission.TaskSubmissionsId);
-                    var existing_user=context.Users.FirstOrDefault(u=>u.UserId==existing_TaskSubmission.UserId);
-existing_TaskSubmission.SubmittedByUser=existing_user;
+                    var existing_user = context.Users.FirstOrDefault(u => u.UserId == existing_TaskSubmission.UserId);
+                    existing_TaskSubmission.SubmittedByUser = existing_user;
                     var submissionData = new
                     {
 
@@ -148,117 +150,132 @@ existing_TaskSubmission.SubmittedByUser=existing_user;
 
         public async Task<string> RateASubmittedTask(AddRating addRating)
         {
+
             try
             {
-                var existing_rating = context.Ratings.FirstOrDefault(r => r.TaskSubmissionId == addRating.TaskSubmissionId);
-                if (existing_rating != null)
-                {
-                    //Check if rating for that tasksubmission for that user already exixts if it does return that object
+                var existingRating = await context.Ratings.FirstOrDefaultAsync(r => r.TaskSubmissionId == addRating.TaskSubmissionId);
 
-                    return "This TaskSubmission Already Rated";
+                if (existingRating != null)
+                {
+                    return "This TaskSubmission has already been rated.";
                 }
                 else
                 {
-                     var ratingThresholds = new Dictionary<double, Comments>
-{
-    { 90, Comments.VeryGood },
-    { 70, Comments.Good },
-    { 50, Comments.Average },
-    { 30, Comments.BelowAverage },
-    { double.MinValue, Comments.Bad } // Default comment for ratings below 30
-};
-                    //Check if a feedback object for that task already exists
-                    //Get TaskSubmissedId=>SubTaskId=>TaskId=>Feedback Table 
-                    //If yes update that object
-                    //Else Create a new Feedback row
-                    var existing_Task_submission = context.TaskSubmissions.FirstOrDefault(t => t.TaskSubmissionsId == addRating.TaskSubmissionId);
-                    var existing_Sub_task = context.SubTask.Where(s => s.SubTaskId == (existing_Task_submission.subtaskid));
-                    var count_ofsubtasks = existing_Sub_task.Count();
-                    var Add = (1 / count_ofsubtasks) * 100;
-                    var taskid = existing_Sub_task.FirstOrDefault().TaskId;
-                     var existing_user=context.Users.FirstOrDefault(u=>u.UserId==addRating.RatedTo);
-                        var count_tasks_assigned_to_user=context.Tasks
-    .Where(t => t.AssignedTo != null && t.AssignedTo.Contains(addRating.RatedTo))
-    .Count();
+                    var ratingThresholds = new Dictionary<double, Comments>
+            {
+                { 90, Comments.VeryGood },
+                { 70, Comments.Good },
+                { 50, Comments.Average },
+                { 30, Comments.BelowAverage },
+                { double.MinValue, Comments.Bad } // Default comment for ratings below 30
+            };
 
+                    var existingTaskSubmission = await context.TaskSubmissions.FirstOrDefaultAsync(t => t.TaskSubmissionsId == addRating.TaskSubmissionId);
+                    var existingSubTasks = await context.SubTask.Where(s => s.SubTaskId == existingTaskSubmission.subtaskid).ToListAsync();
+                    var countOfSubTasks = existingSubTasks.Count;
+                    var taskID = existingSubTasks.FirstOrDefault().TaskId;
 
-                    var feed = 1;
-                    var existing_feedback = context.FeedBacks.FirstOrDefault(
-                        f => f.TaskId == taskid && f.UserId==addRating.RatedTo);
-                        
-                    if (existing_feedback != null)
+                    var existingUser = await context.Users.FirstOrDefaultAsync(u => u.UserId == addRating.RatedTo);
+                    var countTasksAssignedToUser = await context.Tasks.Where(t => t.AssignedTo.Contains(addRating.RatedTo)).CountAsync();
+
+                    var feedback = await context.FeedBacks.FirstOrDefaultAsync(f => f.TaskId == taskID && f.UserId == addRating.RatedTo);
+                    var isNewFeedback = feedback == null;
+
+                    if (isNewFeedback)
                     {
-                        feed = existing_feedback.FeedbackId;
-
-
-
-
-
-                        existing_feedback.TotalAverageRating = ((1 / count_ofsubtasks) * addRating.RatingValue) + existing_feedback.TotalAverageRating;
-                        
-                        //Update the Total Average rating of that user as well 
-                       
-                     
-
-
-                        existing_user.Total_Average_RatingStatus=((1 / count_tasks_assigned_to_user) *  existing_feedback.TotalAverageRating) + existing_user.Total_Average_RatingStatus;
-                        
-                       
-
-                        // Determine the comment based on the updated total average rating
-                        existing_feedback.Comments = ratingThresholds.FirstOrDefault(kv => existing_feedback.TotalAverageRating >= kv.Key).Value;
-                        context.SaveChanges();
-
+                        feedback = new FeedBack();
+                        feedback.TotalAverageRating = (1 / countOfSubTasks) * addRating.RatingValue;
+                        feedback.TaskId = taskID;
+                        feedback.UserId = addRating.RatedTo;
+                        feedback.Comments = ratingThresholds.FirstOrDefault(kv => feedback.TotalAverageRating >= kv.Key).Value;
+                        await context.FeedBacks.AddAsync(feedback);
                     }
                     else
                     {
-                        FeedBack feedback = new FeedBack();
-                        feedback.TotalAverageRating = (1 / count_ofsubtasks) * addRating.RatingValue;
-                        feedback.TaskId = taskid;
-                        feedback.UserId = addRating.RatedTo;
+                        feedback.TotalAverageRating = ((1 / countOfSubTasks) * addRating.RatingValue) + feedback.TotalAverageRating;
                         feedback.Comments = ratingThresholds.FirstOrDefault(kv => feedback.TotalAverageRating >= kv.Key).Value;
-
-                        context.FeedBacks.AddAsync(feedback);
-                        await context.SaveChangesAsync();
-                        feed = feedback.FeedbackId;
-                        existing_user.Total_Average_RatingStatus=((1 / count_tasks_assigned_to_user) *  feedback.TotalAverageRating) + existing_user.Total_Average_RatingStatus;
-
+                        context.FeedBacks.Update(feedback);
 
                     }
-                    Rating newrating = new Rating();
-                    newrating.FeedbackId = feed;
-                    newrating.RatedBy = addRating.RatedBy;
-                    newrating.RatedTo = addRating.RatedTo;
-                    newrating.RatingValue = addRating.RatingValue;
-                    newrating.TaskSubmissionId = addRating.TaskSubmissionId;
-                    newrating.Comments = addRating.Comments;
-                    context.Ratings.AddAsync(newrating);
-                    await context.SaveChangesAsync();
-                    return "SubTask rated";
 
+                    var newRating = new Rating();
+
+                    newRating.RatedBy = addRating.RatedBy;
+                    newRating.RatedTo = addRating.RatedTo;
+                    newRating.RatingValue = addRating.RatingValue;
+                    newRating.TaskSubmissionId = addRating.TaskSubmissionId;
+                    newRating.Comments = addRating.Comments;
+                    existingUser.Total_Average_RatingStatus = ((1 / 1) * feedback.TotalAverageRating) + existingUser.Total_Average_RatingStatus;
+                    //existingUser.Total_Average_RatingStatus=19;
+                    context.Users.Update(existingUser);
+                    await context.Ratings.AddAsync(newRating);
+
+                    using (var transaction = await context.Database.BeginTransactionAsync())
+                    {
+                        try
+                        {
+                            // Perform database operations within the transaction
+
+                            // Save changes to the database
+                            await context.SaveChangesAsync();
+
+                            // Commit the transaction if all operations succeed
+                            await transaction.CommitAsync();
+                        }
+                        catch (Exception)
+                        {
+                            // Rollback the transaction if an error occurs
+                            await transaction.RollbackAsync();
+                            throw; // Rethrow the exception for logging or handling elsewhere
+                        }
+                    }
+
+                    newRating.FeedbackId = feedback.FeedbackId;
+                    using (var transaction = await context.Database.BeginTransactionAsync())
+                    {
+                        try
+                        {
+                            // Perform database operations within the transaction
+
+                            // Save changes to the database
+                            await context.SaveChangesAsync();
+
+                            // Commit the transaction if all operations succeed
+                            await transaction.CommitAsync();
+                        }
+                        catch (Exception)
+                        {
+                            // Rollback the transaction if an error occurs
+                            await transaction.RollbackAsync();
+                            throw; // Rethrow the exception for logging or handling elsewhere
+                        }
+                    }
+
+                    return "SubTask has been rated.";
                 }
-
-                return null;
             }
             catch (Exception e)
             {
-                throw;
+                throw; // Rethrow the exception for logging or handling elsewhere
             }
+
         }
 
         public async Task<List<TaskSubmissions>> GetAllSubmissionsofATask(int taskid, int Userid)
         {
-            var existing_user=context.Users.FirstOrDefault(u=>u.UserId==Userid);
-            var existing_task=context.Tasks.FirstOrDefault(t=>t.UserTaskID==taskid);
-            if(existing_user!=null && existing_task!=null){
-                var existing_subtasks=context.SubTask.Where(s=>s.TaskId==taskid).ToList();
-                List<TaskSubmissions> tasksub=new List<TaskSubmissions>();
-            foreach(var subtask in existing_subtasks){
-                var existing_submission=context.TaskSubmissions.Where(t=>t.subtaskid==subtask.SubTaskId).ToList();
-tasksub.Concat(existing_submission);
-            }
-            return tasksub;
-            
+            var existing_user = context.Users.FirstOrDefault(u => u.UserId == Userid);
+            var existing_task = context.Tasks.FirstOrDefault(t => t.UserTaskID == taskid);
+            if (existing_user != null && existing_task != null)
+            {
+                var existing_subtasks = context.SubTask.Where(s => s.TaskId == taskid).ToList();
+                List<TaskSubmissions> tasksub = new List<TaskSubmissions>();
+                foreach (var subtask in existing_subtasks)
+                {
+                    var existing_submission = context.TaskSubmissions.Where(t => t.subtaskid == subtask.SubTaskId).ToList();
+                    tasksub.Concat(existing_submission);
+                }
+                return tasksub;
+
             }
             return null;
 
@@ -267,16 +284,72 @@ tasksub.Concat(existing_submission);
         public async Task<List<TaskSubmissions>> GetAllSubmissionsofAUser(int Userid)
         {
 
-            try{
-                var existing_user=context.Users.FirstOrDefault(u=>u.UserId==Userid);
-                if(existing_user!=null){
-                    var existing_submissions=context.TaskSubmissions.Where(t=>t.UserId==Userid).ToList();
+            try
+            {
+                var existing_user = context.Users.FirstOrDefault(u => u.UserId == Userid);
+                if (existing_user != null)
+                {
+                    var existing_submissions = context.TaskSubmissions.Where(t => t.UserId == Userid).ToList();
                     return existing_submissions;
-                }return null;
+                }
+                return null;
             }
-            catch(Exception e){
+            catch (Exception e)
+            {
                 throw;
             }
+        }
+
+        public async Task<string> UpdateFeedbacks(List<AddFeedback> feedback)
+        {
+            try
+            {
+                if (feedback != null)
+                {
+                    foreach (var feed in feedback)
+                    {
+                        var existing_feedbacks = await context.FeedBacks.FirstOrDefaultAsync(f => f.FeedbackId == feed.feedbackId);
+                        if (existing_feedbacks != null)
+                        {
+                            if (feed.comments != null)
+                            {
+                                if (feed.comments is int)
+                                {
+                                    existing_feedbacks.Comments = (Comments)(int)feed.comments;
+                                }
+                                else if (feed.comments is string)
+                                {
+                                    // Handle string values (if needed)
+                                    existing_feedbacks.Comments = (Comments)Convert.ToInt32(feed.comments);
+                                }
+                                else
+                                {
+                                  string trimmedComments = feed.comments.ToString().Trim();
+if (int.TryParse(trimmedComments, out int commentInt))
+{
+    existing_feedbacks.Comments=(Comments)commentInt;
+    // Conversion succeeded
+}
+                                    // Handle other types or unexpected values
+                                }
+                            }
+                            else
+                            {
+                                // Handle null values (if needed)
+                                existing_feedbacks.Comments =existing_feedbacks.Comments;
+                            }
+
+
+                            existing_feedbacks.Description = feed.description;
+                            existing_feedbacks.TotalAverageRating = (int)feed.totalAverageRating;
+                            context.FeedBacks.Update(existing_feedbacks);
+                        }
+                    }
+                    context.SaveChanges();
+                }
+                return null;
+            }
+            catch (Exception e) { throw; }
         }
     }
 }

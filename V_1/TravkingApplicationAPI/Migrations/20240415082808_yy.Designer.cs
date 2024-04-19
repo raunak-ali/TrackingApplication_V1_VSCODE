@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TravkingApplicationAPI.Data;
 
@@ -11,9 +12,11 @@ using TravkingApplicationAPI.Data;
 namespace TravkingApplicationAPI.Migrations
 {
     [DbContext(typeof(TrackingApplicationDbContext))]
-    partial class TrackingApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240415082808_yy")]
+    partial class yy
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

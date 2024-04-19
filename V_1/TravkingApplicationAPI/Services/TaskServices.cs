@@ -71,7 +71,28 @@ namespace TravkingApplicationAPI.Services
                 throw;
             }
         }
+        public async Task<string> DeleteTask(int taskid)
+        {
+               try
+            {
+                return await task.DeleteTask(taskid);
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+public async Task<List<FeedBack>> GetTaskFeedbacks(int taskid){
+        try
+            {
+                return await task.GetTaskFeedbacks(taskid);
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
 
+}
 
 
 

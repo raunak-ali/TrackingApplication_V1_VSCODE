@@ -15,12 +15,15 @@ ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddDbContext<TrackingApplicationDbContext>(options=>options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddControllers() .AddJsonOptions(options =>
-    {
-        //options.JsonSerializerOptions.MaxDepth = 256666666; // Set to a suitable value
-                    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    // System.Text.Json configuration
+    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+});
 
-    });
+// Configure Newtonsoft.Json separately
+
+
 builder.Services.AddCors(p => p.AddDefaultPolicy(policy => policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod()));
  builder.Services.Configure<IISServerOptions>(options =>
     {

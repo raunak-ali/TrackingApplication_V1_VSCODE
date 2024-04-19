@@ -23,10 +23,10 @@ namespace TravkingApplicationAPI.Models
     public int TaskSubmissionId { get; set; }//Fk to submission table
     public int RatingValue { get; set; }
     public Comments Comments { get; set; }//Average,Very Good,Average,Below Good, =>Make the enum
-    public int FeedbackId { get; set; }//Fk to Feedback table
+    public int? FeedbackId { get; set; }//Fk to Feedback table
 
 
-    public FeedBack FeedBack { get;set; }//Nav Property
+    public FeedBack? FeedBack { get;set; }//Nav Property
 
         public TaskSubmissions TaskSubmissions { get;  set; }//Nav Property
         public User RatedByUser { get;  set; }//Nav Property

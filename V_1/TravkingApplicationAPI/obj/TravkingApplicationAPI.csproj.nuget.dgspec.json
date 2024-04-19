@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\rauali\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\TravkingApplicationAPI.csproj": {}
+    "C:\\Users\\rauali\\OneDrive - Capgemini\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\TravkingApplicationAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\rauali\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\TravkingApplicationAPI.csproj": {
+    "C:\\Users\\rauali\\OneDrive - Capgemini\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\TravkingApplicationAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\rauali\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\TravkingApplicationAPI.csproj",
+        "projectUniqueName": "C:\\Users\\rauali\\OneDrive - Capgemini\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\TravkingApplicationAPI.csproj",
         "projectName": "TravkingApplicationAPI",
-        "projectPath": "C:\\Users\\rauali\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\TravkingApplicationAPI.csproj",
+        "projectPath": "C:\\Users\\rauali\\OneDrive - Capgemini\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\TravkingApplicationAPI.csproj",
         "packagesPath": "C:\\Users\\rauali\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\rauali\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\obj\\",
+        "outputPath": "C:\\Users\\rauali\\OneDrive - Capgemini\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\rauali\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -52,6 +52,10 @@
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[8.0.2, )"
+            },
+            "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
+              "target": "Package",
+              "version": "[8.0.4, )"
             },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",

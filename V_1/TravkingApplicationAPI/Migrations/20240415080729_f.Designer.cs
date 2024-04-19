@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TravkingApplicationAPI.Data;
 
@@ -11,9 +12,11 @@ using TravkingApplicationAPI.Data;
 namespace TravkingApplicationAPI.Migrations
 {
     [DbContext(typeof(TrackingApplicationDbContext))]
-    partial class TrackingApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240415080729_f")]
+    partial class f
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -161,7 +164,7 @@ namespace TravkingApplicationAPI.Migrations
                     b.Property<int>("Comments")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FeedbackId")
+                    b.Property<int>("FeedbackId")
                         .HasColumnType("int");
 
                     b.Property<int>("RatedBy")
@@ -453,7 +456,8 @@ namespace TravkingApplicationAPI.Migrations
                     b.HasOne("TravkingApplicationAPI.Models.FeedBack", "FeedBack")
                         .WithMany("Ratings")
                         .HasForeignKey("FeedbackId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("TravkingApplicationAPI.Models.User", "RatedByUser")
                         .WithMany()

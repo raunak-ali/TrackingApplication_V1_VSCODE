@@ -71,5 +71,18 @@ namespace TravkingApplicationAPI.Services
             }
         }
 
+        public async Task<string> UpdateFeedbacks(List<AddFeedback> feedback)
+        {
+              try
+            {
+                return await tasksubrepo.UpdateFeedbacks(feedback);
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+            
+        }
+
     }
 }

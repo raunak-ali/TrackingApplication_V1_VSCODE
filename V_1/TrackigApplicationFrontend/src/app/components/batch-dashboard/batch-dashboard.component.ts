@@ -22,6 +22,7 @@ import { RemoveEmployeesFromBatchService } from 'src/app/Services/remove-employe
 })
 export class BatchDashboardComponent implements OnInit {
 
+
 showEmployee: boolean=false;
 
 
@@ -283,7 +284,10 @@ viewEmployee(userid:number) {
 
       }
 
-//functions purely for ui
+//FeedbackView
+viewFeedbacks(taskid: number) {
+  this.router.navigate(['/Feedbacks', taskid]);
+  }
 
 
 }

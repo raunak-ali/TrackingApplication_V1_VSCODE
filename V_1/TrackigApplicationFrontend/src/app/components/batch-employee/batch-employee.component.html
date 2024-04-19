@@ -1,0 +1,120 @@
+<!-- Header -->
+<div class="header">
+  <h2>Dashboard <img src="/assets/Mentor_Dashboard_Icon.png" alt="Mentor Dashboard Icon" class="icon"></h2>
+  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu" class="menu-button">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu" class="custom-menu">
+    <button mat-menu-item (click)="navigateTo('dashboard')">Dashboard</button>
+    <button mat-menu-item (click)="navigateTo('batches')">Batches</button>
+    <button mat-menu-item (click)="navigateTo('profile')">Profile</button>
+    <button mat-menu-item (click)="navigateTo('employees')">Employees</button>
+    <button mat-menu-item (click)="logout()">Logout</button>
+  </mat-menu>
+</div>
+<br><br>
+
+<div class="content">
+  <div *ngIf="currentUser.Role == 0" class="excel-table">
+    <form (ngSubmit)="submitFeedbacks()">
+      <table>
+        <thead>
+          <tr>
+            <th>Feedback Of</th>
+            <th>Feedback Of Task</th>
+            <th>Feedback Rating</th>
+            <th>Feedback Comment</th>
+            <th>Feedback Description</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let feedback of feedbacks.controls; let i = index">
+            <tr *ngIf="feedback.value.userId == currentUser.userId">
+              <td>{{ feedback.value.user.name }}</td>
+              <td>{{ feedback.value.userTask.taskName }}</td>
+              <td>
+                <ng-container *ngIf="!editable; else editModeRating">
+                  {{ feedback.value.totalAverageRating }}
+                </ng-container>
+                <ng-template #editModeRating>
+                  <input type="number" [(ngModel)]="feedback.value.totalAverageRating" name="totalAverageRating{{i}}" placeholder="{{feedback.value.totalAverageRating}}">
+                </ng-template>
+              </td>
+              <td>
+                <ng-container *ngIf="!editable; else editModeComments">
+                  {{ commentsOptions[feedback.value.comments] }}
+                </ng-container>
+                <ng-template #editModeComments>
+                  <select [(ngModel)]="feedback.value.comments" name="comments{{i}}" title="Comments" class="form-control" required>
+                    <option disabled value="">Select a comment</option>
+                    <option *ngFor="let option of commentsOptions; let j = index" [value]="j">{{ option }}</option>
+                  </select>
+                </ng-template>
+              </td>
+              <td>
+                <ng-container *ngIf="!editable; else editModeDescription">
+                  {{ feedback.value.description }}
+                </ng-container>
+                <ng-template #editModeDescription>
+                  <input type="text" [(ngModel)]="feedback.value.description" name="description{{i}}" placeholder="{{feedback.value.description}}">
+                </ng-template>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+
+    </form>
+  </div>
+</div>
+
+
+
+<div *ngIf="currentUser.Role!=0">
+  <button mat-menu-item (click)="editable=!editable">EDIT ALL</button>
+
+<!-- Main Content -->
+<div class="content">
+  <div *ngIf="currentUser.Role != 0" class="excel-table">
+    <form (ngSubmit)="submitFeedbacks()">
+      <table>
+        <thead>
+          <tr>
+            <th>Feedback Of</th>
+            <th>Feedback Of Task</th>
+            <th>Feedback Rating</th>
+            <th>Feedback Comment</th>
+            <th>Feedback Description</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let feedback of feedbacks.controls; let i = index">
+            <!-- <p>i {{feedback}}</p> -->
+
+            <td>{{ feedback.value.user.name }}</td>
+            <td>{{ feedback.value.userTask.taskName }}</td>
+            <td>
+<p *ngIf="!editable">{{feedback.value.totalAverageRating}}</p>
+              <input *ngIf="editable" type="number" [(ngModel)]="feedback.value.totalAverageRating" name="totalAverageRating{{i}}" placeholder="{{feedback.value.totalAverageRating}}">
+            </td>
+            <td>
+              <p *ngIf="!editable">{{commentsOptions[feedback.value.comments]}}</p>
+              <select *ngIf="editable" [(ngModel)]="feedback.value.comments" name="comments{{i}}" title="Comments" class="form-control" required>
+                <option disabled value="">Select a comment</option>
+                <option *ngFor="let option of commentsOptions; let j = index" [value]="j">{{ option }}</option>
+              </select>
+            </td>
+            <td>
+              <p *ngIf="!editable">{{feedback.value.description}}</p>
+              <input *ngIf="editable" type="text" [(ngModel)]="feedback.value.description" name="description{{i}}" placeholder="{{feedback.value.description}}">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+</div>
+  <div>

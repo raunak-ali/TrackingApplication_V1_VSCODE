@@ -127,6 +127,36 @@ namespace TravkingApplicationAPI.Controllers
             }
 
         }
+
+
+[HttpPost]
+        [AllowAnonymous]
+        //[Authorize(Roles ="Mentor")]
+        [DisableRequestSizeLimit]
+        [Route("UpdateFeedbacks")]
+        public async Task<ActionResult> UpdateFeedbacks([FromBody] dynamic data)
+        {
+       
+            try
+            {
+                var temp = data.GetProperty("Feedbacks").GetProperty("feedbacks").ToString();
+                //temp = data.GetProperty("feedbacks").ToString();
+        var feedbacks = System.Text.Json.JsonSerializer.Deserialize<List<AddFeedback>>(temp);
+                var res = taskSubmissionService.UpdateFeedbacks(feedbacks);
+                if (res == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(new { message = res });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+
+            }
+        }
+
+
     }
 
 

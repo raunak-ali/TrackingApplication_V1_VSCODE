@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using TravkingApplicationAPI.Data;
 using TravkingApplicationAPI.DTO;
 using TravkingApplicationAPI.Interfaces;
+using TravkingApplicationAPI.Migrations;
 using TravkingApplicationAPI.Models;
 
 namespace TravkingApplicationAPI.Repository
@@ -215,6 +216,54 @@ return existing_task;
           catch(Exception e){
             throw;
           }
+        }
+
+        public async Task<string> DeleteTask(int taskid)
+        {
+           try{
+var existing_task=context.Tasks.FirstOrDefault(t=>t.UserTaskID==taskid);
+if(existing_task!=null){
+    //Delete all subtasks of that task,
+    //all ratings
+    //all feedbacks
+    //all submissions
+var existing_Sub_task = context.SubTask.Where(s => s.TaskId == taskid);
+var existing_Task_submission = context.TaskSubmissions.Where(tt => existing_Sub_task.Any(ss => ss.SubTaskId == tt.subtaskid));
+var existing_rating = context.Ratings.Where(r => existing_Task_submission.Any(ts => ts.TaskSubmissionsId == r.TaskSubmissionId));
+var existing_feedbacks=context.FeedBacks.Where(f=>f.TaskId==taskid);
+
+context.SubTask.RemoveRange(existing_Sub_task);
+context.TaskSubmissions.RemoveRange(existing_Task_submission);
+context.Ratings.RemoveRange(existing_rating);
+context.FeedBacks.RemoveRange(existing_feedbacks);
+context.Tasks.Remove(existing_task);
+await context.SaveChangesAsync();
+return "Deleted Task sucessfully";
+}
+return null;
+
+           }
+           catch(Exception e){
+            throw;
+           }
+
+        }
+
+        public async Task<List<FeedBack>> GetTaskFeedbacks(int taskid)
+        {
+           try{
+            var existing_task=context.Tasks.FirstOrDefault(t=>t.UserTaskID==taskid);
+            if(existing_task!=null){
+                var existing_feedbacks=context.FeedBacks.Include(f=>f.User).Where(f=>f.TaskId==taskid)
+                .ToList();
+                
+                return existing_feedbacks;
+            }
+            return null;
+           }
+           catch(Exception e){
+            throw;
+           }
         }
     }
 }

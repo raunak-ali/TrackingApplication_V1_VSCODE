@@ -6,7 +6,9 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using TravkingApplicationAPI.DTO;
 using TravkingApplicationAPI.Models;
 using TravkingApplicationAPI.Services;
@@ -18,10 +20,15 @@ namespace TravkingApplicationAPI.Controllers
     {
 
         private readonly TaskServices taskService;
+private readonly JsonSerializerSettings _jsonSettings;
 
         public TaskController(TaskServices taskService)
         {
             this.taskService = taskService;
+            _jsonSettings = new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore // Configure Newtonsoft.Json settings as needed
+        };
         }
         [HttpPost]
         [AllowAnonymous]
@@ -33,7 +40,7 @@ namespace TravkingApplicationAPI.Controllers
             try
             {
                 var temp = data.GetProperty("task").GetRawText();
-                var task = JsonSerializer.Deserialize<AddTask>(temp);
+                var task = System.Text.Json.JsonSerializer.Deserialize<AddTask>(temp);
                 var res = await taskService.AddnewTask(task);
                 if (res == null)
                 {
@@ -81,7 +88,7 @@ namespace TravkingApplicationAPI.Controllers
             {
 
                 var temp = data.GetProperty("Subtask").GetRawText();
-                var Subtask = JsonSerializer.Deserialize<AddSubTask>(temp);
+                var Subtask = System.Text.Json.JsonSerializer.Deserialize<AddSubTask>(temp);
                 var res = await taskService.AddNewSubtask(Subtask);
                 if (res == null)
                 {
@@ -142,6 +149,63 @@ namespace TravkingApplicationAPI.Controllers
                     return BadRequest();
                 }
                 return Ok(new { message = res });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+
+            }
+        }
+
+
+
+
+
+        
+        [HttpPost]
+        [AllowAnonymous]
+        //[Authorize(Roles ="Mentor")]
+        [DisableRequestSizeLimit]
+        [Route("DeleteTask")]
+        public async Task<ActionResult> DeleteTask(int taskid)//Try [FromBody]
+        {
+            try
+            {
+
+                //var TaskId = data.GetProperty("TaskId").GetInt32();
+                // var Subtask = JsonSerializer.Deserialize<AddSubTask>(temp);
+                var res = await taskService.DeleteTask(taskid);
+                if (res == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(new { message = res });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+
+            }
+        }
+[HttpPost]
+        [AllowAnonymous]
+        //[Authorize(Roles ="Mentor")]
+        [DisableRequestSizeLimit]
+        [Route("GetTaskFeedBack")]
+        public async Task<ActionResult> GetTaskFeedBack([FromBody]dynamic data)//Try [FromBody]
+        {
+            try
+            {
+
+                var TaskId = data.GetProperty("taskid").GetInt32();
+                // var Subtask = JsonSerializer.Deserialize<AddSubTask>(temp);
+                var res = await taskService.GetTaskFeedbacks(TaskId);
+                if (res == null)
+                {
+                    return BadRequest();
+                }
+                var e=new JsonResult(res, _jsonSettings);
+                return Ok(new{message=e});
             }
             catch (Exception ex)
             {

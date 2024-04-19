@@ -16,8 +16,12 @@ namespace TravkingApplicationAPI.Interfaces
 
                 Task<List<SubTask>> GetAllSubtask(int TaskId);
 
+                Task<string> DeleteTask(int taskid);
+
                 
 Task<List<Models.UserTask>> GetTaskforUser(int userid);
+
+Task<List<FeedBack>>GetTaskFeedbacks(int taskid);
 
                 
                 

@@ -90,6 +90,8 @@
             <p>{{ task.description }}</p>
             <p>Deadline: {{ task.deadLine }}</p>
             <button class="btn btn-primary" (click)="viewBatch(task.userTaskID)">View SubTasks</button>
+            <span></span>
+            <button class="btn btn-primary ms-3" (click)="viewFeedbacks(task.userTaskID)">View Feedbacks</button>
             <!-- Add more details and subtask link as needed -->
           </mat-expansion-panel>
         </mat-accordion>

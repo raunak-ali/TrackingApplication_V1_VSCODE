@@ -16,6 +16,8 @@ namespace TravkingApplicationAPI.Models
 
     
     public Comments Comments { get; set; }
+
+        public string? Description { get; set; }=null;
     public int UserId { get; set; }
     public UserTask? UserTask { get; set; } // Navigation property for Task
     public User? User { get; set; } // Navigation property for User
