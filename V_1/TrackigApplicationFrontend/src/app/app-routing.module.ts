@@ -13,6 +13,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 import { BatchEmployeeComponent } from './components/batch-employee/batch-employee.component';
+import { CompileAndExecuteComponent } from './components/compile-and-execute/compile-and-execute.component';
 
 const routes: Routes = [
   {
@@ -20,10 +21,12 @@ const routes: Routes = [
     component: MentorDashboardComponent, // Use the layout component as the root component
     children: [
       { path: "Batch_dashboard/:batchId", component:BatchDashboardComponent  },
+      {path:"compile",component:CompileAndExecuteComponent}
       //Add other compoenents, i wanna show the header in
 
     ]
   },
+  {path:"compile",component:CompileAndExecuteComponent},
   {
     path:"Login",
     component:LoginComponent

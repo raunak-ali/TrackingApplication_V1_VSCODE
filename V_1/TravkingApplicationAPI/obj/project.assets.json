@@ -195,7 +195,8 @@
       "Microsoft.CodeAnalysis.Analyzers/3.3.3": {
         "type": "package",
         "build": {
-          "build/_._": {}
+          "build/Microsoft.CodeAnalysis.Analyzers.props": {},
+          "build/Microsoft.CodeAnalysis.Analyzers.targets": {}
         }
       },
       "Microsoft.CodeAnalysis.Common/4.5.0": {
@@ -5075,6 +5076,7 @@
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 8.0.2",
       "Microsoft.AspNetCore.Mvc.NewtonsoftJson >= 8.0.4",
       "Microsoft.AspNetCore.OpenApi >= 8.0.3",
+      "Microsoft.CodeAnalysis.Common >= 4.5.0",
       "Microsoft.EntityFrameworkCore >= 8.0.2",
       "Microsoft.EntityFrameworkCore.Design >= 8.0.2-preview.2.24128.4",
       "Microsoft.EntityFrameworkCore.SqlServer >= 8.0.2",
@@ -5088,11 +5090,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\rauali\\OneDrive - Capgemini\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\TravkingApplicationAPI.csproj",
+      "projectUniqueName": "c:\\Users\\rauali\\OneDrive - Capgemini\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\TravkingApplicationAPI.csproj",
       "projectName": "TravkingApplicationAPI",
-      "projectPath": "C:\\Users\\rauali\\OneDrive - Capgemini\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\TravkingApplicationAPI.csproj",
+      "projectPath": "c:\\Users\\rauali\\OneDrive - Capgemini\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\TravkingApplicationAPI.csproj",
       "packagesPath": "C:\\Users\\rauali\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\rauali\\OneDrive - Capgemini\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\obj\\",
+      "outputPath": "c:\\Users\\rauali\\OneDrive - Capgemini\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\rauali\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -5141,6 +5143,10 @@
           "Microsoft.AspNetCore.OpenApi": {
             "target": "Package",
             "version": "[8.0.3, )"
+          },
+          "Microsoft.CodeAnalysis.Common": {
+            "target": "Package",
+            "version": "[4.5.0, )"
           },
           "Microsoft.EntityFrameworkCore": {
             "target": "Package",

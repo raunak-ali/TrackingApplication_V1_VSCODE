@@ -47,7 +47,12 @@
           </mat-form-field>
           <mat-form-field appearance="fill">
             <mat-label>Deadline</mat-label>
-            <input matInput type="date" formControlName="DeadLine" id="deadLine" placeholder="DeadLine">
+            <input matInput [matDatepicker]="deadlinePicker" formControlName="DeadLine" id="deadLine" placeholder="Deadline">
+            <mat-datepicker-toggle matSuffix [for]="deadlinePicker"></mat-datepicker-toggle>
+            <mat-datepicker #deadlinePicker></mat-datepicker>
+            <mat-error *ngIf="AddNewTaskForm.get('DeadLine')?.errors && AddNewTaskForm.get('DeadLine')?.errors?.['deadlineNotGreaterThanToday']">
+              Deadline must be greater than today's date.
+            </mat-error>
           </mat-form-field>
           <mat-form-field appearance="fill">
             <mat-label>Assigned To</mat-label>

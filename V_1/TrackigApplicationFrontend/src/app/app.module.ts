@@ -38,6 +38,7 @@ import { MatTableModule } from '@angular/material/table';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BatchEmployeeComponent } from './components/batch-employee/batch-employee.component';
+import { CompileAndExecuteComponent } from './components/compile-and-execute/compile-and-execute.component';
 
 
 // Import jQuery
@@ -61,6 +62,7 @@ import { BatchEmployeeComponent } from './components/batch-employee/batch-employ
     LayoutComponent,
     AdminDashboardComponent,
     BatchEmployeeComponent,
+    CompileAndExecuteComponent,
 
 
   ],

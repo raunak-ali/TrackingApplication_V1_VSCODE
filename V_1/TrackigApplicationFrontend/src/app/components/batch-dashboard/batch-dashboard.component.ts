@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AddTask, priority } from 'src/app/Models/add-task';
 import { GetTask } from 'src/app/Models/get-task';
@@ -124,7 +124,7 @@ AddnewEmpoyee: any;
       TaskName: ['',Validators.required],
       Description: ['',Validators.required],
       Priority: ['', Validators.required],
-      DeadLine: ['', Validators.required],
+      DeadLine: ['', [Validators.required, this.deadlineGreaterThanToday()]],
       Status: [0],
       AssignedBy: [this.getMentorID],
       AssignedTo: [[], Validators.required],
@@ -134,6 +134,17 @@ AddnewEmpoyee: any;
 
     // Now you can use this.batchId in your component logic
     console.log('Batch ID:', this.batchId);
+  }
+  deadlineGreaterThanToday(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const today = new Date();
+      const deadlineDate = new Date(control.value);
+
+      if (deadlineDate <= today) {
+        return { deadlineNotGreaterThanToday: true };
+      }
+      return null;
+    };
   }
   FetchTasks(){
     this.gettasksservice.Getall(this.batchId).subscribe(

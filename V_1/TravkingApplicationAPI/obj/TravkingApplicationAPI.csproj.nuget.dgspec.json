@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\rauali\\OneDrive - Capgemini\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\TravkingApplicationAPI.csproj": {}
+    "c:\\Users\\rauali\\OneDrive - Capgemini\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\TravkingApplicationAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\rauali\\OneDrive - Capgemini\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\TravkingApplicationAPI.csproj": {
+    "c:\\Users\\rauali\\OneDrive - Capgemini\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\TravkingApplicationAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\rauali\\OneDrive - Capgemini\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\TravkingApplicationAPI.csproj",
+        "projectUniqueName": "c:\\Users\\rauali\\OneDrive - Capgemini\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\TravkingApplicationAPI.csproj",
         "projectName": "TravkingApplicationAPI",
-        "projectPath": "C:\\Users\\rauali\\OneDrive - Capgemini\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\TravkingApplicationAPI.csproj",
+        "projectPath": "c:\\Users\\rauali\\OneDrive - Capgemini\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\TravkingApplicationAPI.csproj",
         "packagesPath": "C:\\Users\\rauali\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\rauali\\OneDrive - Capgemini\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\obj\\",
+        "outputPath": "c:\\Users\\rauali\\OneDrive - Capgemini\\Desktop\\Tracking Application\\V_1\\TravkingApplicationAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\rauali\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -60,6 +60,10 @@
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[8.0.3, )"
+            },
+            "Microsoft.CodeAnalysis.Common": {
+              "target": "Package",
+              "version": "[4.5.0, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
