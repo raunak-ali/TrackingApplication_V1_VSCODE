@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GetBatches } from 'src/app/Models/get-batches';
 import { GetTask } from 'src/app/Models/get-task';
@@ -19,6 +20,7 @@ import { LoginService } from 'src/app/Services/login.service';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent  implements OnInit {
+
 
     UserId!: number;
     User!:User;
@@ -63,6 +65,8 @@ export class ProfileComponent  implements OnInit {
 
 
     constructor(private route: ActivatedRoute,
+      private snackBar: MatSnackBar
+,
       private gettasksservice:GetTasksService,
       private getUserByBatchService:GetUserByBatchService,
       private fb: FormBuilder,
@@ -99,6 +103,8 @@ export class ProfileComponent  implements OnInit {
           },
           (error) => {
             console.error('Error fetching batches:', error);
+            this.snackBar.open(`Issues fetching batches : ${{error}}}`, 'Close', { duration: 3000 });
+
           }
         );
 
@@ -129,6 +135,8 @@ export class ProfileComponent  implements OnInit {
           },
           (error) => {
             console.error('Error fetching batches:', error);
+            this.snackBar.open(`issues fetching batches : ${{error}}}`, 'Close', { duration: 3000 });
+
           }
         );
       }
@@ -153,6 +161,8 @@ export class ProfileComponent  implements OnInit {
           },
           (error) => {
             console.error('Error fetching batches:', error);
+            this.snackBar.open(`Error fetchig batches : ${{error}}}`, 'Close', { duration: 3000 });
+
           }
         );
   }

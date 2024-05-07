@@ -52,7 +52,17 @@ private tokenKey = 'auth_token';
   }
 
   clearUser(): void {
-    sessionStorage.removeItem(this.User);
+    sessionStorage.clear(); // Clear session storage
+  localStorage.clear(); // Clear local storage
+
+  // Clear cache storage
+  if (caches) {
+    caches.keys().then(keys => {
+      keys.forEach(key => {
+        caches.delete(key);
+      });
+    });
+  }
   }
 
 

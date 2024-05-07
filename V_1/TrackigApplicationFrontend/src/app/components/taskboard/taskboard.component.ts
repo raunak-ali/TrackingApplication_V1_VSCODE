@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { GetSubTask } from 'src/app/Models/get-sub-task';
@@ -7,6 +7,9 @@ import { SubTask } from 'src/app/Models/sub-task';
 import { AddsubtaskServiceService } from 'src/app/Services/addsubtask-service.service';
 import { GetSubTasksByTaskService } from 'src/app/Services/get-sub-tasks-by-task.service';
 import { LoginService } from '../../Services/login.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Location } from '@angular/common';
+
 //All Task details
 //->(Like thier substask)
 //->THe rating of each of these Subtasks
@@ -18,6 +21,7 @@ import { LoginService } from '../../Services/login.service';
 })
 export class TaskboardComponent implements OnInit {
 
+
   form!: FormGroup;
   taskId!: number;
   selectedFile: any;
@@ -27,12 +31,14 @@ export class TaskboardComponent implements OnInit {
   currentUser = this.loginservice.getUserFromSession();
 
   constructor(
+    private snackBar: MatSnackBar,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private addsubtaskServiceservice:AddsubtaskServiceService,
     private getSubTasksByTaskService:GetSubTasksByTaskService,
     private loginservice:LoginService,
-    private router: Router) {}
+    private router: Router,
+    private location: Location) {}
 
   ngOnInit(): void {
     this.taskId = +this.route.snapshot.params['taskiId'];
@@ -52,18 +58,48 @@ export class TaskboardComponent implements OnInit {
     // Implement logout functionality
   }
   initializeForm(): void {
-
+//AddSubtaskForm
     this.form = this.formBuilder.group({
       Title: ['', Validators.required],
       Description: ['', Validators.required],
       TaskId: this.taskId,
       FileUploadTaskFileUpload: [null], // Assuming this is for file uploads in Angular
       FileUploadTaskPdf: [null], // Assuming this is for binary data or string (like base64) for PDFs
-      FileName:['',Validators.required]
+      FileName:['',Validators.required],
+      TestCases:[''], // Initialize TestCases as an empty FormArray
+      TestCasesArray: this.formBuilder.array([]), // Initialize TestCasesString as an empty string
+      isCodingProblem:[true]
+
     });
   }
-  onSubmit(): void {
-    if (this.form.valid) {
+  // Add a method to get TestCases FormArray
+// Add a method to get TestCasesArray FormArray
+get testCasesArray(): FormArray {
+  return this.form.get('TestCasesArray') as FormArray;
+}
+
+addTestCase(): void {
+  this.testCasesArray.push(this.createTestCase());
+}
+
+createTestCase(): FormGroup {
+  return this.formBuilder.group({
+    SampleInput: ['', Validators.required],
+    ExpectedOutput: ['', Validators.required]
+  });
+}
+
+onSubmit(): void {
+  if (this.form.valid) {
+    // Stringify the array value
+    const testCasesString = JSON.stringify(this.testCasesArray.value);
+
+    // Update the TestCases field in the form with the string representation
+    this.form.patchValue({
+      TestCases: testCasesString
+    });
+      this.form.removeControl('TestCasesArray');
+
       const formData=this.form.value;
       formData.FileUploadTaskFileUpload=this.selectedFile;
       const file = formData.FileUploadTaskFileUpload as File;
@@ -81,10 +117,17 @@ export class TaskboardComponent implements OnInit {
       this.addsubtaskServiceservice.Addsubtask(formData).subscribe(
         (response: any) => {
           console.log('Subtask profile added successfully:', response);
+          this.snackBar.open(`Subtask profile added successfully:`, 'Close', { duration: 3000 });
+
+          window.location.reload();
+
           // Optionally, you can navigate to another page or display a success message here
         },
         (error: any) => {
           console.log('Subtask profile Not added Error:', error);
+          this.snackBar.open(`Error  ${{error}}`, 'Close', { duration: 3000 });
+
+
           // Handle error appropriately, such as displaying error messages to the user
         }
       );
@@ -134,6 +177,8 @@ export class TaskboardComponent implements OnInit {
       },
       (error) => {
         console.error('Error fetching batches:', error);
+        this.snackBar.open(`Errro : ${{error}}`, 'Close', { duration: 3000 });
+
       }
     );
 

@@ -22,5 +22,9 @@ namespace TravkingApplicationAPI.Models
     public UserTask? UserTask { get; set; } // Navigation property for Task
     public User? User { get; set; } // Navigation property for User
     public List<Rating>? Ratings { get; set; } // Navigation property for Ratings
-}
+public string? Submission_Count { get; set; }=null;
+    }
+
+
+
     }

@@ -18,6 +18,10 @@ namespace TravkingApplicationAPI.Models
     public byte[]? FileUploadTaskPdf { get; set; }
 
      public DateTime CreationDate { get; set; }
+
+     public bool? isCodingProblem{get;set;}=false;
+       public string? TestCases{get;set;}=null;
+
    
    
     

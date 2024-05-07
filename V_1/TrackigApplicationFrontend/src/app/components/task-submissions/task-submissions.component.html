@@ -54,7 +54,7 @@
                   <div class="form-group">
                     <label for="comments">Comments:</label>
                     <select class="form-control" id="comments" formControlName="Comments" required>
-                      <option *ngFor="let comment of commentsOptions; let i = index" [value]="i">{{ commentsOptions[i] }}</option>
+                      <option *ngFor="let comment of commentsOptions; let i = index" [value]="i">{{ commentsOptions[i-1] }}</option>
                     </select>
                   </div>
                   <!-- Hidden fields -->
@@ -72,6 +72,9 @@
 
   <!-- Table for Submission Details -->
   <div  class="excel-table" *ngIf="submissionDetails && currentUser.Role==0">
+    <button class="btn btn-info" (click)="GoToCompiler()">GO To Online Compiler </button>
+    <br>
+    <br>
     <table>
       <thead>
         <tr>

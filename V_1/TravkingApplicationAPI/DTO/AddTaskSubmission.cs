@@ -14,8 +14,11 @@ namespace TravkingApplicationAPI.DTO
 public status status{get;set;}=status.Complted;
 public string? submittedFileName{get;set;}
 public IFormFile? FileUpload{get;set;}//Will always be null
+        public string Result{get;set;}
 
          public byte[]? FileUploadSubmission { get; set; }
     public DateTime? SubTaskSubmitteddOn { get; set; }//Date of when The Submission file was submitted   
+
+    public int? Test_cases_passed{get;set;}
     }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Role } from 'src/app/Models/user';
 import { AddMentorService } from 'src/app/Services/add-mentor.service';
@@ -20,7 +21,8 @@ export class AddMentorComponent implements OnInit {
 
 
   constructor(private fb: FormBuilder, private AddMentorservice: AddMentorService,
-    private router: Router, private loginservice :LoginService,) { }
+    private router: Router, private loginservice :LoginService,private snackBar: MatSnackBar
+    ) { }
 
   ngOnInit(): void {
     this.AddMentorForm = this.fb.group({
@@ -63,12 +65,16 @@ export class AddMentorComponent implements OnInit {
       this.AddMentorservice.Addmentor(formData).subscribe(
         (response: any) => {
           console.log('Mentor profile added successfully:', response);
+          this.snackBar.open(`Mentor Added Sucessfully,Refresh page to view: ${{response}}`, 'Close', { duration: 3000 });
+
           const userId = response.userId;
           this.router.navigate(['AddNewBatch', userId]);
           // Optionally, you can navigate to another page or display a success message here
         },
         (error: any) => {
           console.log('Mentor profile Not added Error:', error);
+          this.snackBar.open(`Mentor Profile Not Added ,Error: ${{error}}`, 'Close', { duration: 3000 });
+
           // Handle error appropriately, such as displaying error messages to the user
         }
       );

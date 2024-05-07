@@ -214,5 +214,29 @@ private readonly JsonSerializerSettings _jsonSettings;
             }
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        //[Authorize(Roles ="Mentor")]
+        [DisableRequestSizeLimit]
+        [Route("GetSubtask")]
+        public async Task<ActionResult> GetSubtask([FromBody] dynamic data)//Try [FromBody]
+        {
+            try
+            {
+                var BatchId = data.GetProperty("SubTaskId").GetInt32();
+                //var BatchId = JsonSerializer.Deserialize<UserTask>(temp);
+                var res = await taskService.GetSubTask(BatchId);
+                if (res == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(new { message = res });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
     }
 }

@@ -45,7 +45,7 @@ namespace TravkingApplicationAPI.Repository
                 _config["Jwt:Issuer"],
                 _config["Jwt:Audience"],
                 claims,
-                expires: DateTime.Now.AddMinutes(10),
+                expires: DateTime.Now.AddMinutes(10),//make it 1 minute
                 signingCredentials: credentials
             );
             return new JwtSecurityTokenHandler().WriteToken(token);

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { GetUser } from 'src/app/Models/get-user';
@@ -16,6 +17,7 @@ import { LoginService } from 'src/app/Services/login.service';
 })
 export class AddBatchesComponent implements OnInit {
 
+
   AddBatchForm!: FormGroup;
   error: string | undefined;
   selectedFile: any;
@@ -26,7 +28,8 @@ export class AddBatchesComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private Addbatchesservice: AddBatchesService, private loginservice: LoginService
     ,private route: ActivatedRoute,private getMentorsService:GetMentorsService,
-    private router: Router){}
+    private router: Router,      private snackBar: MatSnackBar
+    ){}
   private existing_mentor?=this.loginservice.getUser();
 
   ngOnInit(): void {
@@ -64,6 +67,8 @@ this.fetchmentors();
       },
       (error) => {
         console.error('Error fetching batches:', error);
+        this.snackBar.open(`Only Admin is allowed to view all mentors: ${{error}}`, 'Close', { duration: 3000 });
+
       }
     );
   }
@@ -91,11 +96,15 @@ this.fetchmentors();
       this.Addbatchesservice.Addmentor(formData).subscribe(
         (response: any) => {
           console.log('Batches profile added successfully:', response);
+          this.snackBar.open(`Batch Added Sucessfully,Refresh page to view: ${{response}}`, 'Close', { duration: 3000 });
+
           this.router.navigate(['AdminDashboard']);
           // Optionally, you can navigate to another page or display a success message here
         },
         (error: any) => {
           console.log('Batches profile Not added Error:', error);
+          this.snackBar.open(`Batch Not Added,Error: ${{error}}`, 'Close', { duration: 3000 });
+
           // Handle error appropriately, such as displaying error messages to the user
         }
       );

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TravkingApplicationAPI.DTO;
+using TravkingApplicationAPI.Models;
 using TravkingApplicationAPI.Services;
 
 namespace TravkingApplicationAPI.Controllers
@@ -157,7 +158,66 @@ namespace TravkingApplicationAPI.Controllers
         }
 
 
-    }
+    
 
+     [HttpPost]
+        //[Authorize(Roles ="Admin")]
+        [Route("SendFeedbackemailtoEmployees")]
+        [AllowAnonymous]
+        public async Task<ActionResult> SendFeedbackemailtoEmployees([FromBody] dynamic data)
+        {
+
+
+            try
+            {
+               var temp = data.GetProperty("Feedbacks").GetProperty("feedbacks").ToString();
+                //temp = data.GetProperty("feedbacks").ToString();
+        var feedbacks = System.Text.Json.JsonSerializer.Deserialize<List<AddFeedback>>(temp);
+                var res = taskSubmissionService.SendFeedbacktoEmployee(feedbacks);
+                if (res == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(new { message = res });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+
+            }
+
+        }
+
+
+
+         [HttpPost]
+        //[Authorize(Roles ="Admin")]
+        [Route("SendFeedbackemailtoMentor")]
+        [AllowAnonymous]
+        public async Task<ActionResult> SendFeedbackemailtoMentor([FromBody] dynamic data)
+        {
+
+
+            try
+            {
+               var temp = data.GetProperty("Feedbacks").GetProperty("feedbacks").ToString();
+                //temp = data.GetProperty("feedbacks").ToString();
+        var feedbacks = System.Text.Json.JsonSerializer.Deserialize<List<AddFeedback>>(temp);
+                var res = taskSubmissionService.SendFeedbacktoMentor(feedbacks);
+                if (res == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(new { message = res });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+
+            }
+
+        }
+
+    }
 
 }

@@ -6,6 +6,8 @@ export class AddTaskSubmissions {
   FileUpload?: File | null; // Will always be null
   FileUploadSubmission?: Uint8Array | null;
   SubTaskSubmitteddOn?: Date | null; // Date of when the Submission file was submitted
+  Result!:string;
+
 }
 export enum StatusEnum {
   Completed = 'Complted',

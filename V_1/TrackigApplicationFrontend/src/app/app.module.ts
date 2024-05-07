@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -39,6 +40,7 @@ import { AdminDashboardComponent } from './components/admin-dashboard/admin-dash
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BatchEmployeeComponent } from './components/batch-employee/batch-employee.component';
 import { CompileAndExecuteComponent } from './components/compile-and-execute/compile-and-execute.component';
+import {MatTabsModule} from '@angular/material/tabs';
 
 
 // Import jQuery
@@ -67,7 +69,8 @@ import { CompileAndExecuteComponent } from './components/compile-and-execute/com
 
   ],
   imports: [
-
+    MatTabsModule,
+    MatCheckboxModule,
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,

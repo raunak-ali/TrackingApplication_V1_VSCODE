@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AddTask, priority } from 'src/app/Models/add-task';
 import { GetTask } from 'src/app/Models/get-task';
@@ -24,6 +25,7 @@ export class BatchDashboardComponent implements OnInit {
 
 
 showEmployee: boolean=false;
+
 
 
   @ViewChild('assignedTo')assignedToSelect!: ElementRef;
@@ -67,7 +69,8 @@ AddnewEmpoyee: any;
     private router: Router,
     private getAllEmployees:GetAllEmployeesService,
     private addnewemployeetoBatch:AddEmployeesToBatchService,
-    private removeEmployeesFromBatchService:RemoveEmployeesFromBatchService) { }
+    private removeEmployeesFromBatchService:RemoveEmployeesFromBatchService,
+    private snackBar: MatSnackBar) { }
     AddMentorForm!: FormGroup;
   ngOnInit(): void {
     this.GetAllEmployees();
@@ -156,10 +159,12 @@ AddnewEmpoyee: any;
           console.log(this.AllTasks);
         } else {
           console.error('Unexpected data format:', data);
+          this.snackBar.open(`Error fetching batches:: ${{data}}`, 'Close', { duration: 3000 });
         }
       },
       (error) => {
         console.error('Error fetching batches:', error);
+        this.snackBar.open(`Error fetching batches:: ${{error}}`, 'Close', { duration: 3000 });
       }
     );
   }
@@ -179,10 +184,14 @@ AddnewEmpoyee: any;
       this.addnewTaskService.AddTask(this.addTask).subscribe(
         (response: any) => {
           console.log('Task profile added successfully:', response);
+          this.snackBar.open(`Task Added Sucessfully,Refresh page to view:`, 'Close', { duration: 3000 });
+          //this.router.navigate(['/Batch_dashboard', this.batchId]);
+
           // Optionally, you can navigate to another page or display a success message here
         },
         (error: any) => {
           console.log('Task profile Not added Error:', error);
+          this.snackBar.open(`Task profile Not added Error:`, 'Close', { duration: 3000 });
           // Handle error appropriately, such as displaying error messages to the user
         }
       );
@@ -199,10 +208,13 @@ AddnewEmpoyee: any;
           console.log(this.AllEmployyes);
         } else {
           console.error('Unexpected data format:', data);
+
+        this.snackBar.open(`Unexpected data format: ${{data}}`, 'Close', { duration: 3000 });
         }
       },
       (error) => {
         console.error('Error fetching batches:', error);
+        this.snackBar.open(`Error fetching batches: ${{error}}`, 'Close', { duration: 3000 });
       }
     );
   }
@@ -251,10 +263,13 @@ viewEmployee(userid:number) {
     this.addnewemployeetoBatch.addEmployee(formData,this.batchId).subscribe(
       (response: any) => {
         console.log('New Employee added successfully:', response);
+        this.snackBar.open(`New Employee Added Sucessfully,Refresh page to view: ${{response}}`, 'Close', { duration: 3000 });
+
         // Optionally, you can navigate to another page or display a success message here
       },
       (error: any) => {
         console.log('Employee Not added Error:', error);
+        this.snackBar.open(`Employee Not added Error:: ${{error}}`, 'Close', { duration: 3000 });
         // Handle error appropriately, such as displaying error messages to the user
       }
     );
@@ -270,12 +285,14 @@ viewEmployee(userid:number) {
           if (Array.isArray(data.$values)) {
             this.FetchedEmployees = data.$values;
             console.log('All Employees',this.FetchedEmployees);
+
           } else {
             console.error('Unexpected data format:', data);
           }
         },
         (error) => {
           console.error('Error fetching batches:', error);
+          this.snackBar.open(`Error fetching batches:: ${{error}}`, 'Close', { duration: 3000 });
         }
       );
 
@@ -285,10 +302,13 @@ viewEmployee(userid:number) {
       this.removeEmployeesFromBatchService.RemoveEmployee(Userid,this.batchId).subscribe(
         (response: any) => {
           console.log('Employee Removed successfully:', response);
+          this.snackBar.open(`Employee Removed Sucessfully,Refresh page to view: ${{response}}`, 'Close', { duration: 3000 });
+
           // Optionally, you can navigate to another page or display a success message here
         },
         (error: any) => {
           console.log('Employee Removed added Error:', error);
+          this.snackBar.open(`Employee Removed added Error: ${{error}}`, 'Close', { duration: 3000 });
           // Handle error appropriately, such as displaying error messages to the user
         }
       );

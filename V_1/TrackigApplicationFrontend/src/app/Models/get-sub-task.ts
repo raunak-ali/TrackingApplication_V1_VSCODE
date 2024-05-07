@@ -7,4 +7,7 @@ export class GetSubTask {
     creationDate!: Date;
     fileUploadSubmission?: Uint8Array;
     subTaskCompletedOn?: Date;
+    TestCases!:string;
+    isCodingProblem!:boolean;
+
 }

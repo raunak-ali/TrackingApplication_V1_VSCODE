@@ -98,8 +98,8 @@ namespace TravkingApplicationAPI.Controllers
 
         }
  [HttpPost]
-        //[Authorize(Roles = "Mentor,Admin")]
-        [AllowAnonymous]
+        [Authorize(Roles = "Mentor,Admin")]
+        //[AllowAnonymous]
         [DisableRequestSizeLimit]
         [Route("AddBatchToUser")]
         public async Task<ActionResult>AddBatchToUser([FromBody]dynamic data)//Try [FromBody]
@@ -130,8 +130,8 @@ namespace TravkingApplicationAPI.Controllers
 
 
         [HttpPost]
-        //[Authorize(Roles = "Mentor,Admin")]
-        [AllowAnonymous]
+        [Authorize(Roles = "Mentor,Admin")]
+        //[AllowAnonymous]
         [DisableRequestSizeLimit]
         [Route("GetAllBatch")]
         public async Task<ActionResult>GetAllBatch()//Try [FromBody]
@@ -157,8 +157,8 @@ namespace TravkingApplicationAPI.Controllers
         }
 
          [HttpPost]
-        //[Authorize(Roles = "Mentor,Admin")]
-        [AllowAnonymous]
+        [Authorize(Roles = "Mentor,Admin")]
+        //[AllowAnonymous]
         [DisableRequestSizeLimit]
         [Route("RemoveUserFromABatch")]
         public async Task<ActionResult>RemoveUserFromABatch([FromBody]dynamic data)//Try [FromBody]

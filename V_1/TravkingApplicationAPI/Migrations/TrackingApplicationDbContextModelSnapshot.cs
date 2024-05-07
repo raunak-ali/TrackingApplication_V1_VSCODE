@@ -132,6 +132,9 @@ namespace TravkingApplicationAPI.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Submission_Count")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("TaskId")
                         .HasColumnType("int");
 
@@ -213,9 +216,15 @@ namespace TravkingApplicationAPI.Migrations
                     b.Property<int>("TaskId")
                         .HasColumnType("int");
 
+                    b.Property<string>("TestCases")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("isCodingProblem")
+                        .HasColumnType("bit");
 
                     b.HasKey("SubTaskId");
 
@@ -235,8 +244,14 @@ namespace TravkingApplicationAPI.Migrations
                     b.Property<byte[]>("FileUploadSubmission")
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<string>("Result")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("SubTaskSubmitteddOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<int?>("Test_cases_passed")
+                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");

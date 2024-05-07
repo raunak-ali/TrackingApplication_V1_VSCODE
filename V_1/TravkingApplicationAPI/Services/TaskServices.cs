@@ -93,6 +93,20 @@ public async Task<List<FeedBack>> GetTaskFeedbacks(int taskid){
             }
 
 }
+public async Task<List<string>>GetSubTasksTestCases(int subtadkid){
+
+    try{
+        return await task.GetSubTasksTestCases(subtadkid);
+    }
+    catch(Exception e){throw;}
+}
+public async Task<SubTask> GetSubTask(int subtadkid)
+        {
+            try{
+                return await task.GetSubTask(subtadkid);
+            }
+            catch(Exception e){throw;}
+        }
 
 
 

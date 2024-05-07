@@ -290,3 +290,6 @@ c:\Users\rauali\OneDrive - Capgemini\Desktop\Tracking Application\V_1\TravkingAp
 c:\Users\rauali\OneDrive - Capgemini\Desktop\Tracking Application\V_1\TravkingApplicationAPI\obj\Debug\net8.0\TravkingApplicationAPI.pdb
 c:\Users\rauali\OneDrive - Capgemini\Desktop\Tracking Application\V_1\TravkingApplicationAPI\obj\Debug\net8.0\TravkingApplicationAPI.genruntimeconfig.cache
 c:\Users\rauali\OneDrive - Capgemini\Desktop\Tracking Application\V_1\TravkingApplicationAPI\obj\Debug\net8.0\ref\TravkingApplicationAPI.dll
+C:\Users\rauali\OneDrive - Capgemini\Desktop\Tracking Application\V_1\TravkingApplicationAPI\bin\Debug\net8.0\Xceed.Document.NET5.dll
+C:\Users\rauali\OneDrive - Capgemini\Desktop\Tracking Application\V_1\TravkingApplicationAPI\bin\Debug\net8.0\Xceed.Words.NET5.dll
+C:\Users\rauali\OneDrive - Capgemini\Desktop\Tracking Application\V_1\TravkingApplicationAPI\bin\Debug\net8.0\System.IO.Packaging.dll

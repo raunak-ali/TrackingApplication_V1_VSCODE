@@ -26,7 +26,7 @@ const routes: Routes = [
 
     ]
   },
-  {path:"compile",component:CompileAndExecuteComponent},
+  {path:"compile/:subtaskid",component:CompileAndExecuteComponent},
   {
     path:"Login",
     component:LoginComponent

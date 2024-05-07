@@ -23,9 +23,13 @@ namespace TravkingApplicationAPI.Models
         public status status { get; set; }
         public string? submittedFileName { get; set; }
         public byte[]? FileUploadSubmission { get; set; }
+
+        public string? Result{get;set;}
+
         public DateTime? SubTaskSubmitteddOn { get; set; }//Date of when The Submission file was submitted
 
         public User? SubmittedByUser{get;set;}//nav property
+         public int? Test_cases_passed{get;set;}
 
     }
 }

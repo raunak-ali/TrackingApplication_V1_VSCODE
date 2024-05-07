@@ -9,6 +9,7 @@ import { AddTaskSubmissionsService } from 'src/app/Services/add-task-submissions
 import { AddNewRatingService } from 'src/app/Services/add-new-rating.service';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-task-submissions',
@@ -26,6 +27,11 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 
 
 export class TaskSubmissionsComponent implements OnInit {
+
+
+GoToCompiler() {
+  this.router.navigate(["compile",this.subtaskid]);
+}
   //taskId!: number;
   commentsOptions: string[] =  Object.keys(Comments).filter(key => !isNaN(Number(Comments[key as keyof typeof Comments]))) as string[];
   userid!: any;
@@ -49,7 +55,9 @@ export class TaskSubmissionsComponent implements OnInit {
     private taskSubmissionsService: TaskSubmissionsService,
     private formBuilder: FormBuilder,
     private addTaskSubmissionsService: AddTaskSubmissionsService,
-    private ratingService: AddNewRatingService) { }
+    private ratingService: AddNewRatingService,
+    private snackBar: MatSnackBar
+) { }
   ngOnInit(): void {
 
     this.statusOptions = Object.values(StatusEnum);
@@ -91,10 +99,15 @@ export class TaskSubmissionsComponent implements OnInit {
     this.ratingService.AddRating(this.ratingform.value).subscribe(
       (response: any) => {
         console.log('Submission added successfully:', response);
+        this.snackBar.open(`Submission Added, Please refresh to view${{response}}`, 'Close', { duration: 3000 });
+        window.location.reload();
+
         // Optionally, you can navigate to another page or display a success message here
       },
       (error: any) => {
         console.log('Submissions Not added Error:', error);
+        this.snackBar.open(`Error in making the submission: ${{error}}`, 'Close', { duration: 3000 });
+
         // Handle error appropriately, such as displaying error messages to the user
       }
     );
@@ -182,6 +195,8 @@ export class TaskSubmissionsComponent implements OnInit {
       formData.subtaskid = this.subtaskid;
       formData.status = 0;
       formData.SubTaskSubmitteddOn = new Date();
+      formData.Result=null;
+
 
       console.log(formData);
 
@@ -200,11 +215,16 @@ export class TaskSubmissionsComponent implements OnInit {
 
         this.addTaskSubmissionsService.AddSubmission(formData).subscribe(
           (response: any) => {
-            console.log('Submission added successfully:', response);
+            console.log('Submission added successfully:');
+            this.snackBar.open(`Submission Added Sucessfully,Refresh page to view: ${{response}}`, 'Close', { duration: 3000 });
+            window.location.reload();
+
             // Optionally, you can navigate to another page or display a success message here
           },
           (error: any) => {
-            console.log('Submissions Not added Error:', error);
+            console.log('Submissions added ');
+            this.snackBar.open(`Submission not Added Sucessfully : ${{error}}`, 'Close', { duration: 3000 });
+
             // Handle error appropriately, such as displaying error messages to the user
           }
         );
@@ -290,10 +310,13 @@ export class TaskSubmissionsComponent implements OnInit {
 
 }
 export enum Comments {
-  Average = 0,
-  VeryGood = 1,
-  Good = 2,
-  BelowAverage = 3,
-  Bad = 4
+
+
+    VeryGood=1,
+    Good=2,
+    Average=3,
+    BelowAverage=4,
+    Bad=5
+
 }
 

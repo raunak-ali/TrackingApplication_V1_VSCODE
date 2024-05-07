@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TravkingApplicationAPI.DTO;
 using TravkingApplicationAPI.Interfaces;
+using TravkingApplicationAPI.Models;
 
 namespace TravkingApplicationAPI.Services
 {
@@ -83,6 +84,26 @@ namespace TravkingApplicationAPI.Services
             }
             
         }
+                public async Task<string> SendFeedbacktoEmployee(List<AddFeedback> feedback)
+        {
+            try
+            {
+                return await tasksubrepo.SendFeedbacktoEmployee(feedback);
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+
+        }
+                public async Task<string> SendFeedbacktoMentor(List<AddFeedback> feedback)
+{
+    try{
+                        return await tasksubrepo.SendFeedbacktoMentor(feedback);
+
+    }
+    catch(Exception e){throw;}
+}
 
     }
 }

@@ -33,9 +33,9 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   padding: 20px;
   position: absolute;
-  top: 2%;
-  left: 18%;
-  width: 300px; /* Adjust card width as needed */
+  top: 45%;
+  left: 28%;
+  width: 700px; /* Adjust card width as needed */
   z-index: 1000;
 }
 

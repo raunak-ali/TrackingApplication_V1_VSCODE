@@ -4,6 +4,8 @@ import { GetBatchesService } from '../../Services/get-batches.service';
 import { LoginService } from 'src/app/Services/login.service';
 import { GetBatches } from 'src/app/Models/get-batches';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Role } from '../../Models/user';
 
 @Component({
   selector: 'app-get-batch',
@@ -20,7 +22,10 @@ export class GetBatchComponent implements OnInit {
 
   constructor( private getbatchesservice: GetBatchesService,
     private loginservice :LoginService,
-    private router: Router) { }
+    private router: Router,
+    private snackBar: MatSnackBar
+    ) { }
+
 
   ngOnInit(): void {
     this.getMentorID=this.loginservice.getUser();
@@ -31,11 +36,38 @@ export class GetBatchComponent implements OnInit {
         this.getMentorID=this.getMentorID;
       }
     }
-   this.fetchTransactions();
-   this.fetchallBathes();
+
+   if(this.currentUser.Role == 0){
+   this.fetchallBathes();}
+   else if(this.currentUser.Role==1){
+    this.fetchTransactions();
+   }
+   else{
+    this.fetchBatchesforAdmin();
+   }
+
   }
+  fetchBatchesforAdmin() {
+    this.getbatchesservice.getBatch().subscribe(
+      (data: any) => {
+        // Ensure data.$values exists and is an array before accessing it
+        if (Array.isArray(data.$values)) {
+          this.allBatches = data.$values;
+          console.log(this.allBatches);
+        } else {
+          console.error('Unexpected data format:', data);
+        }
+      },
+      (error) => {
+        console.error('Error fetching batches:', error);
+        this.snackBar.open(`Error Fetching Batches: ${{error}}`, 'Close', { duration: 3000 });
+
+      }
+    );
+  }
+
   fetchallBathes() {
-   this.getbatchesservice.getBatch().subscribe(
+   this.getbatchesservice.Getall(this.getMentorID).subscribe(
     (data: any) => {
       // Ensure data.$values exists and is an array before accessing it
       if (Array.isArray(data.$values)) {
@@ -47,6 +79,8 @@ export class GetBatchComponent implements OnInit {
     },
     (error) => {
       console.error('Error fetching batches:', error);
+      this.snackBar.open(`Error Fetching Batches: ${{error}}`, 'Close', { duration: 3000 });
+
     }
   );
   }

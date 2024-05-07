@@ -72,20 +72,23 @@
 
 
 <div *ngIf="currentUser.Role!=0">
-  <button mat-menu-item (click)="editable=!editable">EDIT ALL</button>
-
+  <div style="display: flex; justify-content: space-between; margin: 0 200px; text-align: center;">
+    <button class="btn" style="text-align: center; gbackground-color: lightblue; width: 180px;" mat-menu-item (click)="sendEmailtoemployee()">Email to Employees</button>
+    <button class="btn" style="text-align: center; background-color: lightblue; width: 180px;" mat-menu-item (click)="editable=!editable">EDIT ALL</button>
+    <button class="btn" style="background-color: lightblue; width: 180px;" mat-menu-item (click)="sendEmailtoMentor()">Email to Mentor</button>
+  </div>
 <!-- Main Content -->
 <div class="content">
   <div *ngIf="currentUser.Role != 0" class="excel-table">
     <form (ngSubmit)="submitFeedbacks()">
       <table>
         <thead>
-          <tr>
-            <th>Feedback Of</th>
-            <th>Feedback Of Task</th>
-            <th>Feedback Rating</th>
-            <th>Feedback Comment</th>
-            <th>Feedback Description</th>
+          <tr style="color: darkblue;">
+            <th style="color: darkblue;">Feedback Of</th>
+            <th style="color: darkblue;">Feedback Of Task</th>
+            <th style="color: darkblue;">Feedback Rating</th>
+            <th style="color: darkblue;">Feedback Comment</th>
+            <th style="color: darkblue;">Feedback Description</th>
 
           </tr>
         </thead>
@@ -95,15 +98,16 @@
 
             <td>{{ feedback.value.user.name }}</td>
             <td>{{ feedback.value.userTask.taskName }}</td>
+
             <td>
 <p *ngIf="!editable">{{feedback.value.totalAverageRating}}</p>
               <input *ngIf="editable" type="number" [(ngModel)]="feedback.value.totalAverageRating" name="totalAverageRating{{i}}" placeholder="{{feedback.value.totalAverageRating}}">
             </td>
             <td>
-              <p *ngIf="!editable">{{commentsOptions[feedback.value.comments]}}</p>
+              <p *ngIf="!editable">{{commentsOptions[feedback.value.comments-1]}}</p>
               <select *ngIf="editable" [(ngModel)]="feedback.value.comments" name="comments{{i}}" title="Comments" class="form-control" required>
                 <option disabled value="">Select a comment</option>
-                <option *ngFor="let option of commentsOptions; let j = index" [value]="j">{{ option }}</option>
+                <option *ngFor="let option of commentsOptions; let j = index" [value]="j+1">{{ option }}</option>
               </select>
             </td>
             <td>

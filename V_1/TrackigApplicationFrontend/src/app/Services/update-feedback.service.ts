@@ -11,6 +11,8 @@ import { Batch } from '../Models/batch';
 })
 export class UpdateFeedbackService {
 private apiUrl='http://localhost:5138/TaskSubmission/UpdateFeedbacks';
+private sendemailtoemployeeUrl='http://localhost:5138/TaskSubmission/SendFeedbackemailtoEmployees';
+private sendemailtomentorUrl="http://localhost:5138/TaskSubmission/SendFeedbackemailtoMentor";
 constructor(private http: HttpClient) { }
 Getall(Feedbacks:any): Observable<any> {
 
@@ -20,6 +22,29 @@ Getall(Feedbacks:any): Observable<any> {
     })
   };
   return this.http.post<any>(this.apiUrl,{Feedbacks}, httpOptions)
+  .pipe(
+    map(response => response.message));
+}
+
+SendEmailToEmployee(Feedbacks:any): Observable<any> {
+
+  const httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json'
+    })
+  };
+  return this.http.post<any>(this.sendemailtoemployeeUrl,{Feedbacks}, httpOptions)
+  .pipe(
+    map(response => response.message));
+}
+SendEmailToMentor(Feedbacks:any): Observable<any> {
+
+  const httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json'
+    })
+  };
+  return this.http.post<any>(this.sendemailtomentorUrl,{Feedbacks}, httpOptions)
   .pipe(
     map(response => response.message));
 }

@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using TravkingApplicationAPI.Data;
 using TravkingApplicationAPI.DTO;
 using TravkingApplicationAPI.Interfaces;
@@ -80,37 +82,37 @@ namespace TravkingApplicationAPI.Repository
             try
             {
                 if (BatchId != null)
-{
-    var existing_batch = context.Batches.FirstOrDefault(b => b.BatchId == BatchId);
-    
-    if (existing_batch != null)
-    {
-        var all_tasks = context.Tasks
-                                .Include(t => t.AssignedToUser)
-                                .Where(t => t.BatchId == BatchId)
-                                .ToList();
-        
-        if(all_tasks != null)
-        {
-            foreach (var task in all_tasks)
-            {
-                task.AssignedToUser.Clear(); // Clear existing assigned users
-                var assignedUserIds = task.AssignedTo;
-
-                if (assignedUserIds != null && assignedUserIds.Any())
                 {
-                    var assignedUsers = context.Users
-                                                .Where(u => assignedUserIds.Contains(u.UserId))
+                    var existing_batch = context.Batches.FirstOrDefault(b => b.BatchId == BatchId);
+
+                    if (existing_batch != null)
+                    {
+                        var all_tasks = context.Tasks
+                                                .Include(t => t.AssignedToUser)
+                                                .Where(t => t.BatchId == BatchId)
                                                 .ToList();
-                    
-                    task.AssignedToUser.AddRange(assignedUsers);
+
+                        if (all_tasks != null)
+                        {
+                            foreach (var task in all_tasks)
+                            {
+                                task.AssignedToUser.Clear(); // Clear existing assigned users
+                                var assignedUserIds = task.AssignedTo;
+
+                                if (assignedUserIds != null && assignedUserIds.Any())
+                                {
+                                    var assignedUsers = context.Users
+                                                                .Where(u => assignedUserIds.Contains(u.UserId))
+                                                                .ToList();
+
+                                    task.AssignedToUser.AddRange(assignedUsers);
+                                }
+                            }
+                        }
+
+                        return all_tasks;
+                    }
                 }
-            }
-        }
-        
-        return all_tasks;
-    }
-}
                 return null;
             }
             catch (Exception e)
@@ -136,6 +138,8 @@ namespace TravkingApplicationAPI.Repository
                         newsubtask.Title = subtask.Title;
                         newsubtask.UserTask = existing_Task;
                         newsubtask.FileName = subtask.FileName;
+                        newsubtask.isCodingProblem = subtask.isCodingProblem;
+                        newsubtask.TestCases = subtask.TestCases;
                         context.SubTask.Add(newsubtask);
                         await context.SaveChangesAsync();
 
@@ -198,72 +202,157 @@ namespace TravkingApplicationAPI.Repository
 
         public async Task<List<Models.UserTask>> GetTaskforUser(int userid)
         {
-          try{
+            try
+            {
 
-            var existing_user=context.Users.FirstOrDefault(u=>u.UserId==userid);
-            if(existing_user!=null){
+                var existing_user = context.Users.FirstOrDefault(u => u.UserId == userid);
+                if (existing_user != null)
+                {
 
-var existing_task=context.Tasks.Where(t=>t.AssignedTo.Contains(userid)).ToList();
-foreach (var task in existing_task){
-    var existing_subtasks=context.SubTask.Where(u=>u.TaskId==task.UserTaskID).ToList();
-    task.SubTasks=existing_subtasks;
-     
-}
-return existing_task;
+                    var existing_task = context.Tasks.Where(t => t.AssignedTo.Contains(userid)).ToList();
+                    foreach (var task in existing_task)
+                    {
+                        var existing_subtasks = context.SubTask.Where(u => u.TaskId == task.UserTaskID).ToList();
+                        task.SubTasks = existing_subtasks;
+
+                    }
+                    return existing_task;
+                }
+                return null;
             }
-            return null;
-          }
-          catch(Exception e){
-            throw;
-          }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
 
         public async Task<string> DeleteTask(int taskid)
         {
-           try{
-var existing_task=context.Tasks.FirstOrDefault(t=>t.UserTaskID==taskid);
-if(existing_task!=null){
-    //Delete all subtasks of that task,
-    //all ratings
-    //all feedbacks
-    //all submissions
-var existing_Sub_task = context.SubTask.Where(s => s.TaskId == taskid);
-var existing_Task_submission = context.TaskSubmissions.Where(tt => existing_Sub_task.Any(ss => ss.SubTaskId == tt.subtaskid));
-var existing_rating = context.Ratings.Where(r => existing_Task_submission.Any(ts => ts.TaskSubmissionsId == r.TaskSubmissionId));
-var existing_feedbacks=context.FeedBacks.Where(f=>f.TaskId==taskid);
+            try
+            {
+                var existing_task = context.Tasks.FirstOrDefault(t => t.UserTaskID == taskid);
+                if (existing_task != null)
+                {
+                    //Delete all subtasks of that task,
+                    //all ratings
+                    //all feedbacks
+                    //all submissions
+                    var existing_Sub_task = context.SubTask.Where(s => s.TaskId == taskid);
+                    var existing_Task_submission = context.TaskSubmissions.Where(tt => existing_Sub_task.Any(ss => ss.SubTaskId == tt.subtaskid));
+                    var existing_rating = context.Ratings.Where(r => existing_Task_submission.Any(ts => ts.TaskSubmissionsId == r.TaskSubmissionId));
+                    var existing_feedbacks = context.FeedBacks.Where(f => f.TaskId == taskid);
 
-context.SubTask.RemoveRange(existing_Sub_task);
-context.TaskSubmissions.RemoveRange(existing_Task_submission);
-context.Ratings.RemoveRange(existing_rating);
-context.FeedBacks.RemoveRange(existing_feedbacks);
-context.Tasks.Remove(existing_task);
-await context.SaveChangesAsync();
-return "Deleted Task sucessfully";
-}
-return null;
+                    context.SubTask.RemoveRange(existing_Sub_task);
+                    context.TaskSubmissions.RemoveRange(existing_Task_submission);
+                    context.Ratings.RemoveRange(existing_rating);
+                    context.FeedBacks.RemoveRange(existing_feedbacks);
+                    context.Tasks.Remove(existing_task);
+                    await context.SaveChangesAsync();
+                    return "Deleted Task sucessfully";
+                }
+                return null;
 
-           }
-           catch(Exception e){
-            throw;
-           }
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
 
         }
 
         public async Task<List<FeedBack>> GetTaskFeedbacks(int taskid)
         {
-           try{
-            var existing_task=context.Tasks.FirstOrDefault(t=>t.UserTaskID==taskid);
-            if(existing_task!=null){
-                var existing_feedbacks=context.FeedBacks.Include(f=>f.User).Where(f=>f.TaskId==taskid)
-                .ToList();
-                
-                return existing_feedbacks;
+            try
+            {
+                var existing_task = context.Tasks.FirstOrDefault(t => t.UserTaskID == taskid);
+                if (existing_task != null)
+                {
+                    var existing_feedbacks = context.FeedBacks.Include(f => f.User).Where(f => f.TaskId == taskid)
+                    .ToList();
+                    foreach (var feedback in existing_feedbacks)
+                    {
+                        if (feedback.UserId != null)
+                        {
+
+                            var total_subtasks = context.SubTask.Where(s => s.TaskId == taskid).ToList();//Fetch all subtaks 
+                                                                                                         //Fetch how many the user has submitted 
+                            var total_submitted = 0;
+                            foreach (var subtask in total_subtasks)
+                            {
+                                var existing_submission = context.TaskSubmissions.FirstOrDefault(t => t.subtaskid == subtask.SubTaskId && t.UserId == feedback.UserId && t.FileUploadSubmission != null);
+                                if (existing_submission != null)
+                                {
+                                    total_submitted = total_submitted + 1;
+                                }
+                            }
+
+
+
+                            var total = total_subtasks.Count();
+                            var submissionCountObj = new { Total = total, TotalSubmitted = total_submitted };
+                            feedback.Submission_Count = JsonConvert.SerializeObject(submissionCountObj);
+
+
+                        }
+                    }
+
+                    return existing_feedbacks;
+                }
+                return null;
             }
-            return null;
-           }
-           catch(Exception e){
-            throw;
-           }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<string>> GetSubTasksTestCases(int Subtaskid)
+        {
+            try
+            {
+                var existing_subtask = context.SubTask.FirstOrDefault(s => s.SubTaskId == Subtaskid);
+                if (existing_subtask != null)
+                {
+                    var testCaseString = existing_subtask.TestCases;
+                    testCaseString = testCaseString.Substring(1, testCaseString.Length - 2);
+
+                    // Split the string based on "},{" sequence
+                    string[] testCaseArray = testCaseString.Split(new[] { "},{" }, StringSplitOptions.RemoveEmptyEntries);
+
+                    // Add each individual test case string to the list
+                    List<string> testCaseList = new List<string>();
+                    foreach (var testCase in testCaseArray)
+                    {
+                        var temp = testCase.Replace("{", "").Replace("}", "");
+                        // Add back the braces to each test case string
+                        string formattedTestCase = "{" + temp + "}";
+
+                        testCaseList.Add(formattedTestCase);
+                    }
+
+                    return testCaseList;
+
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
+        public async Task<SubTask> GetSubTask(int subtadkid)
+        {
+            try{
+                var existing_subtask=context.SubTask.FirstOrDefault(s=>s.SubTaskId==subtadkid);
+                if(existing_subtask!=null){
+                    return existing_subtask;
+                }
+return null;
+            }
+            catch(Exception e){
+                throw;
+            }
         }
     }
 }

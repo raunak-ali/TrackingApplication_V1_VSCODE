@@ -13,6 +13,7 @@ import { RemoveEmployeesFromBatchService } from 'src/app/Services/remove-employe
 import { Comments } from '../task-submissions/task-submissions.component';
 import { User } from '../../Models/user';
 import { UpdateFeedbackService } from 'src/app/Services/update-feedback.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-batch-employee',
@@ -52,7 +53,9 @@ constructor(private route: ActivatedRoute,
   private addnewemployeetoBatch:AddEmployeesToBatchService,
   private removeEmployeesFromBatchService:RemoveEmployeesFromBatchService,
   private getFeedBacksService :GetFeedBacksService,
-  private updateFeedbackService:UpdateFeedbackService ) { }
+  private updateFeedbackService:UpdateFeedbackService ,
+  private snackBar: MatSnackBar
+  ) { }
   ngOnInit(): void {
 
     feedbacksForm: FormGroup;
@@ -82,15 +85,18 @@ constructor(private route: ActivatedRoute,
               totalAverageRating,
               comments,
               description,
+              submission_Count,
               user: { userId,name, total_Average_RatingStatus },
               userTask: { userTaskID,taskName }
             } = item;
+
 
             return {
               feedbackId,
               totalAverageRating,
               comments,
               description,
+              submission_Count,
               user: { userId,name, total_Average_RatingStatus},
               task: { userTaskID,taskName }
             };
@@ -187,15 +193,56 @@ constructor(private route: ActivatedRoute,
     this.updateFeedbackService.Getall(this.feedbacksForm.value).subscribe(
       (response: any) => {
         console.log('Feedbacks updated successfully:', response);
+        this.snackBar.open('Feedback SUcessfully added, Refresh page to view', 'Close', { duration: 3000 });
 
         // Optionally, you can navigate to another page or display a success message here
       },
       (error: any) => {
         console.log('Feedbacks  Not added Error:', error);
+        this.snackBar.open(`Feedback  Added sucessfully`, 'Close', { duration: 3000 });
         // Handle error appropriately, such as displaying error messages to the user
       }
     );
 
   }
-}
+  sendEmailtoemployee() :void {
 
+    console.log("Submitted feedbacks:", this.feedbacksForm.value);
+    // Call your service method to send data to the server, or perform other actions as needed
+    // Here you can handle the submission of updated feedback data
+    this.updateFeedbackService.SendEmailToEmployee(this.feedbacksForm.value).subscribe(
+      (response: any) => {
+        console.log('Feedbacks updated successfully:', response);
+        this.snackBar.open('Feedback SUcessfully Sent to employees, Refresh page to view', 'Close', { duration: 3000 });
+
+        // Optionally, you can navigate to another page or display a success message here
+      },
+      (error: any) => {
+        console.log('Feedbacks  Not added Error:', error);
+        this.snackBar.open(`Feedback  Added sucessfully`, 'Close', { duration: 3000 });
+        // Handle error appropriately, such as displaying error messages to the user
+      }
+    );}
+
+
+
+    sendEmailtoMentor() :void {
+
+      console.log("Submitted feedbacks:", this.feedbacksForm.value);
+      // Call your service method to send data to the server, or perform other actions as needed
+      // Here you can handle the submission of updated feedback data
+      this.updateFeedbackService.SendEmailToMentor(this.feedbacksForm.value).subscribe(
+        (response: any) => {
+          console.log('Feedbacks updated successfully:', response);
+          this.snackBar.open('Feedback SUcessfully Sent to mentor, Refresh page to view', 'Close', { duration: 3000 });
+
+          // Optionally, you can navigate to another page or display a success message here
+        },
+        (error: any) => {
+          console.log('Feedbacks  Not added Error:', error);
+          this.snackBar.open(`Feedback  Added sucessfully`, 'Close', { duration: 3000 });
+          // Handle error appropriately, such as displaying error messages to the user
+        }
+      );
+}
+}

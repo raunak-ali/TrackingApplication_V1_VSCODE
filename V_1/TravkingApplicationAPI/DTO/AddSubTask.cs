@@ -11,7 +11,9 @@ namespace TravkingApplicationAPI.DTO
     public string Description { get; set; }
     public int Status { get; set; }
     public int TaskId { get; set; }//Fk to Task
+  public bool? isCodingProblem{get;set;}=false;
 
+  public string? TestCases{get;set;}=null;
     public IFormFile? FileUploadTaskFileUpload{get;set;}
 
     public byte[]? FileUploadTaskPdf { get; set; }

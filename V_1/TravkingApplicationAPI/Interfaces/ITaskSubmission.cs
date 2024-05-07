@@ -22,6 +22,13 @@ namespace TravkingApplicationAPI.Interfaces
          Task<List<TaskSubmissions>>GetAllSubmissionsofAUser(int Userid);
 
          Task<string>UpdateFeedbacks(List<AddFeedback> feedback);
+//Send Feedback email to individual employees
+         Task<string>SendFeedbacktoEmployee(List<AddFeedback>feedback);
+
+//Send Feedback table as an email to the mentor
+         Task<string>SendFeedbacktoMentor(List<AddFeedback>feedback);
+
+
 
     }
     }

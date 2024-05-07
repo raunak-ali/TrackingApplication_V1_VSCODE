@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 namespace TravkingApplicationAPI.Models
 {
     public enum Comments{
-         Average,
-  VeryGood,
-  Good,
-  BelowAverage,
-  Bad
+         
+ VeryGood=1,
+    Good=2,
+    Average=3,
+    BelowAverage=4,
+    Bad=5
+
     }
     public class Rating
     {

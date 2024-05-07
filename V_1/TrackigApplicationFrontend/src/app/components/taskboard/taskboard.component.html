@@ -34,13 +34,35 @@
           </mat-form-field>
           <mat-form-field appearance="fill">
             <mat-label>Description</mat-label>
-            <textarea matInput formControlName="Description" placeholder="Description"></textarea>
+            <textarea matInput mat-class="form-control" rows="1" formControlName="Description" placeholder="Description"></textarea>
           </mat-form-field>
-
           <mat-form-field appearance="fill">
             <mat-label>FileName</mat-label>
             <input matInput formControlName="FileName" placeholder="FileName" required>
           </mat-form-field>
+           <!-- TestCases field -->
+ <!-- TestCases field -->
+ <div formArrayName="TestCasesArray">
+    <div *ngFor="let testCase of testCasesArray.controls; let i = index" [formGroupName]="i">
+      <p>TEST CASE {{i}}</p>
+      <mat-form-field appearance="fill">
+      <mat-label>Sample Input</mat-label>
+      <input matInput formControlName="SampleInput" placeholder="Sample Input">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Expected Output</mat-label>
+      <input matInput formControlName="ExpectedOutput" placeholder="Expected Output">
+    </mat-form-field>
+  </div>
+</div>
+
+<!-- Button to add test cases -->
+<button type="button" mat-raised-button color="primary" (click)="addTestCase()">Add Test Case</button>
+
+
+
+            <mat-checkbox style="color: blue;"  formControlName="isCodingProblem"><h3>isCodingProblem</h3></mat-checkbox>
+
           <div class="form-group">
             <label for="fileUploadTaskFileUpload">File (if any)</label>
             <input type="file" (change)="onFileChange($event)" id="fileUploadTaskFileUpload" class="form-control-file">

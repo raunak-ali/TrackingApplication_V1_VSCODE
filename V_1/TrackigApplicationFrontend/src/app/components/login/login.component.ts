@@ -81,6 +81,11 @@ export class LoginComponent  implements OnInit {
         },
         (error) => {
           this.error = error.error.message;
+          let Error=error.error.message;
+          console.log(Error);
+
+          this.snackBar.open(`Username or password is incorrect `, 'Close', { duration: 3000 });
+
           this.jwtToken = undefined;
         }
       );

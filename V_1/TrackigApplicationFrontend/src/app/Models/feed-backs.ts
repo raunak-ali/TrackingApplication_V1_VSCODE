@@ -12,4 +12,5 @@ export class FeedBacks {
   userTask!: GetTask;
   user!: GetUser;
   ratings!: any[];
+  submission_Count:any=null;
 }
