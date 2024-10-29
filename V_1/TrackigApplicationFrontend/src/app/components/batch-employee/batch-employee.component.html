@@ -1,18 +1,28 @@
 <!-- Header -->
+<br>
+<br>
 <div class="header">
-  <h2>Dashboard <img src="/assets/Mentor_Dashboard_Icon.png" alt="Mentor Dashboard Icon" class="icon"></h2>
+  <h2 style="margin-bottom:110px">Dashboard </h2>
+  <h2 style="margin-bottom:110px;text-align: right;"> Welcome {{currentUser.Name}}! </h2>
+
   <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu" class="menu-button">
     <mat-icon>menu</mat-icon>
   </button>
   <mat-menu #menu="matMenu" class="custom-menu">
-    <button mat-menu-item (click)="navigateTo('dashboard')">Dashboard</button>
-    <button mat-menu-item (click)="navigateTo('batches')">Batches</button>
-    <button mat-menu-item (click)="navigateTo('profile')">Profile</button>
-    <button mat-menu-item (click)="navigateTo('employees')">Employees</button>
+    <button mat-menu-item (click)="navigateToDahsBoard()">Dashboard</button>
+    <button mat-menu-item (click)="viewEmployee(currentUser.userId)">Profile</button>
     <button mat-menu-item (click)="logout()">Logout</button>
   </mat-menu>
 </div>
-<br><br>
+<br>
+<button class="btn" (click)="toggleNavigationHistory()">Show Navigation History</button>
+
+<ul *ngIf="showNavigationHistory">
+  <li *ngFor="let link of navigationHistory">
+    <a style="background-color: lightblue; width: 180px; margin-left: 60px;" [routerLink]="link">{{ link }}</a>
+  </li>
+</ul>
+<br>
 
 <div class="content">
   <div *ngIf="currentUser.Role == 0" class="excel-table">
@@ -34,13 +44,11 @@
               <td>{{ feedback.value.user.name }}</td>
               <td>{{ feedback.value.userTask.taskName }}</td>
               <td>
-                <ng-container *ngIf="!editable; else editModeRating">
-                  {{ feedback.value.totalAverageRating }}
-                </ng-container>
-                <ng-template #editModeRating>
-                  <input type="number" [(ngModel)]="feedback.value.totalAverageRating" name="totalAverageRating{{i}}" placeholder="{{feedback.value.totalAverageRating}}">
-                </ng-template>
-              </td>
+                <td>
+                  {{ feedback.value.totalAverageRating }}%
+                </td>
+
+
               <td>
                 <ng-container *ngIf="!editable; else editModeComments">
                   {{ commentsOptions[feedback.value.comments] }}
@@ -71,11 +79,12 @@
 
 
 
-<div *ngIf="currentUser.Role!=0">
+<div *ngIf="currentUser.Role==1">
   <div style="display: flex; justify-content: space-between; margin: 0 200px; text-align: center;">
-    <button class="btn" style="text-align: center; gbackground-color: lightblue; width: 180px;" mat-menu-item (click)="sendEmailtoemployee()">Email to Employees</button>
+    <button class="btn" style="text-align: center; background-color: lightblue; width: 180px;" mat-menu-item (click)="sendEmailtoemployee()">Email to Candidates</button>
     <button class="btn" style="text-align: center; background-color: lightblue; width: 180px;" mat-menu-item (click)="editable=!editable">EDIT ALL</button>
-    <button class="btn" style="background-color: lightblue; width: 180px;" mat-menu-item (click)="sendEmailtoMentor()">Email to Mentor</button>
+    <button class="btn" style="background-color: lightblue; width: 180px;" mat-menu-item (click)="sendEmailtoMentor()">Email Feedback</button>
+  </div>
   </div>
 <!-- Main Content -->
 <div class="content">
@@ -100,9 +109,8 @@
             <td>{{ feedback.value.userTask.taskName }}</td>
 
             <td>
-<p *ngIf="!editable">{{feedback.value.totalAverageRating}}</p>
-              <input *ngIf="editable" type="number" [(ngModel)]="feedback.value.totalAverageRating" name="totalAverageRating{{i}}" placeholder="{{feedback.value.totalAverageRating}}">
-            </td>
+                  {{ feedback.value.totalAverageRating }}%
+                </td>
             <td>
               <p *ngIf="!editable">{{commentsOptions[feedback.value.comments-1]}}</p>
               <select *ngIf="editable" [(ngModel)]="feedback.value.comments" name="comments{{i}}" title="Comments" class="form-control" required>
@@ -117,7 +125,8 @@
           </tr>
         </tbody>
       </table>
-      <button type="submit">Submit</button>
+      <br>
+      <button style="text-align: center; background-color: lightblue; width: 180px;" *ngIf="currentUser.Role==1" type="submit">Submit</button>
     </form>
   </div>
 </div>

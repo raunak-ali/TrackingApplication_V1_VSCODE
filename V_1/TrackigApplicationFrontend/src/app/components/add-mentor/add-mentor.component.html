@@ -64,24 +64,34 @@
 </head>
 
 <body>
+  <div class="header">
+    <h2 style="margin-bottom:110px"> Admin Dashboard</h2>
+    <h2 style="margin-bottom:110px;text-align: right;"> Welcome {{currentUser.Name}}! </h2>
+
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu" class="menu-button">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu" class="custom-menu">
+      <button mat-menu-item (click)="navigateTo('AdminDashboard')">Dashboard</button>
+      <button mat-menu-item (click)="logout()">Logout</button>
+    </mat-menu>
+  </div>
+
   <div class="content">
-    <div class="header">
-      <h2> Dashboard <img src="/assets/Mentor_Dashboard_Icon.png" alt="Mentor Dashboard Icon" class="icon"></h2>
-      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu" class="menu-button">
-        <mat-icon>menu</mat-icon>
-      </button>
-      <mat-menu #menu="matMenu" class="custom-menu">
-        <button mat-menu-item (click)="navigateTo('dashboard')">Dashboard</button>
-        <button mat-menu-item (click)="navigateTo('batches')">Batches</button>
-        <button mat-menu-item (click)="navigateTo('profile')">Profile</button>
-        <button mat-menu-item (click)="navigateTo('employees')">Employees</button>
-        <button mat-menu-item (click)="logout()">Logout</button>
-      </mat-menu>
-    </div>
+
+    <br>
+    <br>
 
       <div class="card">
         <div class="card-header">
           <h2>Add Mentor</h2>
+          <button class="btn" (click)="toggleNavigationHistory()">Show Navigation History</button>
+
+<ul *ngIf="showNavigationHistory">
+  <li *ngFor="let link of navigationHistory">
+    <a style="background-color: lightblue; width: 180px; margin-left: 60px;" [routerLink]="link">{{ link }}</a>
+  </li>
+</ul>
         </div>
         <div class="card-body">
           <form [formGroup]="AddMentorForm" (ngSubmit)="onSubmit()">

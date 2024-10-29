@@ -14,6 +14,7 @@ import { Comments } from '../task-submissions/task-submissions.component';
 import { User } from '../../Models/user';
 import { UpdateFeedbackService } from 'src/app/Services/update-feedback.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { NavigationService } from 'src/app/Services/navigation.service';
 
 @Component({
   selector: 'app-batch-employee',
@@ -21,8 +22,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./batch-employee.component.css']
 })
 export class BatchEmployeeComponent implements OnInit {
+  navigationHistory: string[]=[];
 toggleEditMode() {
 throw new Error('Method not implemented.');
+}
+showNavigationHistory: boolean = false;
+
+toggleNavigationHistory() {
+  this.showNavigationHistory = !this.showNavigationHistory;
 }
 
   taskid!:number;
@@ -54,9 +61,12 @@ constructor(private route: ActivatedRoute,
   private removeEmployeesFromBatchService:RemoveEmployeesFromBatchService,
   private getFeedBacksService :GetFeedBacksService,
   private updateFeedbackService:UpdateFeedbackService ,
-  private snackBar: MatSnackBar
+  private snackBar: MatSnackBar,
+  private navigationService: NavigationService
+
   ) { }
   ngOnInit(): void {
+    this.navigationHistory = this.navigationService.getNavigationHistory();
 
     feedbacksForm: FormGroup;
     this.taskid = +this.route.snapshot.params['taskid'];
@@ -126,6 +136,21 @@ constructor(private route: ActivatedRoute,
     this.router.navigate(["Login"]);
     // Implement logout functionality
   }
+  viewEmployee(userid:number) {
+    this.router.navigate(['/UserProfile', userid]);
+    }
+
+    navigateToDahsBoard(){
+      if(this.currentUser.Role==2){
+        this.router.navigate(['AdminDashboard']);
+      }
+      else if(this.currentUser.Role==1){
+        this.router.navigate(['Mentor_dashboard']);
+      }
+      else{
+        this.router.navigate(['Employee_DashBoard']);
+      }
+    }
   initForm(): void {
 
     if (this.filteredArray) {

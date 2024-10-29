@@ -15,18 +15,19 @@
   <!-- Page content -->
   <div class="content">
     <div class="header">
-      <h2> Dashboard <img src="/assets/Mentor_Dashboard_Icon.png" alt="Mentor Dashboard Icon" class="icon"></h2>
+      <h2 style="margin-bottom:110px"> Dashboard </h2>
+      <h2 style="margin-bottom:110px;text-align: right;"> Welcome {{currentUser.Name}}! </h2>
+
       <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu" class="menu-button">
         <mat-icon>menu</mat-icon>
       </button>
       <mat-menu #menu="matMenu" class="custom-menu">
-        <button mat-menu-item (click)="navigateTo('dashboard')">Dashboard</button>
-        <button mat-menu-item (click)="navigateTo('batches')">Batches</button>
-        <button mat-menu-item (click)="navigateTo('profile')">Profile</button>
-        <button mat-menu-item (click)="navigateTo('employees')">Employees</button>
+        <button mat-menu-item (click)="navigateToDahsBoard()">Dashboard</button>
+        <button mat-menu-item (click)="viewEmployee(currentUser.UserId)">Profile</button>
         <button mat-menu-item (click)="logout()">Logout</button>
       </mat-menu>
     </div>
+<br>
 
     <app-get-batch></app-get-batch>
   </div>

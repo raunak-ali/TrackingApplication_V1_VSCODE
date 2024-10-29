@@ -1,29 +1,48 @@
 
-
+<br>
+<br>
 <!-- Header -->
 <div class="header">
-  <h2>Dashboard <img src="/assets/Mentor_Dashboard_Icon.png" alt="Mentor Dashboard Icon" class="icon"></h2>
+  <h2 style="margin-bottom:110px"> Dashboard </h2>
+  <h2 style="margin-bottom:110px;text-align: right;"> Welcome {{currentUser.Name}}! </h2>
+
   <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu" class="menu-button">
     <mat-icon>menu</mat-icon>
   </button>
   <mat-menu #menu="matMenu" class="custom-menu">
-    <button mat-menu-item (click)="navigateTo('dashboard')">Dashboard</button>
-    <button mat-menu-item (click)="navigateTo('batches')">Batches</button>
-    <button mat-menu-item (click)="navigateTo('profile')">Profile</button>
-    <button mat-menu-item (click)="navigateTo('employees')">Employees</button>
+    <button mat-menu-item (click)="navigateToDahsBoard()">Dashboard</button>
+    <button mat-menu-item (click)="viewEmployee(currentUser.userId)">Profile</button>
     <button mat-menu-item (click)="logout()">Logout</button>
   </mat-menu>
 </div>
 
+<br>
+
+<br>
+
+
+
+<br>
+<button class="btn" (click)="toggleNavigationHistory()">Show Navigation History</button>
+
+<ul *ngIf="showNavigationHistory">
+  <li *ngFor="let link of navigationHistory">
+    <a style="background-color: lightblue; width: 180px; margin-left: 60px;" [routerLink]="link">{{ link }}</a>
+  </li>
+</ul>
 <!-- Main Content -->
 <div class="content">
+
+
+
+
   <div *ngIf="currentUser.Role!=0"  class="excel-table">
     <table>
-      <thead>
+      <thead  style="color: darkblue;">
         <tr>
-          <th>Submitted By</th>
-          <th>The File Uploaded</th>
-          <th>The Rating</th>
+          <th  style="color: darkblue;" >Submitted By</th>
+          <th style="color: darkblue;" >The File Uploaded</th>
+          <th  style="color: darkblue;">The Rating</th>
         </tr>
       </thead>
       <tbody>
@@ -41,15 +60,28 @@
         </td>
           <td>
             <div *ngIf="item.rating != null">
-              {{ item.rating.RatingValue }}
+              {{ item.rating.RatingValue }}%
             </div>
-            <div *ngIf="item.rating == null">
+            <div *ngIf="item.rating == null && currentUser.Role==1">
               <button (click)="showRatingForm(item.submissionDetails.TaskSubmissionsId, item.submissionDetails.UserId)" class="btn btn-primary">Add Rating</button>
               <div *ngIf="showRatingForms[item.submissionDetails.TaskSubmissionsId + item.submissionDetails.UserId]">
                 <form [formGroup]="ratingform" (ngSubmit)="submitRating(item.submissionDetails.TaskSubmissionsId, item.submissionDetails.UserId)">
                   <div class="form-group">
-                    <label for="ratingValue">Rating Value:</label>
-                    <input type="number" class="form-control" id="ratingValue" formControlName="RatingValue" required>
+                    <label for="RatingValue">Rating Value:</label>
+                    <select class="form-control"  id="RatingValue" formControlName="RatingValue" required>
+                      <option [value]="" disabled selected>Select a rating percentage</option>
+                      <option [value]="0">0%</option>
+                      <option [value]="10">10%</option>
+                      <option [value]="20">20%</option>
+                      <option [value]="30">30%</option>
+                      <option [value]="40">40%</option>
+                      <option [value]="50">50%</option>
+                      <option [value]="60">60%</option>
+                      <option [value]="70">70%</option>
+                      <option [value]="80">80%</option>
+                      <option [value]="90">90%</option>
+                      <option [value]="100">100%</option>
+                    </select>
                   </div>
                   <div class="form-group">
                     <label for="comments">Comments:</label>
@@ -76,11 +108,11 @@
     <br>
     <br>
     <table>
-      <thead>
-        <tr>
-          <th>Submitted By</th>
-          <th>The File Uploaded</th>
-          <th>The Rating</th>
+      <thead style="color: darkblue;">
+        <tr style="color: darkblue;">
+          <th style="color: darkblue;">Submitted By</th>
+          <th style="color: darkblue;">The File Uploaded</th>
+          <th style="color: darkblue;">The Rating</th>
         </tr>
       </thead>
       <tbody>
@@ -123,7 +155,7 @@
           </td>
           <td>
             <div *ngIf="rating != null">
-              {{ rating.RatingValue }}
+              {{ rating.RatingValue }}%
               <!-- Include comments if needed -->
             </div>
           </td>

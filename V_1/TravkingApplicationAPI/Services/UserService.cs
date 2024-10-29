@@ -70,8 +70,9 @@ namespace TravkingApplicationAPI.Services
                 throw;
             }
         }
- public async Task<List<User>> FetchMentors()
-        { try
+        public async Task<List<User>> FetchMentors()
+        {
+            try
             {
                 return await User.FetchMentors();
 
@@ -82,7 +83,8 @@ namespace TravkingApplicationAPI.Services
                 throw;
             }
         }
-        public async Task<string> ResetPasswordOtp(string capgeminiid){
+        public async Task<string> ResetPasswordOtp(string capgeminiid)
+        {
             try
             {
                 return await User.ResetPasswordOtp(capgeminiid);
@@ -96,9 +98,9 @@ namespace TravkingApplicationAPI.Services
         }
         public async Task<string> ResetPassword(string username, string oldpassword, string newpassword)
         {
-              try
+            try
             {
-                return await User.ResetPassword(username,oldpassword,newpassword);
+                return await User.ResetPassword(username, oldpassword, newpassword);
 
 
             }
@@ -107,9 +109,10 @@ namespace TravkingApplicationAPI.Services
                 throw;
             }
         }
-         public async Task<List<User>> FetchEmployees(){
+        public async Task<List<User>> FetchEmployees()
+        {
 
-              try
+            try
             {
                 return await User.FetchEmployees();
 
@@ -120,7 +123,7 @@ namespace TravkingApplicationAPI.Services
                 throw;
             }
 
-         }
+        }
 
 
     }

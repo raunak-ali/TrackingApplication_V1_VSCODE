@@ -1,3 +1,4 @@
+import { GetModules } from "./get-modules";
 import { GetTask } from "./get-task";
 import { GetUser } from "./get-user";
 import { User } from "./user";
@@ -13,4 +14,6 @@ export class FeedBacks {
   user!: GetUser;
   ratings!: any[];
   submission_Count:any=null;
+  moduleId!:number;
+  module!:GetModules;
 }

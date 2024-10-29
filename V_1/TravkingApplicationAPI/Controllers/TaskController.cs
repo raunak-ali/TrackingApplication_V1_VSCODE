@@ -20,15 +20,15 @@ namespace TravkingApplicationAPI.Controllers
     {
 
         private readonly TaskServices taskService;
-private readonly JsonSerializerSettings _jsonSettings;
+        private readonly JsonSerializerSettings _jsonSettings;
 
         public TaskController(TaskServices taskService)
         {
             this.taskService = taskService;
             _jsonSettings = new JsonSerializerSettings
-        {
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore // Configure Newtonsoft.Json settings as needed
-        };
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore // Configure Newtonsoft.Json settings as needed
+            };
         }
         [HttpPost]
         [AllowAnonymous]
@@ -63,9 +63,9 @@ private readonly JsonSerializerSettings _jsonSettings;
         {
             try
             {
-                var BatchId = data.GetProperty("BatchId").GetInt32();
+                var ModuleId = data.GetProperty("ModuleId").GetInt32();
                 //var BatchId = JsonSerializer.Deserialize<UserTask>(temp);
-                var res = await taskService.GetAllTasks(BatchId);
+                var res = await taskService.GetAllTasks(ModuleId);
                 if (res == null)
                 {
                     return BadRequest();
@@ -131,7 +131,7 @@ private readonly JsonSerializerSettings _jsonSettings;
 
             }
         }
-[HttpPost]
+        [HttpPost]
         [AllowAnonymous]
         //[Authorize(Roles ="Mentor")]
         [DisableRequestSizeLimit]
@@ -161,7 +161,7 @@ private readonly JsonSerializerSettings _jsonSettings;
 
 
 
-        
+
         [HttpPost]
         [AllowAnonymous]
         //[Authorize(Roles ="Mentor")]
@@ -187,12 +187,12 @@ private readonly JsonSerializerSettings _jsonSettings;
 
             }
         }
-[HttpPost]
+        [HttpPost]
         [AllowAnonymous]
         //[Authorize(Roles ="Mentor")]
         [DisableRequestSizeLimit]
         [Route("GetTaskFeedBack")]
-        public async Task<ActionResult> GetTaskFeedBack([FromBody]dynamic data)//Try [FromBody]
+        public async Task<ActionResult> GetTaskFeedBack([FromBody] dynamic data)//Try [FromBody]
         {
             try
             {
@@ -204,8 +204,8 @@ private readonly JsonSerializerSettings _jsonSettings;
                 {
                     return BadRequest();
                 }
-                var e=new JsonResult(res, _jsonSettings);
-                return Ok(new{message=e});
+                var e = new JsonResult(res, _jsonSettings);
+                return Ok(new { message = e });
             }
             catch (Exception ex)
             {

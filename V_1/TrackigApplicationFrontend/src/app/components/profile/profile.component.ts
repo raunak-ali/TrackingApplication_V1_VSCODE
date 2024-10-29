@@ -13,6 +13,7 @@ import { GetUserByBatchService } from 'src/app/Services/get-user-by-batch.servic
 import { GetUserTasksService } from 'src/app/Services/get-user-tasks.service';
 import { GetUserinfoService } from 'src/app/Services/get-userinfo.service';
 import { LoginService } from 'src/app/Services/login.service';
+import { NavigationService } from 'src/app/Services/navigation.service';
 
 @Component({
   selector: 'app-profile',
@@ -37,7 +38,12 @@ export class ProfileComponent  implements OnInit {
   showBatches: boolean = false;
   showTasks: boolean = false;
   showSubtasks: { [taskId: number]: boolean } = {};
+  navigationHistory: string[]=[];
+  showNavigationHistory: boolean = false;
 
+  toggleNavigationHistory() {
+    this.showNavigationHistory = !this.showNavigationHistory;
+  }
   // Add new methods
   toggleBatches(): void {
     this.showBatches = !this.showBatches;
@@ -74,10 +80,13 @@ export class ProfileComponent  implements OnInit {
       private router: Router,
       private getbatchesservice: GetBatchesService,
       private getUserinfoService:GetUserinfoService,
-      private getUserTasksService :GetUserTasksService ) { }
+      private getUserTasksService :GetUserTasksService,
+      private navigationService: NavigationService
+      ) { }
 
     ngOnInit(): void {
 
+      this.navigationHistory = this.navigationService.getNavigationHistory();
 
       // Retrieve the batchId parameter from the route
       this.UserId = +this.route.snapshot.params['UserId'];
@@ -145,7 +154,19 @@ export class ProfileComponent  implements OnInit {
         // Navigate to another component with batchId as a parameter
         this.router.navigate(['/Batch_dashboard', batchId]);
     }
+
       //
+navigateToDahsBoard(){
+    if(this.User.role==2){
+      this.router.navigate(['AdminDashboard']);
+    }
+    else if(this.User.role==1){
+      this.router.navigate(['Mentor_dashboard']);
+    }
+    else{
+      this.router.navigate(['Employee_DashBoard']);
+    }
+  }
 
   //show all of the task the user has been assigned along with its submissions
   fetchUsertasks(){

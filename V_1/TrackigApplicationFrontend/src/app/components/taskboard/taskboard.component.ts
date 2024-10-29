@@ -9,6 +9,7 @@ import { GetSubTasksByTaskService } from 'src/app/Services/get-sub-tasks-by-task
 import { LoginService } from '../../Services/login.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Location } from '@angular/common';
+import { NavigationService } from 'src/app/Services/navigation.service';
 
 //All Task details
 //->(Like thier substask)
@@ -29,6 +30,8 @@ export class TaskboardComponent implements OnInit {
   userid!:any;
   showForm: boolean = false;
   currentUser = this.loginservice.getUserFromSession();
+  selectedSubtaskType: string = '';
+  navigationHistory: string[]=[];
 
   constructor(
     private snackBar: MatSnackBar,
@@ -38,9 +41,17 @@ export class TaskboardComponent implements OnInit {
     private getSubTasksByTaskService:GetSubTasksByTaskService,
     private loginservice:LoginService,
     private router: Router,
-    private location: Location) {}
+    private location: Location,
+    private navigationService: NavigationService
+    ) {}
+    showNavigationHistory: boolean = false;
 
+    toggleNavigationHistory() {
+      this.showNavigationHistory = !this.showNavigationHistory;
+    }
   ngOnInit(): void {
+    this.navigationHistory = this.navigationService.getNavigationHistory();
+
     this.taskId = +this.route.snapshot.params['taskiId'];
     this.userid=this.loginservice.getUser();
     this.initializeForm();
@@ -68,7 +79,7 @@ export class TaskboardComponent implements OnInit {
       FileName:['',Validators.required],
       TestCases:[''], // Initialize TestCases as an empty FormArray
       TestCasesArray: this.formBuilder.array([]), // Initialize TestCasesString as an empty string
-      isCodingProblem:[true]
+      isProctored:[false]
 
     });
   }
@@ -77,6 +88,21 @@ export class TaskboardComponent implements OnInit {
 get testCasesArray(): FormArray {
   return this.form.get('TestCasesArray') as FormArray;
 }
+viewEmployee(userid:number) {
+  this.router.navigate(['/UserProfile', userid]);
+  }
+
+  navigateToDahsBoard(){
+    if(this.currentUser.Role==2){
+      this.router.navigate(['AdminDashboard']);
+    }
+    else if(this.currentUser.Role==1){
+      this.router.navigate(['Mentor_dashboard']);
+    }
+    else{
+      this.router.navigate(['Employee_DashBoard']);
+    }
+  }
 
 addTestCase(): void {
   this.testCasesArray.push(this.createTestCase());
@@ -87,6 +113,12 @@ createTestCase(): FormGroup {
     SampleInput: ['', Validators.required],
     ExpectedOutput: ['', Validators.required]
   });
+}
+
+// Add method to handle dropdown selection
+onChangeSubtaskType(event: Event) {
+  const selectedValue = (event.target as HTMLSelectElement).value;
+  this.selectedSubtaskType = selectedValue;
 }
 
 onSubmit(): void {

@@ -51,11 +51,7 @@
   margin-left: auto;
 }
 
-/* Main Content */
-.main-content {
-  background-color: transparent; /* Set main content background color to transparent */
-  margin-top: 100px; /* Adjust top margin to prevent overlap with navbar */
-}
+
 
 /* Table styles */
 table {
@@ -95,6 +91,15 @@ th {
   cursor: pointer;
   color:#ddd;
   background-color: #ddd;
+  width: 900px;
+}
+.head {
+  background-color: transparent; /* Set background color to transparent */
+  color: #2578be;
+  text-decoration: #00b4d8;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 body, html {
   height: 100%;
@@ -102,10 +107,7 @@ body, html {
   padding: 0;
 }
 
-.container {
-  display: flex;
-  height: 100%;
-}
+
 
 .task-container {
   flex: 1;
@@ -175,26 +177,6 @@ body, html {
   flex-direction: row;
 }
 
-.header {
-  width: auto;
-  color: #000000; /* Set text color to black */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  left:10px;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  height: 200px;
-  margin-top: 50px;
-  align-self: center;
-  margin-left: 85px;
-  margin-right: 85px;
-  background-image: url('/assets/DashBoard_Banner.jpeg');
-  background-size: cover; /* This makes the background image cover the entire header */
-  background-position: center; /* This centers the background image */
-
-}
 
 .icon {
 

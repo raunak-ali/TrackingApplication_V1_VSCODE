@@ -74,7 +74,7 @@ namespace TravkingApplicationAPI.Services
 
         public async Task<string> UpdateFeedbacks(List<AddFeedback> feedback)
         {
-              try
+            try
             {
                 return await tasksubrepo.UpdateFeedbacks(feedback);
             }
@@ -82,9 +82,9 @@ namespace TravkingApplicationAPI.Services
             {
                 throw;
             }
-            
+
         }
-                public async Task<string> SendFeedbacktoEmployee(List<AddFeedback> feedback)
+        public async Task<string> SendFeedbacktoEmployee(List<AddFeedback> feedback)
         {
             try
             {
@@ -96,14 +96,24 @@ namespace TravkingApplicationAPI.Services
             }
 
         }
-                public async Task<string> SendFeedbacktoMentor(List<AddFeedback> feedback)
-{
-    try{
-                        return await tasksubrepo.SendFeedbacktoMentor(feedback);
+        public async Task<string> SendFeedbacktoMentor(List<AddFeedback> feedback)
+        {
+            try
+            {
+                return await tasksubrepo.SendFeedbacktoMentor(feedback);
 
-    }
-    catch(Exception e){throw;}
-}
+            }
+            catch (Exception e) { throw; }
+        }
 
+    public async Task<List<FeedBack>> GetFeedbackforaModule(int MouduleId){
+         try
+            {
+                return await tasksubrepo.GetFeedbackforaModule(MouduleId);
+
+            }
+            catch (Exception e) { throw; }
     }
+    }
+    
 }

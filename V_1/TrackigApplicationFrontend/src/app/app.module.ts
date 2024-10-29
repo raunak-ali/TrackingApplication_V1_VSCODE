@@ -13,7 +13,6 @@ import { AddMentorComponent } from './components/add-mentor/add-mentor.component
 import { AddBatchesComponent } from './components/add-batches/add-batches.component';
 import { GetBatchComponent } from './components/get-batch/get-batch.component';
 import { MentorDashboardComponent } from './components/mentor-dashboard/mentor-dashboard.component';
-import { BatchDashboardComponent } from './components/batch-dashboard/batch-dashboard.component';
 import { TaskboardComponent } from './components/taskboard/taskboard.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
@@ -22,6 +21,7 @@ import { TaskSubmissionsComponent } from './components/task-submissions/task-sub
 import { ProfileComponent } from './components/profile/profile.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { MatCardModule } from '@angular/material/card';
+import { BatchDashboardComponent } from './components/batch-dashboard/batch-dashboard.component';
 
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -41,6 +41,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BatchEmployeeComponent } from './components/batch-employee/batch-employee.component';
 import { CompileAndExecuteComponent } from './components/compile-and-execute/compile-and-execute.component';
 import {MatTabsModule} from '@angular/material/tabs';
+import { ModuleDashboardComponent } from './components/module-dashboard/module-dashboard.component';
+import { ModuleFeedbackComponent } from './components/module-feedback/module-feedback.component';
 
 
 // Import jQuery
@@ -65,6 +67,8 @@ import {MatTabsModule} from '@angular/material/tabs';
     AdminDashboardComponent,
     BatchEmployeeComponent,
     CompileAndExecuteComponent,
+    ModuleDashboardComponent,
+    ModuleFeedbackComponent,
 
 
   ],

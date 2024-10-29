@@ -21,12 +21,15 @@ public enum priority{
     public int BatchId { get; set; }//Fk
     public string Comments { get; set; }
 
-    
+                public int ModuleId { get; set; }
+public Module? Module{get;set;}
     public DateTime? CreatedAt { get; set; }
         public User? AssignedByUser { get;set; }//Nav Property
         //public Batch? Batches{get;set;}//Nav Property
         public List<User>? AssignedToUser { get; internal set; }//Nav Property
         public List<SubTask>? SubTasks { get; set; }//Nav Property
         public List<FeedBack>? FeedBack { get; set; }//Nav Property
+
+        //fk of Module
     }
     }

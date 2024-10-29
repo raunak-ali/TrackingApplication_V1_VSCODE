@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            width: 100%;
+            background-color: #333;
+            color: #2578be;
+            padding: 5px 0;
+            text-align: center;
+            height: 90px;
+            background-color: white;
+        }
+        .navbar h4{
+          margin: 0;
+          margin-right: 0px;
+          margin-left: 910px;
+        }
+       .navbar h2{
+        margin: 0;
+          margin-right: 20px;
+          padding: 0px;
+          font-family: 'Roboto', sans-serif;
+       }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            background-color: #555;
+            color: white;
+            padding: 10px;
+            height: 300px;
+            background:linear-gradient(to bottom, #007bbd, #ADD8E6); /* Dark blue to light blue */
+            background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+
+        }
+        .header h1 {
+            margin: 0;
+            margin-right: 5%;
+            margin-left: 5%;
+        }
+        .header h4 {
+            margin: 0;
+            margin-right: 20px;
+        }
+        .header p{
+          margin: 0;
+          margin-top: 0px;
+          align-items: center;
+          margin-right: 10%;
+
+
+        }
+        .menu-button {
+            margin-left: auto;
+        }
+        .container {
+display: flex;
+            padding: 20px;
+
+        }
+        .main-content {
+            flex: 2;
+            background-color: white;
+            padding: 20px;
+            margin-right: 20px;
+            margin-left: 20px;
+
+        }
+        .side-content {
+flex: 3;
+            background-color:white;
+            padding: 35px;
+        }
+        .form-card, .head, .card-container {
+            margin-bottom: 20px;
+        }
+        .btn {
+            margin-top: 5px;
+        }
+        .custom-menu {
+            margin-top: 40px;
+        }
+        .navbar img {
+          margin-top: 0px;
+        width: 100px; /* Adjust image width as needed */
+        height: auto; /* Maintain aspect ratio */
+        margin-right: 10px; /* Adjust spacing between image and text */
+        margin-left: 10px;
+    }
+    .breadcrumb {
+color: white;
+
+    padding: 5px;
+    margin: 5px;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size:1rem;
+    display: flex;
+    align-items: center;
+}
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+    margin-right: 5px;
+}
+
+.breadcrumb a {
+    color: white;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb i {
+    margin-right: 5px;
+}
+.search-container {
+    position: relative;
+    width: 1100px; /* Adjust this width as needed */
+}
+
+.search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: gray;
+    pointer-events: none;
+}
+
+.search-input {
+    width: 100%;
+    padding-left: 30px; /* Add padding to the left to make space for the icon */
+    height: 36px; /* Adjust the height as needed */
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+    </style>
+</head>
+<body>
+    <div class="navbar">
+     <h2>
+      <img src="/assets/TechPro.png" alt="Image Description" style="vertical-align: middle; margin-right: 10px;">
+
+     </h2>
+      <h4 stye="text-align:margin-right:">Welcome {{currentUser.Name}} !</h4>
+
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu" class="menu-button">
+        <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu" class="custom-menu">
+        <button mat-menu-item (click)="navigateToDahsBoard()">Dashboard</button>
+        <button mat-menu-item (click)="viewEmployee(currentUser.userId)">Profile</button>
+        <button mat-menu-item (click)="logout()">Logout</button>
+        <button *ngIf="currentUser.Role==1" mat-menu-item (click)="showForm = !showForm" >Add New Module</button>
+        <button *ngIf="currentUser.Role==1" mat-menu-item   (click)="viewFeedback()">Feedbacks</button>
+
+    </mat-menu>
+    </div>
+    <div class="header">
+        <h1>
+            <div  class="breadcrumb">
+              <i class="fas fa-tachometer-alt" style="color:#f8f9fa;"></i>
+                            <ng-container *ngFor="let link of navigationHistory; let i = index">
+                  <a style="color: white;" [routerLink]="link">{{ getLinkName(link) }}</a>
+                  <span *ngIf="i < navigationHistory.length - 2"> / </span>
+              </ng-container>
+          </div>
+
+          <p *ngIf="allModules.length>0 ; else noModules" style="font-size:3rem;">{{filteredModules[0].batchs.batchName}}</p>
+          <ng-template #noModules>
+          <p style="font-size:3rem;">No Modules Added</p>
+
+        </ng-template>
+          <br>
+
+          <p *ngIf="allModules.length>0 else noModulessubtitle" style="font-size:1rem;">{{filteredModules[0].batchs.description}}</p>
+          <ng-template #noModulessubtitle>
+          <p  style="font-size:1rem;">Since No Modules have been added yet, There is no Batch info Available</p>
+        </ng-template>
+      </h1>
+          <br>
+        <br>
+
+
+
+    </div>
+    <div class="container">
+        <div class="main-content">
+
+            <div class="head">
+                <h2> <i class="fas fa-code-branch" style="color:#2578be;"></i>  Recent modules ...</h2>
+
+                <div class="search-container">
+                  <i class="fas fa-search search-icon" style="color:#2578be;"></i>
+                  <input class="search-input" style="width: 1100px;" type="text" placeholder="Search..." [(ngModel)]="searchQuery" (input)="filterModules()">
+                </div>
+            </div>
+            <div *ngIf="allModules.length>0 else noModulestt" class="card-container">
+                <mat-card  *ngFor="let modules of filteredModules" (click)="viewTasks(modules.moduleId)" class="custom-card">
+                    <mat-card-header>
+                        <mat-card-title></mat-card-title>
+                        <br>
+                        <br>
+                        <mat-card-subtitle style="margin-top: 10px;">
+                          <h2 mat-button ><u>{{ modules.moduleName }}</u></h2>
+
+                          Description: {{ modules.description }}</mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <ng-template #noModulestt>
+
+
+              <p>No batches available.</p>
+          </ng-template>
+
+        </div>
+        <div *ngIf="showForm" class="form-card">
+          <h2 style="color: #2578be;">Module Form</h2>
+          <form [formGroup]="AddNewModuleForm" (ngSubmit)="OnSubmit()" class="needs-validation" novalidate>
+              <mat-form-field appearance="fill">
+                  <mat-label>ModuleName</mat-label>
+                  <input matInput formControlName="ModuleName" id="ModuleName" placeholder="ModuleName" required>
+                  <mat-error *ngIf="AddNewModuleForm.get('ModuleName')?.invalid">ModuleName is required.</mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                  <mat-label>Description</mat-label>
+                  <input matInput formControlName="Description" id="Description" placeholder="Description of this task">
+              </mat-form-field>
+              <button type="submit" mat-raised-button color="primary">Submit</button>
+          </form>
+      </div>
+       <!-- <div class="side-content">
+
+
+
+
+        </div>-->
+    </div>
+
+</body>
+</html>

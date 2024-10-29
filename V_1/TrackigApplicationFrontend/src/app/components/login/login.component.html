@@ -4,8 +4,7 @@
       <div class="col-md-6 mx-auto">
         <div class="card">
           <div class="card-header bg-transparent text-white d-flex justify-content-between align-items-center">
-            <h2 class="text-center mb-4">TaskIt</h2>
-            <img src="\assets\Business icon.jpg" alt="Icon" class="icon">
+            <h2 class="text-center">TaskIt</h2>
           </div>
           <div class="card-body">
             <!-- Original Login Form -->
@@ -17,10 +16,11 @@
                   </span>
                   <input formControlName="UserName" type="text" id="UserName" class="form-control" placeholder="Username"/>
                 </div>
-                <div *ngIf="loginForm.get('UserName')?.errors" class="text-danger">
-                  <div *ngIf="loginForm.get('UserName')?.errors?.['required']">Username is required.</div>
+                <div *ngIf="loginForm.get('UserName')?.touched && loginForm.get('UserName')?.hasError('required')" class="text-danger">
+                  Username is required.
                 </div>
               </div>
+              <br>
               <div class="form-group">
                 <div class="input-group">
                   <span class="input-group-prepend">
@@ -28,30 +28,36 @@
                   </span>
                   <input type="password" formControlName="Password" id="Password" class="form-control" placeholder="Password"/>
                 </div>
-                <div *ngIf="loginForm.get('Password')?.errors" class="text-danger">
-                  <div *ngIf="loginForm.get('Password')?.errors?.['required']">Password is required.</div>
+                <div *ngIf="loginForm.get('Password')?.touched && loginForm.get('Password')?.hasError('required')" class="text-danger">
+                  Password is required.
                 </div>
               </div>
               <p style="color: rgb(255, 13, 13);" *ngIf="error != null">{{ error }}</p>
-              <button type="submit" class="btn btn-primary btn-block">Login</button>
-            <br>
-            </form>
-<br>
-<p style="color: white;" (click)="showemailform=!showemailform">Forgot Password?</p>
-            <!-- Forgotten Password Form -->
-            <div *ngIf="showemailform">
-            <form [formGroup]="emailForm" (ngSubmit)="SendResetPasswordEmail()" *ngIf="!resetPasswordFormVisible">
-              <div class="form-group">
-                <input formControlName="capgeminiid" type="text" class="form-control" placeholder="Enter your email"/>
-                <div *ngIf="emailForm.get('capgeminiid')?.errors" class="text-danger">
-                  <div *ngIf="emailForm.get('capgeminiid')?.errors?.['required']">Email is required.</div>
-                  <div *ngIf="emailForm.get('capgeminiid')?.errors?.['email']">Invalid email format.</div>
-                </div>
-              </div>
-              <button type="submit" class="btn btn-primary btn-block">Submit</button>
               <br>
-
+              <button type="submit" class="btn btn-primary btn-block">Login</button>
             </form>
+            <br>
+            <p style="color: white;" (click)="showemailform=!showemailform">Forgot Password?</p>
+            <!-- Forgotten Password Form -->
+            <div  *ngIf="showemailform">
+              <form [formGroup]="emailForm" (ngSubmit)="SendResetPasswordEmail()" *ngIf="!resetPasswordFormVisible">
+                <div class="form-group">
+                  <div class="input-group">
+                  <div class="input-group-text"><i class="fas fa-lock" style="color: rgb(20, 20, 20);"></i></div>
+
+                  <input formControlName="capgeminiid" type="text" class="form-control" placeholder="Enter your email"/>
+                  <div *ngIf="emailForm.get('capgeminiid')?.touched && emailForm.get('capgeminiid')?.hasError('required')" class="text-danger">
+                    Email is required.
+                  </div>
+
+                  <div *ngIf="emailForm.get('capgeminiid')?.touched && emailForm.get('capgeminiid')?.hasError('email')" class="text-danger">
+                    Invalid email format.
+                  </div>
+                </div>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+              </form>
             </div>
 
             <!-- Password Reset Form -->
@@ -65,6 +71,7 @@
               <div class="form-group">
                 <input formControlName="newpassword" type="password" class="form-control" placeholder="New Password"/>
               </div>
+              <br>
               <button type="submit" class="btn btn-primary btn-block">Submit</button>
             </form>
           </div>

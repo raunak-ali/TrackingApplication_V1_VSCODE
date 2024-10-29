@@ -50,6 +50,7 @@ namespace TravkingApplicationAPI.Repository
                             NewTask.AssignedTo = usertask.AssignedTo;
                             NewTask.AssignedToUser = existing_employee;
                             NewTask.BatchId = usertask.BatchId;
+                            NewTask.ModuleId = usertask.ModuleId;
                             // NewTask.Batches=existing_batch;
                             NewTask.Comments = usertask.Comments;
                             NewTask.CreatedAt = DateTime.Now;
@@ -77,19 +78,19 @@ namespace TravkingApplicationAPI.Repository
             }
         }
 
-        public async Task<List<UserTask>> GetAllTask(int BatchId)
+        public async Task<List<UserTask>> GetAllTask(int ModuleId)
         {
             try
             {
-                if (BatchId != null)
+                if (ModuleId != null)
                 {
-                    var existing_batch = context.Batches.FirstOrDefault(b => b.BatchId == BatchId);
+                    var existing_modules = context.Modules.FirstOrDefault(b => b.ModuleId == ModuleId);
 
-                    if (existing_batch != null)
+                    if (existing_modules != null)
                     {
                         var all_tasks = context.Tasks
                                                 .Include(t => t.AssignedToUser)
-                                                .Where(t => t.BatchId == BatchId)
+                                                .Where(t => t.ModuleId == ModuleId)
                                                 .ToList();
 
                         if (all_tasks != null)
@@ -109,6 +110,8 @@ namespace TravkingApplicationAPI.Repository
                                 }
                             }
                         }
+                    all_tasks.ForEach(m => m.Module = existing_modules);
+
 
                         return all_tasks;
                     }
@@ -138,7 +141,7 @@ namespace TravkingApplicationAPI.Repository
                         newsubtask.Title = subtask.Title;
                         newsubtask.UserTask = existing_Task;
                         newsubtask.FileName = subtask.FileName;
-                        newsubtask.isCodingProblem = subtask.isCodingProblem;
+                        newsubtask.isProctored = subtask.isProctored;
                         newsubtask.TestCases = subtask.TestCases;
                         context.SubTask.Add(newsubtask);
                         await context.SaveChangesAsync();
@@ -213,6 +216,7 @@ namespace TravkingApplicationAPI.Repository
                     foreach (var task in existing_task)
                     {
                         var existing_subtasks = context.SubTask.Where(u => u.TaskId == task.UserTaskID).ToList();
+                        
                         task.SubTasks = existing_subtasks;
 
                     }
@@ -264,6 +268,62 @@ namespace TravkingApplicationAPI.Repository
         {
             try
             {
+                var ratingThresholds = new Dictionary<double, Comments>
+        {
+            { 90, Comments.VeryGood },
+            { 70, Comments.Good },
+            { 50, Comments.Average },
+            { 30, Comments.BelowAverage },
+            { double.MinValue, Comments.BelowAverage } // Default comment for ratings below 30
+        };
+
+                //Find all the user's assigned to that task
+                var existing_users = context.Tasks.FirstOrDefault(t => t.UserTaskID == taskid);
+                //Find if a feedback already exists for them
+
+                foreach (var user in existing_users.AssignedTo)
+                {
+                    var average=0;
+                    var existing_feedback = context.FeedBacks.FirstOrDefault(f => f.TaskId == taskid && f.UserId == user);
+                    //if it does, ->Update the average->completedsubtaks(subtaks with a rating)/totalsubtaks(subtaks which are proctored)
+                    //else  make a new feedback object  ->Update the average->completedsubtaks(subtaks with a rating)/totalsubtaks(subtaks which are proctored)
+                    var allsubtaks = context.SubTask.Where(s => s.TaskId == taskid).Select(s => s.SubTaskId).ToList();
+                    var allTaskSubmissions = context.TaskSubmissions
+                        .Where(ts => allsubtaks.Contains(ts.subtaskid))
+                        .ToList();
+                        var alltaksub=allTaskSubmissions.Where(ts=>ts.UserId==user).ToList();//Totalsubtaks
+                    var allRatings = context.Ratings
+                    .Where(r => alltaksub.Select(ts => ts.TaskSubmissionsId).Contains(r.TaskSubmissionId))
+                    .ToList();
+                    var compltedsubtaks=allRatings.Where(r=>r.RatedTo==user).ToList();//completedsubtaks
+                    if(compltedsubtaks.Count()!=0 && alltaksub.Count()!=0){
+                    average =(compltedsubtaks.Count()/ alltaksub.Count())*100; }
+
+                    if (existing_feedback != null)
+                    {
+existing_feedback.Comments=ratingThresholds.FirstOrDefault(kv => (int)average >= kv.Key).Value;
+                        existing_feedback.TotalAverageRating = (int)average;
+                        context.FeedBacks.Update(existing_feedback);
+                        context.SaveChanges();
+
+                    }
+                    else
+                    {
+                        var existing_user = context.Users.FirstOrDefault(u => u.UserId == user);
+                        FeedBack newFeedback = new FeedBack();
+                        newFeedback.TotalAverageRating = (int)average;
+                        newFeedback.TaskId = taskid;
+                        newFeedback.Description = null;
+                        newFeedback.Ratings = null;
+                        newFeedback.User = existing_user;
+                        newFeedback.UserId = user;
+                        newFeedback.Comments=ratingThresholds.FirstOrDefault(kv => (int)average >= kv.Key).Value;
+                        context.FeedBacks.Add(newFeedback);
+                        context.SaveChanges();
+
+                    }
+                }
+
                 var existing_task = context.Tasks.FirstOrDefault(t => t.UserTaskID == taskid);
                 if (existing_task != null)
                 {
@@ -273,7 +333,7 @@ namespace TravkingApplicationAPI.Repository
                     {
                         if (feedback.UserId != null)
                         {
-
+                            // A subtask is considered submittedif it has a rating
                             var total_subtasks = context.SubTask.Where(s => s.TaskId == taskid).ToList();//Fetch all subtaks 
                                                                                                          //Fetch how many the user has submitted 
                             var total_submitted = 0;
@@ -343,14 +403,17 @@ namespace TravkingApplicationAPI.Repository
 
         public async Task<SubTask> GetSubTask(int subtadkid)
         {
-            try{
-                var existing_subtask=context.SubTask.FirstOrDefault(s=>s.SubTaskId==subtadkid);
-                if(existing_subtask!=null){
+            try
+            {
+                var existing_subtask = context.SubTask.FirstOrDefault(s => s.SubTaskId == subtadkid);
+                if (existing_subtask != null)
+                {
                     return existing_subtask;
                 }
-return null;
+                return null;
             }
-            catch(Exception e){
+            catch (Exception e)
+            {
                 throw;
             }
         }

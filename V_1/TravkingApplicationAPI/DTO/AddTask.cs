@@ -18,6 +18,8 @@ namespace TravkingApplicationAPI.DTO
     public List<int> AssignedTo { get; set; }
     public int BatchId { get; set; }
     public string Comments { get; set; }
+    public int ModuleId { get; set; }
+
 
     }
 }

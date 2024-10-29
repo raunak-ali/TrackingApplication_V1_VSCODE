@@ -15,38 +15,30 @@
   <!-- Page content -->
   <div class="content">
     <div class="header">
-      <h2> Dashboard <img src="/assets/Mentor_Dashboard_Icon.png" alt="Mentor Dashboard Icon" class="icon"></h2>
+      <h2 style="margin-bottom:110px"> Admin Dashboard</h2>
+      <h2 style="margin-bottom:110px;text-align: right;"> Welcome {{currentUser.Name}}! </h2>
+
       <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu" class="menu-button">
         <mat-icon>menu</mat-icon>
       </button>
       <mat-menu #menu="matMenu" class="custom-menu">
-        <button mat-menu-item (click)="navigateTo('dashboard')">Dashboard</button>
-        <button mat-menu-item (click)="navigateTo('batches')">Batches</button>
-        <button mat-menu-item (click)="navigateTo('profile')">Profile</button>
-        <button mat-menu-item (click)="navigateTo('employees')">Employees</button>
+        <button mat-menu-item (click)="navigateTo('AdminDashboard')">Dashboard</button>
+        <button mat-menu-item (click)="viewEmployee(1003)">Profile</button>
+        <button mat-menu-item (click)="RedirectToNewBatch()">Add New Batch</button>
+        <button mat-menu-item (click)="RedirectToNewMentor()">Add New Mentor</button>
         <button mat-menu-item (click)="logout()">Logout</button>
       </mat-menu>
     </div>
-    <app-get-batch></app-get-batch>
-    <div *ngIf="allMentors!=null;">
+    <br>
 
-        <h2>All Mentors</h2>
+    <br>
+    <mat-tab-group>
+      <mat-tab label="Batches">  <app-get-batch></app-get-batch> </mat-tab>
 
-      <div class="container">
-        <div class="card-container">
-          <mat-card *ngFor="let Mentors of allMentors" class="custom-card">
-            <mat-card-header>
-              <mat-card-title>{{ Mentors.name }}</mat-card-title>
-              <mat-card-subtitle>Domain: {{ Mentors.domain}}</mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-              <!-- Add any additional content here -->
-              <button mat-button color="primary" (click)="viewEmployee(Mentors.userId)">View Mentor Profile</button>
-            </mat-card-content>
-          </mat-card>
-        </div>
-      </div>
-    </div>
+
+    </mat-tab-group>
+
+
 
   </div>
 </body>

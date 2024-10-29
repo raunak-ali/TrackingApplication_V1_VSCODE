@@ -5,32 +5,7 @@ background-color:white;
   flex: 1 1 auto;
 }
 
-.navbar {
-  background-color: #000000;
-  opacity: 50%;
-  color: #fff;
-  width: 80px;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  overflow-x: hidden;
-  padding-top: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
 
-.navbar a {
-  padding: 10px 0;
-  text-align: center;
-  text-decoration: none;
-  font-size: 14px;
-  color: #fff;
-  display: block;
-}
-
-.navbar a:hover {
-  background-color: #03045e;
-}
 
 .content {
   background-color:transparent;
@@ -40,27 +15,6 @@ background-color:white;
 }
 .content {
   padding: 20px;
-}
-
-.header {
-  width: auto;
-  color: #000000; /* Set text color to black */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  left:10px;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  height: 200px;
-  margin-top: 50px;
-  align-self: center;
-  margin-left: 75px;
-  margin-right: 75px;
-  background-image: url('/assets/DashBoard_Banner.jpeg');
-  background-size: cover; /* This makes the background image cover the entire header */
-  background-position: center; /* This centers the background image */
-
 }
 
 .icon {

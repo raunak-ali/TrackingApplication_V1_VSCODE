@@ -9,6 +9,7 @@ import { AddBatchesService } from 'src/app/Services/add-batches.service';
 import { AddMentorService } from 'src/app/Services/add-mentor.service';
 import { GetMentorsService } from 'src/app/Services/get-mentors.service';
 import { LoginService } from 'src/app/Services/login.service';
+import { NavigationService } from 'src/app/Services/navigation.service';
 
 @Component({
   selector: 'app-add-batches',
@@ -23,16 +24,22 @@ export class AddBatchesComponent implements OnInit {
   selectedFile: any;
   mentorid!: number;
   allMentors!:GetUser[];
+  navigationHistory: string[]=[];;
+  currentUser = this.loginservice.getUserFromSession();
+
 
 
 
   constructor(private fb: FormBuilder, private Addbatchesservice: AddBatchesService, private loginservice: LoginService
     ,private route: ActivatedRoute,private getMentorsService:GetMentorsService,
-    private router: Router,      private snackBar: MatSnackBar
+    private router: Router,      private snackBar: MatSnackBar,    private navigationService: NavigationService
+
     ){}
   private existing_mentor?=this.loginservice.getUser();
 
   ngOnInit(): void {
+    this.navigationHistory = this.navigationService.getNavigationHistory();
+
 this.fetchmentors();
     this.AddBatchForm = this.fb.group({
       MentorId: [''],
@@ -54,6 +61,11 @@ this.fetchmentors();
     this.router.navigate(["Login"]);
     // Implement logout functionality
   }
+  showNavigationHistory: boolean = false;
+
+toggleNavigationHistory() {
+  this.showNavigationHistory = !this.showNavigationHistory;
+}
   fetchmentors() {
     this.getMentorsService. GetMentors().subscribe(
       (data: any) => {

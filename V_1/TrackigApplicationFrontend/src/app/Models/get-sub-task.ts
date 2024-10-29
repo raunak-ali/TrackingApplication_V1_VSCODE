@@ -8,6 +8,6 @@ export class GetSubTask {
     fileUploadSubmission?: Uint8Array;
     subTaskCompletedOn?: Date;
     TestCases!:string;
-    isCodingProblem!:boolean;
+    isProctored!:boolean;
 
 }

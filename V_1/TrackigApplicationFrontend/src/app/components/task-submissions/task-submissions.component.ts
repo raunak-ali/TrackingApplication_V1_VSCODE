@@ -10,6 +10,10 @@ import { AddNewRatingService } from 'src/app/Services/add-new-rating.service';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Role } from '../../Models/user';
+import { Location } from '@angular/common';
+import { NavigationService } from 'src/app/Services/navigation.service';
+
 
 @Component({
   selector: 'app-task-submissions',
@@ -27,7 +31,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 export class TaskSubmissionsComponent implements OnInit {
+  navigationHistory: string[]=[];
+  showNavigationHistory: boolean = false;
 
+  toggleNavigationHistory() {
+    this.showNavigationHistory = !this.showNavigationHistory;
+  }
 
 GoToCompiler() {
   this.router.navigate(["compile",this.subtaskid]);
@@ -56,9 +65,15 @@ GoToCompiler() {
     private formBuilder: FormBuilder,
     private addTaskSubmissionsService: AddTaskSubmissionsService,
     private ratingService: AddNewRatingService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private location: Location,
+    private navigationService: NavigationService
 ) { }
+goBack() {
+  this.location.back();
+}
   ngOnInit(): void {
+    this.navigationHistory = this.navigationService.getNavigationHistory();
 
     this.statusOptions = Object.values(StatusEnum);
     this.subtaskid = +this.route.snapshot.params['subtaskid'];
@@ -85,6 +100,10 @@ GoToCompiler() {
 
     }
   }
+  viewEmployee(userid:number) {
+    this.router.navigate(['/UserProfile', userid]);
+    }
+
   submitRating(taskSubmissionId: number, ratedTo: number): void {
 
 
@@ -92,7 +111,8 @@ GoToCompiler() {
     this.ratingform.patchValue({
       TaskSubmissionId: taskSubmissionId,
       RatedTo: ratedTo,
-      Comments: parseInt(this.ratingform.get('Comments').value, 10)
+      Comments: parseInt(this.ratingform.get('Comments').value, 10),
+      RatingValue: parseInt(this.ratingform.get('RatingValue').value, 10)
     });
 
     // Call the rating service method to submit the rating
@@ -299,6 +319,17 @@ GoToCompiler() {
   navigateTo(route: string): void {
     this.router.navigate([route]);
   }
+  navigateToDahsBoard(){
+    if(this.currentUser.Role==2){
+      this.router.navigate(['AdminDashboard']);
+    }
+    else if(this.currentUser.Role==1){
+      this.router.navigate(['Mentor_dashboard']);
+    }
+    else{
+      this.router.navigate(['Employee_DashBoard']);
+    }
+  }
 
   logout(): void {
     this.loginservice.clearUser();
@@ -316,7 +347,6 @@ export enum Comments {
     Good=2,
     Average=3,
     BelowAverage=4,
-    Bad=5
-
+    Below_Average=5
 }
 

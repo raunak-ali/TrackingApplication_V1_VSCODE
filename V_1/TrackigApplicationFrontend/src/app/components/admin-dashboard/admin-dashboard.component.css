@@ -32,10 +32,27 @@ body {
     background-color: #03045e;
   }
 
+  .head {
+    background-color: transparent; /* Set background color to transparent */
+    color: #2578be;
+    text-decoration: #00b4d8;
+    padding: 15px 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+
+  }
+
+  .head h2 {
+    font-size: 24px;
+    margin: 0;
+  }
+
+
   .content {
     background-color:transparent;
-    margin-left: 100px;
+    margin-left: auto;
     padding: 20px;
+    align-items: center;
   }
   .content {
     padding: 20px;
@@ -52,7 +69,7 @@ body {
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     height: 200px;
-    margin-top: 50px;
+    margin-top: 0px;
     align-self: center;
     margin-left: 85px;
     margin-right: 85px;
@@ -82,4 +99,36 @@ body {
     background-color: rgba(255, 255, 255, 0.9); /* Adjust opacity as needed */
   }
 
+  .card {
+    margin-top: 0; /* Remove margin-top */
+  }
+
+  .card p {
+    margin-bottom: 5px; /* Add margin-bottom to separate paragraphs */
+  }
+  .card-container {
+
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .container {
+    background-color: white;
+    padding: 20px;
+  }
+
+  .custom-card {
+    width: calc(33.33% - 20px); /* Adjust the width as needed */
+    margin: 10px;
+     /* Replace 'your-background-image-url' with the actual URL */
+    background-size: cover;
+    background-position: center;
+    background-color: rgba(255, 255, 255, 0.1); /* Set background color with opacity */
+    color: currentcolor;
+
+  }
+
+  .custom-card:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Add hover effect */
+  }
 

@@ -1,39 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Add Mentor</title>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/12.2.8/angular-material.min.css" rel="stylesheet">
+<div class="header">
+  <h2 style="margin-bottom:110px"> Admin Dashboard</h2>
+  <h2 style="margin-bottom:110px;text-align: right;"> Welcome {{currentUser.Name}}! </h2>
 
-</head>
+  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu" class="menu-button">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu" class="custom-menu">
+    <button mat-menu-item (click)="navigateTo('AdminDashboard')">Dashboard</button>
+    <button mat-menu-item (click)="logout()">Logout</button>
+  </mat-menu>
+</div>
 
-<body>
-  <div class="content">
-    <div class="header">
-      <h2> Dashboard <img src="/assets/Mentor_Dashboard_Icon.png" alt="Mentor Dashboard Icon" class="icon"></h2>
-      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu" class="menu-button">
-        <mat-icon>menu</mat-icon>
-      </button>
-      <mat-menu #menu="matMenu" class="custom-menu">
-        <button mat-menu-item (click)="navigateTo('dashboard')">Dashboard</button>
-        <button mat-menu-item (click)="navigateTo('batches')">Batches</button>
-        <button mat-menu-item (click)="navigateTo('profile')">Profile</button>
-        <button mat-menu-item (click)="navigateTo('employees')">Employees</button>
-        <button mat-menu-item (click)="logout()">Logout</button>
-      </mat-menu>
+<div class="container">
+
+
+
+
+  <div>
+    <div class="head">
+      <h2>Add New Batch</h2>
+      <button class="btn" (click)="toggleNavigationHistory()">Show Navigation History</button>
+
+      <ul *ngIf="showNavigationHistory">
+        <li *ngFor="let link of navigationHistory">
+          <a style="background-color: lightblue; width: 180px; margin-left: 60px;" [routerLink]="link">{{ link }}</a>
+        </li>
+      </ul>
     </div>
-    <br>
-    <br>
-
-    <div class="container-fluid">
-      <div class="card">
-        <div class="card-header">
-          <h2>Add Batch</h2>
-        </div>
-        <div class="card-body">
+    <div class="container">
+          <div class="card">
           <!-- Replace with provided form -->
           <form [formGroup]="AddBatchForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
             <mat-form-field appearance="fill">
@@ -66,10 +62,10 @@
             <!-- Add other form fields as needed -->
             <button type="submit" mat-raised-button color="primary">Submit</button>
           </form>
+          </div>
         </div>
-      </div>
     </div>
-  </div>
-</body>
+</div>
 
-</html>
+
+

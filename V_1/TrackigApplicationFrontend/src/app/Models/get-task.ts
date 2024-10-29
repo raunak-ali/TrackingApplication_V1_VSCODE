@@ -1,4 +1,5 @@
 import { Batch } from "./batch";
+import { GetModules } from "./get-modules";
 import { SubTask } from "./sub-task";
 import { User } from "./user";
 
@@ -19,6 +20,8 @@ export class GetTask {
     assignedToUser!: User[] | null; // Nav Property
     subTasks!: SubTask[]; // Nav Property
     feedBack!: null; // Nav Property
+    ModuleId!:number;
+    module!:GetModules;
 
 
 }

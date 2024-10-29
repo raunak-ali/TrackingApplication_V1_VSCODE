@@ -16,6 +16,7 @@ using System.Net.Mail;
 using System.Net;
 using System.Text;
 using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
+using TravkingApplicationAPI.Migrations;
 
 
 namespace TravkingApplicationAPI.Repository
@@ -76,11 +77,18 @@ namespace TravkingApplicationAPI.Repository
 
                 if (existing_TaskSubmission != null)
                 {
+                    var existing_proct=context.Proctereds.Select(p=>p.userId).ToList();
                     foreach (var submission in existing_TaskSubmission)
                     {
                         var existing_rating = context.Ratings
                             .FirstOrDefault(r => r.TaskSubmissionId == submission.TaskSubmissionsId
                             );
+                            if(existing_proct.Contains(existing_rating.RatedTo)){
+                                existing_rating.RatingValue=0;
+                                existing_rating.Comments=Comments.BelowAverage;
+                            
+                            }
+
                         var existing_user = context.Users.FirstOrDefault(u => u.UserId == submission.UserId);
                         submission.SubmittedByUser = existing_user;
 
@@ -170,47 +178,19 @@ namespace TravkingApplicationAPI.Repository
                 { 70, Comments.Good },
                 { 50, Comments.Average },
                 { 30, Comments.BelowAverage },
-                { double.MinValue, Comments.Bad } // Default comment for ratings below 30
+                { double.MinValue, Comments.BelowAverage} // Default comment for ratings below 30
             };
 
                     var existingTaskSubmission = await context.TaskSubmissions.FirstOrDefaultAsync(t => t.TaskSubmissionsId == addRating.TaskSubmissionId);
                     var existingSubTasks = await context.SubTask.Where(s => s.SubTaskId == existingTaskSubmission.subtaskid).ToListAsync();
-                    var countOfSubTasks = existingSubTasks.Count;
+                    var countOfSubTasks = existingSubTasks.Where(s => s.isProctored == true).Count();
                     var taskID = existingSubTasks.FirstOrDefault().TaskId;
-
-                    var existingUser = await context.Users.FirstOrDefaultAsync(u => u.UserId == addRating.RatedTo);
-                    var countTasksAssignedToUser = await context.Tasks.Where(t => t.AssignedTo.Contains(addRating.RatedTo)).CountAsync();
-
-                    var feedback = await context.FeedBacks.FirstOrDefaultAsync(f => f.TaskId == taskID && f.UserId == addRating.RatedTo);
-                    var isNewFeedback = feedback == null;
-
-                    if (isNewFeedback)
-                    {
-                        feedback = new FeedBack();
-                        feedback.TotalAverageRating = (1 / countOfSubTasks) * addRating.RatingValue;
-                        feedback.TaskId = taskID;
-                        feedback.UserId = addRating.RatedTo;
-                        feedback.Comments = ratingThresholds.FirstOrDefault(kv => feedback.TotalAverageRating >= kv.Key).Value;
-                        await context.FeedBacks.AddAsync(feedback);
-                    }
-                    else
-                    {
-                        feedback.TotalAverageRating = ((1 / countOfSubTasks) * addRating.RatingValue) + feedback.TotalAverageRating;
-                        feedback.Comments = ratingThresholds.FirstOrDefault(kv => feedback.TotalAverageRating >= kv.Key).Value;
-                        context.FeedBacks.Update(feedback);
-
-                    }
-
-
-
                     existingRating.RatedBy = addRating.RatedBy;
                     existingRating.RatedTo = addRating.RatedTo;
                     existingRating.RatingValue = addRating.RatingValue;
                     existingRating.TaskSubmissionId = addRating.TaskSubmissionId;
                     existingRating.Comments = addRating.Comments;
-                    existingUser.Total_Average_RatingStatus = ((1 / 1) * feedback.TotalAverageRating) + existingUser.Total_Average_RatingStatus;
                     //existingUser.Total_Average_RatingStatus=19;
-                    context.Users.Update(existingUser);
                     context.Ratings.Update(existingRating);
 
                     using (var transaction = await context.Database.BeginTransactionAsync())
@@ -233,7 +213,6 @@ namespace TravkingApplicationAPI.Repository
                         }
                     }
 
-                    existingRating.FeedbackId = feedback.FeedbackId;
                     using (var transaction = await context.Database.BeginTransactionAsync())
                     {
                         try
@@ -265,36 +244,13 @@ namespace TravkingApplicationAPI.Repository
                 { 70, Comments.Good },
                 { 50, Comments.Average },
                 { 30, Comments.BelowAverage },
-                { double.MinValue, Comments.Bad } // Default comment for ratings below 30
+                { double.MinValue, Comments.BelowAverage } // Default comment for ratings below 30
             };
 
                     var existingTaskSubmission = await context.TaskSubmissions.FirstOrDefaultAsync(t => t.TaskSubmissionsId == addRating.TaskSubmissionId);
                     var existingSubTasks = await context.SubTask.Where(s => s.SubTaskId == existingTaskSubmission.subtaskid).ToListAsync();
                     var countOfSubTasks = existingSubTasks.Count;
                     var taskID = existingSubTasks.FirstOrDefault().TaskId;
-
-                    var existingUser = await context.Users.FirstOrDefaultAsync(u => u.UserId == addRating.RatedTo);
-                    var countTasksAssignedToUser = await context.Tasks.Where(t => t.AssignedTo.Contains(addRating.RatedTo)).CountAsync();
-
-                    var feedback = await context.FeedBacks.FirstOrDefaultAsync(f => f.TaskId == taskID && f.UserId == addRating.RatedTo);
-                    var isNewFeedback = feedback == null;
-
-                    if (isNewFeedback)
-                    {
-                        feedback = new FeedBack();
-                        feedback.TotalAverageRating = (1 / countOfSubTasks) * addRating.RatingValue;
-                        feedback.TaskId = taskID;
-                        feedback.UserId = addRating.RatedTo;
-                        feedback.Comments = ratingThresholds.FirstOrDefault(kv => feedback.TotalAverageRating >= kv.Key).Value;
-                        await context.FeedBacks.AddAsync(feedback);
-                    }
-                    else
-                    {
-                        feedback.TotalAverageRating = ((1 / countOfSubTasks) * addRating.RatingValue) + feedback.TotalAverageRating;
-                        feedback.Comments = ratingThresholds.FirstOrDefault(kv => feedback.TotalAverageRating >= kv.Key).Value;
-                        context.FeedBacks.Update(feedback);
-
-                    }
 
                     var newRating = new Rating();
 
@@ -303,9 +259,7 @@ namespace TravkingApplicationAPI.Repository
                     newRating.RatingValue = addRating.RatingValue;
                     newRating.TaskSubmissionId = addRating.TaskSubmissionId;
                     newRating.Comments = addRating.Comments;
-                    existingUser.Total_Average_RatingStatus = ((1 / 1) * feedback.TotalAverageRating) + existingUser.Total_Average_RatingStatus;
                     //existingUser.Total_Average_RatingStatus=19;
-                    context.Users.Update(existingUser);
                     await context.Ratings.AddAsync(newRating);
 
                     using (var transaction = await context.Database.BeginTransactionAsync())
@@ -328,7 +282,6 @@ namespace TravkingApplicationAPI.Repository
                         }
                     }
 
-                    newRating.FeedbackId = feedback.FeedbackId;
                     using (var transaction = await context.Database.BeginTransactionAsync())
                     {
                         try
@@ -460,35 +413,36 @@ namespace TravkingApplicationAPI.Repository
             {
                 var existinguser = context.Users.FirstOrDefault(u => u.UserId == feed.user.userId);
                 var email = existinguser.CapgeminiEmailId.Replace("\r", "").Replace("\n", "");
-                Comments commentString=Comments.Good;
-                 if (feed.comments is int)
-                                {
-                                    commentString = (Comments)(((int)feed.comments));
-                                }
-                                else if (feed.comments is string)
-                                {
-                                    // Handle string values (if needed)
-                                    commentString = (Comments)Convert.ToInt32(feed.comments);
-                                }
-                                else
-                                {
-                                    string trimmedComments = feed.comments.ToString().Trim();
-                                    if (int.TryParse(trimmedComments, out int commentInt))
-                                    {
-                                        commentString = (Comments)(commentInt);
-                                        // Conversion succeeded
-                                    }
-                                    // Handle other types or unexpected values
-                                }
-                if(commentString==Comments.BelowAverage || commentString==Comments.Bad){
-                      
-                SendEmailtoEmployee(email, feed.totalAverageRating.ToString(), existinguser.Name + "|" + feed.userTask.taskName, commentString.ToString(), existinguser.Name, feed.Submission_Count,feed.description);
+                Comments commentString = Comments.Good;
+                if (feed.comments is int)
+                {
+                    commentString = (Comments)(((int)feed.comments));
+                }
+                else if (feed.comments is string)
+                {
+                    // Handle string values (if needed)
+                    commentString = (Comments)Convert.ToInt32(feed.comments);
+                }
+                else
+                {
+                    string trimmedComments = feed.comments.ToString().Trim();
+                    if (int.TryParse(trimmedComments, out int commentInt))
+                    {
+                        commentString = (Comments)(commentInt);
+                        // Conversion succeeded
+                    }
+                    // Handle other types or unexpected values
+                }
+                if (commentString == Comments.BelowAverage)
+                {
+
+                    SendEmailtoEmployee(email, feed.totalAverageRating.ToString(), existinguser.Name + "|" + feed.userTask.taskName, commentString.ToString(), existinguser.Name, feed.Submission_Count, feed.description);
                 }
             }
             return "sent";
 
         }
-        public void SendEmailtoEmployee(string toEmail, string Feedbackvalue, string subject, string feedbackcomment, string employeename, string incomplete_tasks,string feedbackdescription)
+        public void SendEmailtoEmployee(string toEmail, string Feedbackvalue, string subject, string feedbackcomment, string employeename, string incomplete_tasks, string feedbackdescription)
         {
             try
             {
@@ -512,7 +466,7 @@ namespace TravkingApplicationAPI.Repository
                 mailBody.AppendFormat("<p>Your commitment to growth and development within our dynamic IT company is commendable. As you continue your journey, it's important to address areas for improvement and leverage the support available to you.</p>");
                 mailBody.AppendFormat("<p>Regarding your performance, while your dedication to the training program is evident, there are areas where enhancement is needed. During recent assessments, it was noted that you may be facing challenges in fully grasping certain concepts and addressing queries related to the current topics covered. However, with proactive measures and support, we are confident in your ability to overcome these challenges and excel in your role.</p>");
                 mailBody.AppendFormat("<p>Moving forward, you have {0} tasks remaining on your agenda.</p>", incomplete_tasks);
-                mailBody.AppendFormat("<p>Regarding your feedback, your current feedback value stands at {0} and the comment crrently is at {1}.  The Mentor wants you to Note that {2} .We encourage you to reflect on this feedback and consider it as you continue to grow and develop in your role..</p>", Feedbackvalue, feedbackcomment,feedbackdescription);
+                mailBody.AppendFormat("<p>Regarding your feedback, your current feedback value stands at {0} and the comment crrently is at {1}.  The Mentor wants you to Note that {2} .We encourage you to reflect on this feedback and consider it as you continue to grow and develop in your role..</p>", Feedbackvalue, feedbackcomment, feedbackdescription);
                 mailBody.AppendFormat("<p>In conclusion, we are here to support you every step of the way. Should you require any assistance or guidance with your remaining tasks or feedback, please do not hesitate to reach out.</p>");
                 mailBody.AppendFormat("<p>Wishing you continued success and progress in your professional journey.</p>");
                 mailBody.AppendFormat("<p>Warm regards,</p>");
@@ -527,7 +481,7 @@ namespace TravkingApplicationAPI.Repository
                 Console.WriteLine("ISSUES?");
             }
         }
- public void SendEmailtoMentor(string toEmail, string body, string subject,string employeename)
+        public void SendEmailtoMentor(string toEmail, string body, string subject, string employeename)
         {
             try
             {
@@ -562,14 +516,14 @@ namespace TravkingApplicationAPI.Repository
         {
             try
             {
-               
 
 
-var task = context.Tasks.FirstOrDefault(t => t.UserTaskID == feedback[0].userTask.userTaskID);
-                    var batch = context.Batches.FirstOrDefault(b => b.BatchId == task.BatchId);
-                    var mentor = context.Users.FirstOrDefault(m => m.UserId == batch.MentorId);
 
-                     // Start building the HTML table
+                var task = context.Tasks.FirstOrDefault(t => t.UserTaskID == feedback[0].userTask.userTaskID);
+                var batch = context.Batches.FirstOrDefault(b => b.BatchId == task.BatchId);
+                var mentor = context.Users.FirstOrDefault(m => m.UserId == batch.MentorId);
+
+                // Start building the HTML table
                 StringBuilder emphtmlTable = new StringBuilder();
                 emphtmlTable.Append("<table border='1'>");
 
@@ -578,8 +532,8 @@ var task = context.Tasks.FirstOrDefault(t => t.UserTaskID == feedback[0].userTas
                 emphtmlTable.Append("<th>Username</th>");
                 emphtmlTable.Append("<th>Name</th>");
                 emphtmlTable.Append("<th>Capgemini Email ID</th>");
-                emphtmlTable.Append("<th> Current Topic :"+task.TaskName+"</th>");
-                 emphtmlTable.Append("<th> Feedback for  :"+task.TaskName+"</th>");
+                emphtmlTable.Append("<th> Current Topic :" + task.TaskName + "</th>");
+                emphtmlTable.Append("<th> Feedback for  :" + task.TaskName + "</th>");
                 emphtmlTable.Append("</tr>");
                 foreach (var feed in feedback)
                 {
@@ -587,8 +541,8 @@ var task = context.Tasks.FirstOrDefault(t => t.UserTaskID == feedback[0].userTas
                     //Task se batch
                     //batch se mentor
                     //mentor se mentor email
-                    
-                    
+
+
                     //Columns to get of each employee
                     //	Emp ID,Name,Capgemini Email ID,Week 1 and Week 2(Current Topic: C# Programming)
                     //Lets make the employeetable first
@@ -598,54 +552,54 @@ var task = context.Tasks.FirstOrDefault(t => t.UserTaskID == feedback[0].userTas
                     emphtmlTable.Append("<td>" + existing_user.UserName + "</td>");
                     emphtmlTable.Append("<td>" + existing_user.Name + "</td>");
                     emphtmlTable.Append("<td>" + existing_user.CapgeminiEmailId + "</td>");
-                    Comments commentString=Comments.Good;
-                 if (feed.comments is int)
-                                {
-                                    commentString = (Comments)((int)(feed.comments));
-                                }
-                                else if (feed.comments is string)
-                                {
-                                    // Handle string values (if needed)
-                                    commentString = (Comments)Convert.ToInt32(feed.comments);
-                                }
-                                else
-                                {
-                                    string trimmedComments = feed.comments.ToString().Trim();
-                                    if (int.TryParse(trimmedComments, out int commentInt))
-                                    {
-                                        commentString = (Comments)commentInt;
-                                        // Conversion succeeded
-                                    }
-                                    // Handle other types or unexpected values
-                                }
-                    emphtmlTable.Append("<td>" +commentString + "</td>");
-                    emphtmlTable.Append("<td>" +feed.description + "</td>");
+                    Comments commentString = Comments.Good;
+                    if (feed.comments is int)
+                    {
+                        commentString = (Comments)((int)(feed.comments));
+                    }
+                    else if (feed.comments is string)
+                    {
+                        // Handle string values (if needed)
+                        commentString = (Comments)Convert.ToInt32(feed.comments);
+                    }
+                    else
+                    {
+                        string trimmedComments = feed.comments.ToString().Trim();
+                        if (int.TryParse(trimmedComments, out int commentInt))
+                        {
+                            commentString = (Comments)commentInt;
+                            // Conversion succeeded
+                        }
+                        // Handle other types or unexpected values
+                    }
+                    emphtmlTable.Append("<td>" + commentString + "</td>");
+                    emphtmlTable.Append("<td>" + feed.description + "</td>");
                     emphtmlTable.Append("</tr>");
 
 
                 }
-                
+
                 emphtmlTable.Append("</table>");
 
- StringBuilder batchhtmlTable = new StringBuilder();
+                StringBuilder batchhtmlTable = new StringBuilder();
                 batchhtmlTable.Append("<table border='1'>");
 
                 // Add table headers
                 batchhtmlTable.Append("<tr>");
                 batchhtmlTable.Append("<th>Batch Name</th>");
-                batchhtmlTable.Append("<th>"+batch.BatchName+"</th>");
+                batchhtmlTable.Append("<th>" + batch.BatchName + "</th>");
                 batchhtmlTable.Append("<th>Technology</th>");
-                batchhtmlTable.Append("<th>"+batch.Domain+"</th>");
+                batchhtmlTable.Append("<th>" + batch.Domain + "</th>");
                 batchhtmlTable.Append("</tr>");
-  batchhtmlTable.Append("<tr>");
-                    batchhtmlTable.Append("<td> Current Topic </td>");
-                    batchhtmlTable.Append("<td>" +task.TaskName + "</td>");
-                    batchhtmlTable.Append("</tr>");
-                    
+                batchhtmlTable.Append("<tr>");
+                batchhtmlTable.Append("<td> Current Topic </td>");
+                batchhtmlTable.Append("<td>" + task.TaskName + "</td>");
+                batchhtmlTable.Append("</tr>");
 
 
-                
-                
+
+
+
                 batchhtmlTable.Append("</table>");
                 //Columns to get of the batch
 
@@ -660,19 +614,109 @@ var task = context.Tasks.FirstOrDefault(t => t.UserTaskID == feedback[0].userTas
                 //Current Batch Pace:Slow,Bad
                 //Overall Performance:Good,Above Average,Average,Below Average:   
 
-try{
-//SendEmail with the table
-SendEmailtoMentor(mentor.CapgeminiEmailId.Replace("\r", "").Replace("\n", ""),emphtmlTable+"<h3>BATCH DETAILS</h3>"+batchhtmlTable,batch.BatchName,mentor.Name);}
-catch(Exception e){
-    Console.WriteLine("Issues",e);
-}
-return "sent";
+                try
+                {
+                    //SendEmail with the table
+                    SendEmailtoMentor(mentor.CapgeminiEmailId.Replace("\r", "").Replace("\n", ""), emphtmlTable + "<h3>BATCH DETAILS</h3>" + batchhtmlTable, batch.BatchName, mentor.Name);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Issues", e);
+                }
+                return "sent";
 
 
 
 
             }
             catch (Exception e) { throw; }
+        }
+
+        public async Task<List<FeedBack>> GetFeedbackforaModule(int MouduleId)
+        {
+            try
+            {
+                var ratingThresholds = new Dictionary<double, Comments>
+        {
+            { 90, Comments.VeryGood },
+            { 70, Comments.Good },
+            { 50, Comments.Average },
+            { 30, Comments.BelowAverage },
+            { double.MinValue, Comments.BelowAverage } // Default comment for ratings below 30
+        };
+
+                var module =  context.Modules
+                    .FirstOrDefault(m => m.ModuleId == MouduleId);
+
+                if (module == null)
+                {
+                    return null; // Module not found
+                }
+
+                var moduleFeedbacks = new List<FeedBack>();
+
+                var batchUserIds = await context.Users
+                    .Where(u => u.Batches.Any(b => b.BatchId == module.BatchId))
+                    .Select(u => u.UserId)
+                    .ToListAsync();
+
+                foreach (var userId in batchUserIds)
+                {
+                    var existingFeedback = context.FeedBacks
+                        .FirstOrDefault(f => f.ModuleId == MouduleId && f.UserId == userId);
+                    var task_ids = context.Tasks.Where(t => t.ModuleId == MouduleId).Select(t => t.UserTaskID).ToList();
+                    var totaltasks = 0;
+                    var Average = 0;
+                    foreach (var task in task_ids)
+                    {
+                        var task_feedbacks = context.FeedBacks.FirstOrDefault(f => f.TaskId == task && f.UserId == userId);
+                        if (task_feedbacks != null)
+                        {
+                            totaltasks = totaltasks + 1;
+                            Average = Average + task_feedbacks.TotalAverageRating;
+                        }
+                    }
+                    if (Average != 0 && totaltasks != 0)
+                    {
+                        Average = Average / totaltasks;
+                    }
+
+                    if (existingFeedback != null)
+                    {
+                        existingFeedback.TotalAverageRating = (int)Average;
+                        existingFeedback.User = context.Users.FirstOrDefault(u => u.UserId == userId);
+existingFeedback.Comments=ratingThresholds.FirstOrDefault(kv => Average >= kv.Key).Value;
+                        context.FeedBacks.Update(existingFeedback);
+                        await context.SaveChangesAsync();
+                        moduleFeedbacks.Add(existingFeedback);
+                    }
+                    else
+                    {
+                        var newFeedback = new FeedBack
+                        {
+                            UserId = userId,
+                            ModuleId = MouduleId,
+                            Module = module,
+                            TotalAverageRating = (int)Average,
+                            Comments = ratingThresholds.FirstOrDefault(kv => Average >= kv.Key).Value,
+                            User = context.Users.FirstOrDefault(u => u.UserId == userId)
+
+                        };
+                        context.FeedBacks.Add(newFeedback);
+                        await context.SaveChangesAsync();
+                        moduleFeedbacks.Add(newFeedback);
+                    }
+                }
+                await context.SaveChangesAsync();
+                return moduleFeedbacks;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                throw;
+            }
+
+
         }
     }
 }

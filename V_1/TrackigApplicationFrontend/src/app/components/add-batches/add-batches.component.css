@@ -7,7 +7,20 @@
   padding: 20px;
 }
 
+.head {
+  background-color: transparent; /* Set background color to transparent */
+  color: #2578be;
+  text-decoration: #00b4d8;
+  padding: 25px 25px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 
+}
+
+.head h2 {
+  font-size: 20px;
+  margin: 0;
+}
 
 .header {
   width: auto;
@@ -50,10 +63,36 @@
   background-color: rgba(255, 255, 255, 0.9);
 }
 .card {
-  border: 1px solid #ccc;
-  width: auto;
-  border-radius: 5px;
-  padding: 20px;
-  margin-top: 20px;
-  display: flexbox;
+  margin-top: 0; /* Remove margin-top */
 }
+
+.card p {
+  margin-bottom: 5px; /* Add margin-bottom to separate paragraphs */
+}
+.card-container {
+
+  display: flex;
+  flex-wrap: wrap;
+}
+.container {
+  align-items: center;
+  background-color: white;
+  padding: 20px;
+}
+.card {
+  width: 350px; /* Adjust the width as needed */
+  margin: 20px;
+  padding: 20px;
+   /* Replace 'your-background-image-url' with the actual URL */
+  background-size: cover;
+  background-position: center;
+  background-color: rgba(255, 255, 255, 0.1); /* Set background color with opacity */
+  color: currentcolor;
+
+
+}
+
+.card:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Add hover effect */
+}
+

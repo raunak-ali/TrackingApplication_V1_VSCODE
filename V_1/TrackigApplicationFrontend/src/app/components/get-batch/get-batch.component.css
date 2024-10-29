@@ -1,9 +1,11 @@
 .container {
   background-color: white;
-  padding: 20px;
+  padding: 10px;
+margin-left: 0px;
+  margin-right: 0px;
 }
 
-.header {
+.head {
   background-color: transparent; /* Set background color to transparent */
   color: #2578be;
   text-decoration: #00b4d8;
@@ -47,9 +49,7 @@
 .btn-primary:focus {
   box-shadow: 0 0 0 0.2rem rgba(0, 180, 216, 0.5);
 }
-.container {
-  padding: 20px;
-}
+
 
 .card-container {
 
@@ -63,20 +63,86 @@
    /* Replace 'your-background-image-url' with the actual URL */
   background-size: cover;
   background-position: center;
-  background-color: rgba(255, 255, 255, 0.1); /* Set background color with opacity */
+  background-color: #cedee4; /* Set background color with opacity */
   color: currentcolor;
+
 
 }
 
 .custom-card:hover {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Add hover effect */
 }
-.mat-mdc-card-title{
-  background: linear-gradient(to bottom, #c1d8f0, white);
+.mat-mdc-card-title {
+  background-image: url('/assets/Modules.gif');
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  color: black;
+  height: 100px;
+  width: 275px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  text-align: center;
 }
-.mat-mdc-card-title, .mat-mdc-card-subtitle {
+
+ .mat-mdc-card-subtitle {
 
   display: block;
   margin: 0;
   color: black;
+  height: 200px;
+  text-overflow: ellipsis;
+  overflow: hidden; /* Hide the overflow */
+}
+
+
+/* Form Card */
+.form-card {
+  justify-self: center;
+  background-color: #ffffff; /* Set form card background color */
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  width: 500px; /* Adjust card width as needed */
+  z-index: 1000;
+
+}
+
+.form-card h2 {
+  margin-bottom: 20px;
+}
+.head {
+  background-color: transparent; /* Set background color to transparent */
+  color: #2578be;
+  text-decoration: #00b4d8;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.search-container {
+  position: relative;
+  width: 1100px; /* Adjust this width as needed */
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: gray;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding-left: 30px; /* Add padding to the left to make space for the icon */
+  height: 36px; /* Adjust the height as needed */
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }

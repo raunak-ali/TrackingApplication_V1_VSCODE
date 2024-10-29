@@ -6,5 +6,5 @@ export class AddSubTask {
   FileUploadTaskFileUpload?: File|null; // Assuming this is for file uploads in Angular
   FileUploadTaskPdf?: Uint8Array|string|null;
   TestCases!:string;
-  isCodingProblem!:boolean;
+  isProctored!:boolean;
 }

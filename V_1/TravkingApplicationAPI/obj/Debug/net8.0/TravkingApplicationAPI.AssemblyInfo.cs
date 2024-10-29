@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TravkingApplicationAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+188b3d12d95c1eda297ad75044ff49071c2400fd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ea164d93cace4fa09aefae7612c75d4391f1e8c8")]
 [assembly: System.Reflection.AssemblyProductAttribute("TravkingApplicationAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TravkingApplicationAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -130,19 +130,19 @@ namespace TravkingApplicationAPI.Controllers
         }
 
 
-[HttpPost]
+        [HttpPost]
         [AllowAnonymous]
         //[Authorize(Roles ="Mentor")]
         [DisableRequestSizeLimit]
         [Route("UpdateFeedbacks")]
         public async Task<ActionResult> UpdateFeedbacks([FromBody] dynamic data)
         {
-       
+
             try
             {
                 var temp = data.GetProperty("Feedbacks").GetProperty("feedbacks").ToString();
                 //temp = data.GetProperty("feedbacks").ToString();
-        var feedbacks = System.Text.Json.JsonSerializer.Deserialize<List<AddFeedback>>(temp);
+                var feedbacks = System.Text.Json.JsonSerializer.Deserialize<List<AddFeedback>>(temp);
                 var res = taskSubmissionService.UpdateFeedbacks(feedbacks);
                 if (res == null)
                 {
@@ -158,9 +158,9 @@ namespace TravkingApplicationAPI.Controllers
         }
 
 
-    
 
-     [HttpPost]
+
+        [HttpPost]
         //[Authorize(Roles ="Admin")]
         [Route("SendFeedbackemailtoEmployees")]
         [AllowAnonymous]
@@ -170,9 +170,9 @@ namespace TravkingApplicationAPI.Controllers
 
             try
             {
-               var temp = data.GetProperty("Feedbacks").GetProperty("feedbacks").ToString();
+                var temp = data.GetProperty("Feedbacks").GetProperty("feedbacks").ToString();
                 //temp = data.GetProperty("feedbacks").ToString();
-        var feedbacks = System.Text.Json.JsonSerializer.Deserialize<List<AddFeedback>>(temp);
+                var feedbacks = System.Text.Json.JsonSerializer.Deserialize<List<AddFeedback>>(temp);
                 var res = taskSubmissionService.SendFeedbacktoEmployee(feedbacks);
                 if (res == null)
                 {
@@ -190,7 +190,7 @@ namespace TravkingApplicationAPI.Controllers
 
 
 
-         [HttpPost]
+        [HttpPost]
         //[Authorize(Roles ="Admin")]
         [Route("SendFeedbackemailtoMentor")]
         [AllowAnonymous]
@@ -200,9 +200,9 @@ namespace TravkingApplicationAPI.Controllers
 
             try
             {
-               var temp = data.GetProperty("Feedbacks").GetProperty("feedbacks").ToString();
+                var temp = data.GetProperty("Feedbacks").GetProperty("feedbacks").ToString();
                 //temp = data.GetProperty("feedbacks").ToString();
-        var feedbacks = System.Text.Json.JsonSerializer.Deserialize<List<AddFeedback>>(temp);
+                var feedbacks = System.Text.Json.JsonSerializer.Deserialize<List<AddFeedback>>(temp);
                 var res = taskSubmissionService.SendFeedbacktoMentor(feedbacks);
                 if (res == null)
                 {
@@ -217,6 +217,45 @@ namespace TravkingApplicationAPI.Controllers
             }
 
         }
+
+
+
+
+
+
+
+[HttpPost]
+        //[Authorize(Roles ="Admin")]
+        [Route("GetFeedbackforAModule")]
+        [AllowAnonymous]
+        public async Task<ActionResult> GetFeedbackforAModule([FromBody]dynamic data)
+        {
+
+
+            try
+            {
+                var temp = data.GetProperty("ModuleId").GetInt32();
+                //temp = data.GetProperty("feedbacks").ToString();
+                //var feedbacks = System.Text.Json.JsonSerializer.Deserialize<List<AddFeedback>>(temp);
+                var res = await taskSubmissionService.GetFeedbackforaModule(temp);
+                if (res == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(new { message = res });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+
+            }
+
+        }
+
+
+
+
+
 
     }
 

@@ -23,9 +23,9 @@ namespace TravkingApplicationAPI.Controllers
 
 
         [HttpPost]
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         [Route("AddMentor")]
-      
+
         public async Task<ActionResult> AddUser([FromBody] AddUserAddUser user)//Try [FromBody]
         {
             try
@@ -62,7 +62,7 @@ namespace TravkingApplicationAPI.Controllers
                 var res = await UserService.LoginUser(user);
                 if (res == null)
                 {
-                    return BadRequest(new {message="Username or password is incorrect"});
+                    return BadRequest(new { message = "Username or password is incorrect" });
                 }
                 return Ok(res);
             }
@@ -138,7 +138,7 @@ namespace TravkingApplicationAPI.Controllers
         }
 
 
-         [HttpPost]
+        [HttpPost]
         [AllowAnonymous]
         [Route("ResetPasswordOtp")]
 
@@ -146,21 +146,21 @@ namespace TravkingApplicationAPI.Controllers
         {
             try
             {
-string capgeminiid= data.GetProperty("capgeminiid").ToString();
+                string capgeminiid = data.GetProperty("capgeminiid").ToString();
 
                 var res = await UserService.ResetPasswordOtp(capgeminiid);
                 if (res == null)
                 {
-                    return BadRequest(new {message="User with that email does not exist"});
+                    return BadRequest(new { message = "User with that email does not exist" });
                 }
-                return Ok(new {message=res});
+                return Ok(new { message = res });
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
             }
         }
-[HttpPost]
+        [HttpPost]
         [AllowAnonymous]
         [Route("ResetPassword")]
 
@@ -168,16 +168,16 @@ string capgeminiid= data.GetProperty("capgeminiid").ToString();
         {
             try
             {
-                var username= data.GetProperty("username").ToString();
-                var oldpassword=data.GetProperty("oldpassword").ToString();
-                var newpassword=data.GetProperty("newpassword").ToString();
+                var username = data.GetProperty("username").ToString();
+                var oldpassword = data.GetProperty("oldpassword").ToString();
+                var newpassword = data.GetProperty("newpassword").ToString();
 
-                var res = await UserService.ResetPassword(username,oldpassword,newpassword);
+                var res = await UserService.ResetPassword(username, oldpassword, newpassword);
                 if (res == null)
                 {
-                    return BadRequest(new {message="User does not exist,Recheck the username and old password"});
+                    return BadRequest(new { message = "User does not exist,Recheck the username and old password" });
                 }
-                return Ok(new {message=res});
+                return Ok(new { message = res });
             }
             catch (Exception ex)
             {
@@ -186,7 +186,7 @@ string capgeminiid= data.GetProperty("capgeminiid").ToString();
         }
 
 
-           [HttpGet]
+        [HttpGet]
         [Authorize(Roles = "Mentor,Employee,Admin")]
         [Route("GetEmployees")]
 
@@ -194,7 +194,7 @@ string capgeminiid= data.GetProperty("capgeminiid").ToString();
         {
             try
             {
-                
+
                 var res = await UserService.FetchEmployees();
                 if (res == null)
                 {

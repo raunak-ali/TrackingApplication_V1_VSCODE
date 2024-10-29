@@ -58,6 +58,12 @@ builder.Services.AddScoped<TaskServices,TaskServices>();
 builder.Services.AddScoped<ITaskSubmissions,TaskSubmissionsRepo>();
 builder.Services.AddScoped<TaskSubmissionService,TaskSubmissionService>();
 
+builder.Services.AddScoped<IModule,ModuleRepo>();
+builder.Services.AddScoped<ModuleService,ModuleService>();
+
+builder.Services.AddScoped<IProctered,ProcteredRepo>();
+builder.Services.AddScoped<ProcteredService,ProcteredService>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

@@ -28,6 +28,12 @@ namespace TravkingApplicationAPI.Interfaces
 //Send Feedback table as an email to the mentor
          Task<string>SendFeedbacktoMentor(List<AddFeedback>feedback);
 
+         //GetFeedback for a Module
+
+         Task<List<FeedBack>>GetFeedbackforaModule(int MouduleId);
+         //Add Feedback for a USer for a Module
+         //Update Feedback for  User For a Module
+
 
 
     }

@@ -12,14 +12,15 @@ export class GetTasksService {
 
   private apiUrl = 'http://localhost:5138/Task/GetTask';
   constructor(private http: HttpClient) { }
-  Getall(BatchId:any): Observable<any> {
+  Getall(moduleid:number): Observable<any> {
+    const ModuleId = Number(moduleid);
 
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })
     };
-    return this.http.post<any>(this.apiUrl,{BatchId}, httpOptions)
+    return this.http.post<any>(this.apiUrl,{ModuleId}, httpOptions)
     .pipe(
       map(response => response.message));
   }

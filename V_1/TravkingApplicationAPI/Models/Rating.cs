@@ -11,7 +11,6 @@ namespace TravkingApplicationAPI.Models
     Good=2,
     Average=3,
     BelowAverage=4,
-    Bad=5
 
     }
     public class Rating

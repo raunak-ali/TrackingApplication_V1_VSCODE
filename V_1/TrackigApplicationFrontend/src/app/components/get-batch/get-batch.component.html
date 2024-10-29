@@ -1,29 +1,41 @@
-<div class="container">
-  <button *ngIf="currentUser.Role==2" mat-button color="primary" (click)="addBatch(getMentorID)">Add New Batch</button>
-  <button *ngIf="currentUser.Role==2" mat-button color="primary" (click)="addMentor()">Add New Mentor</button>
 
-  <div *ngIf="allBatches.length > 0; else noTransactions">
-    <div class="header">
-      <h2>All Batches</h2>
+
+
+  <div>
+    <div class="head">
+      <h2> <i class="fas fa-code-branch" style="color:#2578be;"></i>  Recent Coherts ...</h2>
+
+      <div *ngIf="currentUser.Role==2">Mentors
+        <i class="fas fa-search search-icon" style="color:#2578be;"></i>
+        <select class="search-container" style="width: 120px; text-align: right; color: blue;" class="form-control" id="mentorSelect" name="mentorSelect" [(ngModel)]="selectedMentor" (change)="onMentorSelectChange()">
+          <option value="" disabled selected>Select a Mentor</option>
+          <option *ngFor="let mentor of allMentors" [value]="mentor.userId">{{ mentor.name }}</option>
+        </select>      </div>
+
+
+
     </div>
     <div class="container">
       <div class="card-container">
-        <mat-card *ngFor="let batch of allBatches" class="custom-card">
+        <mat-card *ngFor="let batch of filteredBatches" class="custom-card"  (click)="viewBatch(batch.batchId)">
           <mat-card-header>
-            <mat-card-title>{{ batch.batchName }}</mat-card-title>
-            <mat-card-subtitle>Domain: {{ batch.domain}}</mat-card-subtitle>
+            <mat-card-title></mat-card-title>
+            <br>
+            <br>
+            <mat-card-subtitle style="margin-top: 10px;">
+              <h2 mat-button ><u>{{ batch.batchName }}</u></h2>
+
+              Description: {{ batch.description }}</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
-            <!-- Add any additional content here -->
-            <button mat-button color="primary" (click)="downloadFile(batch.employee_info_Excel,batch.batchName+'.xlsx')">Download Batch Employees Info</button>
-            <button mat-button color="primary" (click)="viewBatch(batch.batchId)">View Batch</button>
+            <button *ngIf="currentUser.Role==2" mat-button color="primary" (click)="downloadFile(batch.employee_info_Excel,batch.batchName+'.xlsx')">Download Batch Employees Info</button>
           </mat-card-content>
         </mat-card>
       </div>
     </div>
-  </div>
+
 
   <ng-template #noTransactions>
     <p>No batches available.</p>
   </ng-template>
-</div>
+  </div>

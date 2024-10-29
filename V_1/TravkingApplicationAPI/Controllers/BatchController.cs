@@ -97,22 +97,22 @@ namespace TravkingApplicationAPI.Controllers
             }
 
         }
- [HttpPost]
+        [HttpPost]
         [Authorize(Roles = "Mentor,Admin")]
         //[AllowAnonymous]
         [DisableRequestSizeLimit]
         [Route("AddBatchToUser")]
-        public async Task<ActionResult>AddBatchToUser([FromBody]dynamic data)//Try [FromBody]
+        public async Task<ActionResult> AddBatchToUser([FromBody] dynamic data)//Try [FromBody]
         {
             try
             {
 
 
-            var User = data.GetProperty("User").GetRawText();
-                AddUserAddUser UserObj =JsonConvert.DeserializeObject<AddUserAddUser>(User);
-                
-                int BatchId=data.GetProperty("BatchId").GetInt32();
-                var res = await BatchService.AddBatchToUser(UserObj,BatchId);
+                var User = data.GetProperty("User").GetRawText();
+                AddUserAddUser UserObj = JsonConvert.DeserializeObject<AddUserAddUser>(User);
+
+                int BatchId = data.GetProperty("BatchId").GetInt32();
+                var res = await BatchService.AddBatchToUser(UserObj, BatchId);
                 if (res == null)
                 {
                     return BadRequest();
@@ -134,13 +134,13 @@ namespace TravkingApplicationAPI.Controllers
         //[AllowAnonymous]
         [DisableRequestSizeLimit]
         [Route("GetAllBatch")]
-        public async Task<ActionResult>GetAllBatch()//Try [FromBody]
+        public async Task<ActionResult> GetAllBatch()//Try [FromBody]
         {
             try
             {
 
 
-      
+
                 var res = await BatchService.GetAllBatch();
                 if (res == null)
                 {
@@ -156,21 +156,21 @@ namespace TravkingApplicationAPI.Controllers
 
         }
 
-         [HttpPost]
+        [HttpPost]
         [Authorize(Roles = "Mentor,Admin")]
         //[AllowAnonymous]
         [DisableRequestSizeLimit]
         [Route("RemoveUserFromABatch")]
-        public async Task<ActionResult>RemoveUserFromABatch([FromBody]dynamic data)//Try [FromBody]
+        public async Task<ActionResult> RemoveUserFromABatch([FromBody] dynamic data)//Try [FromBody]
         {
             try
             {
 
 
-           var Userid = data.GetProperty("Userid").GetInt32();
-                
-                int BatchId=data.GetProperty("BatchId").GetInt32();
-                var res = await BatchService.RemoveUSerFromABatch(Userid,BatchId);
+                var Userid = data.GetProperty("Userid").GetInt32();
+
+                int BatchId = data.GetProperty("BatchId").GetInt32();
+                var res = await BatchService.RemoveUSerFromABatch(Userid, BatchId);
                 if (res == null)
                 {
                     return BadRequest();

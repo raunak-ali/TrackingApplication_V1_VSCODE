@@ -26,11 +26,11 @@ namespace TravkingApplicationAPI.Services
                 throw;
             }
         }
-        public async Task<List<UserTask>> GetAllTasks(int BatchId)
+        public async Task<List<UserTask>> GetAllTasks(int ModuleId)
         {
             try
             {
-                return await task.GetAllTask(BatchId);
+                return await task.GetAllTask(ModuleId);
             }
             catch (Exception ex)
             {
@@ -73,7 +73,7 @@ namespace TravkingApplicationAPI.Services
         }
         public async Task<string> DeleteTask(int taskid)
         {
-               try
+            try
             {
                 return await task.DeleteTask(taskid);
             }
@@ -82,8 +82,9 @@ namespace TravkingApplicationAPI.Services
                 throw;
             }
         }
-public async Task<List<FeedBack>> GetTaskFeedbacks(int taskid){
-        try
+        public async Task<List<FeedBack>> GetTaskFeedbacks(int taskid)
+        {
+            try
             {
                 return await task.GetTaskFeedbacks(taskid);
             }
@@ -92,20 +93,23 @@ public async Task<List<FeedBack>> GetTaskFeedbacks(int taskid){
                 throw;
             }
 
-}
-public async Task<List<string>>GetSubTasksTestCases(int subtadkid){
-
-    try{
-        return await task.GetSubTasksTestCases(subtadkid);
-    }
-    catch(Exception e){throw;}
-}
-public async Task<SubTask> GetSubTask(int subtadkid)
+        }
+        public async Task<List<string>> GetSubTasksTestCases(int subtadkid)
         {
-            try{
+
+            try
+            {
+                return await task.GetSubTasksTestCases(subtadkid);
+            }
+            catch (Exception e) { throw; }
+        }
+        public async Task<SubTask> GetSubTask(int subtadkid)
+        {
+            try
+            {
                 return await task.GetSubTask(subtadkid);
             }
-            catch(Exception e){throw;}
+            catch (Exception e) { throw; }
         }
 
 

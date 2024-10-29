@@ -13,7 +13,8 @@ import { catchError, throwError } from "rxjs";
 })
 export class GetFeedBacksService {
   constructor(private http: HttpClient) { }
-  GetAll(taskid: number) {
+  GetAll(Taskid: number) {
+    const taskid = Number(Taskid);
 
     const httpOptions = {
       headers: new HttpHeaders({

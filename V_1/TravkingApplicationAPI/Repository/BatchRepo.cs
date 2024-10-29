@@ -23,7 +23,7 @@ namespace TravkingApplicationAPI.Repository
         {
             context = new TrackingApplicationDbContext(options);
             _config = configuration;
-            userrepo=new UserRepo(options,_config);
+            userrepo = new UserRepo(options, _config);
         }
         private async Task<List<List<string>>> ExtractSpecificColumnsAsync(Stream fileStream)
         {
@@ -265,98 +265,110 @@ namespace TravkingApplicationAPI.Repository
             //return this batches property.
         }
 
-        public async Task<string>AddBatchToUser(AddUserAddUser User,int BatchId)
+        public async Task<string> AddBatchToUser(AddUserAddUser User, int BatchId)
         {
             //Check if the User object is already present
             //If yes just update its batches field and do savechanges
             //if Not call the AddUser method, once that one returns Ok, Then add batches to it and savechanges
-           try{
-var existing_user=context.Users.FirstOrDefault(u=>u.CapgeminiEmailId==User.CapgeminiEmailId);
-var existing_batch=context.Batches.FirstOrDefault(b=>b.BatchId==BatchId);
-if(existing_user==null){
-//Add a new User
+            try
+            {
+                var existing_user = context.Users.FirstOrDefault(u => u.CapgeminiEmailId == User.CapgeminiEmailId);
+                var existing_batch = context.Batches.FirstOrDefault(b => b.BatchId == BatchId);
+                if (existing_user == null)
+                {
+                    //Add a new User
 
-await userrepo.AddUser(User);//Lets make Sure the User is added, before dding that User to the Batch
-existing_user=context.Users.FirstOrDefault(u=>u.CapgeminiEmailId==User.CapgeminiEmailId);
+                    await userrepo.AddUser(User);//Lets make Sure the User is added, before dding that User to the Batch
+                    existing_user = context.Users.FirstOrDefault(u => u.CapgeminiEmailId == User.CapgeminiEmailId);
 
-}
+                }
 
-if(existing_user.Batches==null){
-    existing_user.Batches=new List<Batch>();
-}
-    existing_user.Batches.Add(existing_batch);
-    context.SaveChanges();
+                if (existing_user.Batches == null)
+                {
+                    existing_user.Batches = new List<Batch>();
+                }
+                existing_user.Batches.Add(existing_batch);
+                context.SaveChanges();
 
-return"Batch Added to the User sucessfully";
-           }
-           catch(Exception e){throw;}
+                return "Batch Added to the User sucessfully";
+            }
+            catch (Exception e) { throw; }
         }
 
         public async Task<string> DeleteBatch(int BatchId)
         {
-            try{
-                var existing_batch=context.Batches.FirstOrDefault(b=>b.BatchId==BatchId);
-                if(existing_batch!=null){
+            try
+            {
+                var existing_batch = context.Batches.FirstOrDefault(b => b.BatchId == BatchId);
+                if (existing_batch != null)
+                {
                     context.Batches.Remove(existing_batch);
                     context.SaveChanges();
                     return "Batch removed sucessfully";
                 }
                 return null;
             }
-            catch(Exception e){
+            catch (Exception e)
+            {
                 throw;
             }
         }
 
         public async Task<List<Batch>> GetAllBatch()
         {
-           try{
-            var existing_batchs=context.Batches.ToList();
-            return existing_batchs;
-           }
-           catch(Exception e){
-            throw;
-           }
+            try
+            {
+                var existing_batchs = context.Batches.ToList();
+                return existing_batchs;
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
 
         public async Task<string> RemoveUSerFromABatch(int Userid, int Batchid)
         {
-            try{
-                //Remove the record  from the associative table
-           
-            var existing_user=context.Users .Include(u => u.Batches) // Eagerly load the Batches navigation property
-                            .FirstOrDefault(u => u.UserId == Userid);
-            var existing_batch=context.Batches.FirstOrDefault(b=>b.BatchId==Batchid);
-            if(existing_batch!=null && existing_user!=null)
+            try
             {
-existing_user.Batches.Remove(existing_batch);
-await context.SaveChangesAsync();
- //Remove its userid from any Task (AssignedTo property)
- var existing_tasks=context.Tasks.Where(t=>t.AssignedTo.Contains(Userid)).ToList();
- foreach(var task in existing_tasks){
-    task.AssignedTo.Remove(Userid);
-  
- }
-   await context.SaveChangesAsync();
-            //Remove any TaskSubmissions made for them
-            var existing_TaskSubmissions=context.TaskSubmissions.Where(t=>t.UserId==Userid).ToList();
-            context.TaskSubmissions.RemoveRange(existing_TaskSubmissions);
+                //Remove the record  from the associative table
+
+                var existing_user = context.Users.Include(u => u.Batches) // Eagerly load the Batches navigation property
+                                .FirstOrDefault(u => u.UserId == Userid);
+                var existing_batch = context.Batches.FirstOrDefault(b => b.BatchId == Batchid);
+                if (existing_batch != null && existing_user != null)
+                {
+                    existing_user.Batches.Remove(existing_batch);
+                    await context.SaveChangesAsync();
+                    //Remove its userid from any Task (AssignedTo property)
+                    var existing_tasks = context.Tasks.Where(t => t.AssignedTo.Contains(Userid)).ToList();
+                    foreach (var task in existing_tasks)
+                    {
+                        task.AssignedTo.Remove(Userid);
+
+                    }
+                    await context.SaveChangesAsync();
+                    //Remove any TaskSubmissions made for them
+                    var existing_TaskSubmissions = context.TaskSubmissions.Where(t => t.UserId == Userid).ToList();
+                    context.TaskSubmissions.RemoveRange(existing_TaskSubmissions);
 
 
-            //Remove any Rating given to them
-            var existing_ratings=context.Ratings.Where(r=>r.RatedTo==Userid).ToList();
-             context.Ratings.RemoveRange(existing_ratings);
+                    //Remove any Rating given to them
+                    var existing_ratings = context.Ratings.Where(r => r.RatedTo == Userid).ToList();
+                    context.Ratings.RemoveRange(existing_ratings);
 
-            await context.SaveChangesAsync();
+                    await context.SaveChangesAsync();
 
 
-return "Sucessfully removed";
+                    return "Sucessfully removed";
+                }
+                return null;
             }
-            return null;}
-            catch(Exception e){
+            catch (Exception e)
+            {
                 throw;
             }
-            
+
 
         }
     }

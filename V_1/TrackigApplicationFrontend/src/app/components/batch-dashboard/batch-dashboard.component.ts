@@ -13,6 +13,7 @@ import { GetBatchesService } from 'src/app/Services/get-batches.service';
 import { GetTasksService } from 'src/app/Services/get-tasks.service';
 import { GetUserByBatchService } from 'src/app/Services/get-user-by-batch.service';
 import { LoginService } from 'src/app/Services/login.service';
+import { NavigationService } from 'src/app/Services/navigation.service';
 import { RemoveEmployeesFromBatchService } from 'src/app/Services/remove-employees-from-batch.service';
 
 
@@ -31,7 +32,8 @@ showEmployee: boolean=false;
   @ViewChild('assignedTo')assignedToSelect!: ElementRef;
   priorities :string[]= Object.keys(priority).filter(key => !isNaN(Number(priority[key as keyof typeof priority]))) as string[];
   batchId!: number;
-  AllTasks!:GetTask[];
+  moduleId!:number;
+  AllTasks:GetTask[]=[];
   AllEmployyes!:GetUser[];
   AddNewTaskForm!: FormGroup;
   getMentorID!: any;
@@ -43,10 +45,20 @@ showEmployee: boolean=false;
   USeExistingUser: boolean=false;
   AddUserToBatchForm!: FormGroup;
 AddnewEmpoyee: any;
+  navigationHistory: string[]=[];
   navigateTo(route: string): void {
     this.router.navigate([route]);
   }
+  showNavigationHistory: boolean = false;
 
+toggleNavigationHistory() {
+  this.showNavigationHistory = !this.showNavigationHistory;
+}
+getLinkName(link: string): string {
+  // Customize this function to format the link name as needed
+  // For example, you might want to remove slashes or decode URL parts
+  return link.replace(/\//g, ' ').trim();
+}
   logout(): void {
     this.loginservice.clearUser();
     this.loginservice.clearToken();
@@ -70,14 +82,19 @@ AddnewEmpoyee: any;
     private getAllEmployees:GetAllEmployeesService,
     private addnewemployeetoBatch:AddEmployeesToBatchService,
     private removeEmployeesFromBatchService:RemoveEmployeesFromBatchService,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar,
+    private navigationService: NavigationService
+    ) { }
     AddMentorForm!: FormGroup;
   ngOnInit(): void {
+    this.navigationHistory = this.navigationService.getNavigationHistory();
+
     this.GetAllEmployees();
     console.log(this.currentUser);
 
     // Retrieve the batchId parameter from the route
     this.batchId = +this.route.snapshot.params['batchId'];
+    this.moduleId = +this.route.snapshot.params['moduleId'];
     this.getMentorID=this.loginservice.getUser();
     if (this.getMentorID != null) {
       // Check if this.existing_mentor is a valid number string
@@ -132,7 +149,8 @@ AddnewEmpoyee: any;
       AssignedBy: [this.getMentorID],
       AssignedTo: [[], Validators.required],
       BatchId: [this.batchId],
-      Comments: ['']
+      Comments: [''],
+      ModuleId:[this.moduleId]
     })
 
     // Now you can use this.batchId in your component logic
@@ -150,13 +168,13 @@ AddnewEmpoyee: any;
     };
   }
   FetchTasks(){
-    this.gettasksservice.Getall(this.batchId).subscribe(
+    this.gettasksservice.Getall(this.moduleId).subscribe(
       (data: any) => {
         // Ensure data.$values exists and is an array before accessing it
         if (Array.isArray(data.$values)) {
           this.AllTasks = data.$values;
           this.AllTasks=this.AllTasks.sort((a, b) => b.priority - a.priority);
-          console.log(this.AllTasks);
+          console.log('ALLTAsks',this.AllTasks);
         } else {
           console.error('Unexpected data format:', data);
           this.snackBar.open(`Error fetching batches:: ${{data}}`, 'Close', { duration: 3000 });
@@ -237,6 +255,17 @@ updateAssignedTo(userId: number, event: Event) {
 
 viewEmployee(userid:number) {
   this.router.navigate(['/UserProfile', userid]);
+  }
+  navigateToDahsBoard(){
+    if(this.currentUser.Role==2){
+      this.router.navigate(['AdminDashboard']);
+    }
+    else if(this.currentUser.Role==1){
+      this.router.navigate(['Mentor_dashboard']);
+    }
+    else{
+      this.router.navigate(['Employee_DashBoard']);
+    }
   }
   AddEmployee() {
     let formData=null;

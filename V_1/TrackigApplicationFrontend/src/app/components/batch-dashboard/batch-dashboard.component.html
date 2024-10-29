@@ -1,80 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            width: 100%;
+            background-color: #333;
+            color: #2578be;
+            padding: 5px 0;
+            text-align: center;
+            height: 90px;
+            background-color: white;
+        }
+        .navbar h4{
+          margin: 0;
+          margin-right: 0px;
+          margin-left: 910px;
+        }
+       .navbar h2{
+        margin: 0;
+          margin-right: 20px;
+          padding: 0px;
+          font-family: 'Roboto', sans-serif;
+       }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            background-color: #555;
+            color: white;
+            padding: 10px;
+            height: 300px;
+            background:linear-gradient(to bottom, #007bbd, #ADD8E6); /* Dark blue to light blue */
+            background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
 
-<!-- Header -->
-<div class="header">
-  <h2>Dashboard <img src="/assets/Mentor_Dashboard_Icon.png" alt="Mentor Dashboard Icon" class="icon"></h2>
-  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu" class="menu-button">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <mat-menu #menu="matMenu" class="custom-menu">
-    <button mat-menu-item (click)="navigateTo('dashboard')">Dashboard</button>
-    <button mat-menu-item (click)="navigateTo('batches')">Batches</button>
-    <button mat-menu-item (click)="navigateTo('profile')">Profile</button>
-    <button mat-menu-item (click)="navigateTo('employees')">Employees</button>
-    <button mat-menu-item (click)="logout()">Logout</button>
-  </mat-menu>
-</div>
+        }
+        .header h1 {
+            margin: 0;
+            margin-right: 5%;
+            margin-left: 5%;
+        }
+        .header h4 {
+            margin: 0;
+            margin-right: 20px;
+        }
+        .header p{
+          margin: 0;
+          margin-top: 0px;
+          align-items: center;
+          margin-right: 10%;
 
-<!-- Main Content -->
-<div class="content">
-  <!-- Task Container -->
-  <div class="content">
-    <div  class="task-container">
-      <div *ngIf="AllTasks!=null; else noTransactions">
-        <!-- Your Task List content -->
-        <h2>All Tasks</h2>
-      <button *ngIf="currentUser.Role!=0" mat-raised-button (click)="showForm = !showForm" class="btn btn-primary">Add New Task</button>
-      <br>
-      <!-- Add New Task Form -->
-      <div *ngIf="showForm" class="form-card">
-        <!-- Your Add New Task Form content -->
-        <h2>Add New Task</h2>
-        <form [formGroup]="AddNewTaskForm" (ngSubmit)="AddNewTask()" class="needs-validation" novalidate>
-          <mat-form-field appearance="fill">
-            <mat-label>Task Name</mat-label>
-            <input matInput formControlName="TaskName" id="taskName" placeholder="TaskName"required>
-            <mat-error *ngIf="AddNewTaskForm.get('TaskName')?.invalid">Task name is required.</mat-error>
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Description</mat-label>
-            <input matInput formControlName="Description" id="description" placeholder="Description of this task">
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Priority</mat-label>
-            <mat-select formControlName="Priority" id="priority">
-              <mat-option *ngFor="let priority of priorities" [value]="priorities.indexOf(priority)">{{ priority }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Deadline</mat-label>
-            <input matInput [matDatepicker]="deadlinePicker" formControlName="DeadLine" id="deadLine" placeholder="Deadline">
-            <mat-datepicker-toggle matSuffix [for]="deadlinePicker"></mat-datepicker-toggle>
-            <mat-datepicker #deadlinePicker></mat-datepicker>
-            <mat-error *ngIf="AddNewTaskForm.get('DeadLine')?.errors && AddNewTaskForm.get('DeadLine')?.errors?.['deadlineNotGreaterThanToday']">
-              Deadline must be greater than today's date.
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Assigned To</mat-label>
-            <mat-select formControlName="AssignedTo" multiple>
-              <mat-option *ngFor="let employee of AllEmployyes" [value]="employee.userId">
-                {{ employee.name }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="AddNewTaskForm.get('AssignedTo')?.invalid">At least one employee must be assigned.</mat-error>
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Comments</mat-label>
-            <input matInput formControlName="Comments" id="comments" placeholder="Comments">
-          </mat-form-field>
-          <!-- Add other form fields as needed -->
-          <button type="submit" mat-raised-button color="primary">Submit</button>
-        </form>
 
-      </div>
+        }
+        .menu-button {
+            margin-left: auto;
+        }
+        .container {
+display: flex;
+            padding: 20px;
 
+        }
+        .main-content {
+            flex: 2;
+            background-color: white;
+            padding: 20px;
+            margin-right: 20px;
+            margin-left: 20px;
+            width: 900px;
+
+        }
+        .side-content {
+          flex: 3;
+            background-color:white;
+            padding: 35px;
+            width: 100px;
+        }
+        .mat-accordion{
+          width: 900px;
+        }
+        .form-card, .head, .card-container {
+            margin-bottom: 20px;
+        }
+        .btn {
+            margin-top: 5px;
+        }
+        .custom-menu {
+            margin-top: 40px;
+        }
+        .navbar img {
+          margin-top: 0px;
+        width: 100px; /* Adjust image width as needed */
+        height: auto; /* Maintain aspect ratio */
+        margin-right: 10px; /* Adjust spacing between image and text */
+        margin-left: 10px;
+    }
+    .breadcrumb {
+color: white;
+
+    padding: 5px;
+    margin: 5px;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size:1rem;
+    display: flex;
+    align-items: center;
+}
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+    margin-right: 5px;
+}
+
+.breadcrumb a {
+    color: white;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb i {
+    margin-right: 5px;
+}
+.search-container {
+    position: relative;
+    width: 1100px; /* Adjust this width as needed */
+}
+
+.search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: gray;
+    pointer-events: none;
+}
+
+.search-input {
+    width: 100%;
+    padding-left: 30px; /* Add padding to the left to make space for the icon */
+    height: 36px; /* Adjust the height as needed */
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+    </style>
+</head>
+<body>
+    <div class="navbar">
+     <h2>
+      <img src="/assets/TechPro.png" alt="Image Description" style="vertical-align: middle; margin-right: 10px;">
+
+     </h2>
+      <h4 stye="text-align:margin-right:">Welcome {{currentUser.Name}} !</h4>
+
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu" class="menu-button">
+        <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu" class="custom-menu">
+        <button mat-menu-item (click)="navigateToDahsBoard()">Dashboard</button>
+        <button mat-menu-item (click)="viewEmployee(currentUser.userId)">Profile</button>
+        <button mat-menu-item (click)="logout()">Logout</button>
+        <button *ngIf="currentUser.Role==1" mat-menu-item (click)="showForm = !showForm">Add New Task</button>
+
+
+
+    </mat-menu>
+    </div>
+    <div class="header">
+        <h1>
+            <div  class="breadcrumb">
+              <i class="fas fa-tachometer-alt" style="color:#f8f9fa;"></i>
+                            <ng-container *ngFor="let link of navigationHistory; let i = index">
+                  <a style="color: white;" [routerLink]="link">{{ getLinkName(link) }}</a>
+                  <span *ngIf="i < navigationHistory.length - 2"> / </span>
+              </ng-container>
+          </div>
+
+          <p *ngIf="AllTasks.length>0 ; else noModules" style="font-size:3rem;">{{AllTasks[0].module.moduleName}}</p>
+          <ng-template #noModules>
+          <p style="font-size:3rem;">No Tasks Added</p>
+
+        </ng-template>
+          <br>
+
+          <p *ngIf="AllTasks.length>0 else noModulessubtitle" style="font-size:1rem;">{{AllTasks[0].module.description}}</p>
+          <ng-template #noModulessubtitle>
+          <p  style="font-size:1rem;">Since No Tasks have been added yet, There is no Tasks info Available</p>
+        </ng-template>
+      </h1>
+          <br>
+        <br>
+
+
+
+    </div>
+    <div class="container">
+        <div class="main-content">
+          <div class="head">
+            <h2> <i class="fas fa-code-branch" style="color:#2578be;"></i>  Topics ...</h2>
+
+
+
+
+
+          </div>
       <!-- Display Task List as Accordion -->
-<br>
         <mat-accordion>
           <mat-expansion-panel *ngFor="let task of AllTasks">
             <mat-expansion-panel-header>
@@ -101,19 +246,18 @@
           </mat-expansion-panel>
         </mat-accordion>
 
-      </div>
+
       <!-- Placeholder for no transactions -->
-      <ng-template #noTransactions>
+      <ng-template ##noTasks>
         <p>No Tasks have been added Yet.</p>
       </ng-template>
     </div>
-  </div>
-  <div class="employee-list">
-    <h2>List of Employees</h2>
-    <button *ngIf="currentUser.Role!=0" mat-raised-button (click)="showEmployee = !showEmployee" class="btn btn-primary">Add More Members</button>
+
+ <div class="side-content">
+    <h2>List of Candidates</h2>
+    <button *ngIf="currentUser.Role==2" mat-raised-button (click)="showEmployee = !showEmployee" class="btn btn-primary">Add More Members</button>
     <br>
     <div *ngIf="showEmployee" class="form-card">
-      <!-- Your Add New Task Form content -->
       <h2>Add New Employee</h2>
       <form [formGroup]="AddUserToBatchForm" (ngSubmit)="AddEmployee()" class="needs-validation" novalidate>
 
@@ -206,6 +350,7 @@
 
 
 
+      <!-- Your Add New Task Form content -->
 
     <!--Aplly ngif here and display a form in the center if true-->
 
@@ -213,17 +358,62 @@
     <table class="mat-table employee-table">
       <tr>
         <th>Name</th>
-        <th>Score</th>
-        <th>Remove User</th>
+        <th *ngIf="currentUser.Role==2" >Remove User</th>
       </tr>
       <tr *ngFor="let employee of AllEmployyes">
-        <td (click)="viewEmployee(employee.userId)">{{ employee.name }}</td>
-        <td>{{ employee.total_Average_RatingStatus }}</td>
-        <td (click)="RemoveEmployee(employee.userId)">Remove</td>
+        <td *ngIf="currentUser.Role==0">{{ employee.name }}</td>
+        <td  *ngIf="currentUser.Role!=0"(click)="viewEmployee(employee.userId)">{{ employee.name }}</td>
+        <td *ngIf="currentUser.Role==2" (click)="RemoveEmployee(employee.userId)">Remove</td>
       </tr>
     </table>
   </div>
+  <div *ngIf="showForm" class="form-card">
+    <!-- Your Add New Task Form content -->
+    <h2>Add New Task</h2>
+    <form [formGroup]="AddNewTaskForm" (ngSubmit)="AddNewTask()" class="needs-validation" novalidate>
+      <mat-form-field appearance="fill">
+        <mat-label>Task Name</mat-label>
+        <input matInput formControlName="TaskName" id="taskName" placeholder="TaskName"required>
+        <mat-error *ngIf="AddNewTaskForm.get('TaskName')?.invalid">Task name is required.</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Description</mat-label>
+        <input matInput formControlName="Description" id="description" placeholder="Description of this task">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Priority</mat-label>
+        <mat-select formControlName="Priority" id="priority">
+          <mat-option *ngFor="let priority of priorities" [value]="priorities.indexOf(priority)">{{ priority }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Deadline</mat-label>
+        <input matInput [matDatepicker]="deadlinePicker" formControlName="DeadLine" id="deadLine" placeholder="Deadline">
+        <mat-datepicker-toggle matSuffix [for]="deadlinePicker"></mat-datepicker-toggle>
+        <mat-datepicker #deadlinePicker></mat-datepicker>
+        <mat-error *ngIf="AddNewTaskForm.get('DeadLine')?.errors && AddNewTaskForm.get('DeadLine')?.errors?.['deadlineNotGreaterThanToday']">
+          Deadline must be greater than today's date.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Assigned To</mat-label>
+        <mat-select formControlName="AssignedTo" multiple>
+          <mat-option *ngFor="let employee of AllEmployyes" [value]="employee.userId">
+            {{ employee.name }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="AddNewTaskForm.get('AssignedTo')?.invalid">At least one employee must be assigned.</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Comments</mat-label>
+        <input matInput formControlName="Comments" id="comments" placeholder="Comments">
+      </mat-form-field>
+      <!-- Add other form fields as needed -->
+      <button type="submit" mat-raised-button color="primary">Submit</button>
+    </form>
 
+  </div>
+</div>
 <!-- Angular Material Scripts -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular/12.2.8/angular.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/12.2.8/angular-material.min.js"></script>

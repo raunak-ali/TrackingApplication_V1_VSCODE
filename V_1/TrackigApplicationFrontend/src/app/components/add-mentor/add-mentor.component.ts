@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Role } from 'src/app/Models/user';
 import { AddMentorService } from 'src/app/Services/add-mentor.service';
 import { LoginService } from 'src/app/Services/login.service';
+import { NavigationService } from 'src/app/Services/navigation.service';
 
 @Component({
   selector: 'app-add-mentor',
@@ -17,14 +18,20 @@ export class AddMentorComponent implements OnInit {
   AddMentorForm!: FormGroup;
   error: string | undefined;
   Role=Role;
+  navigationHistory: string[]=[];
+  currentUser = this.loginservice.getUserFromSession();
 
 
 
   constructor(private fb: FormBuilder, private AddMentorservice: AddMentorService,
-    private router: Router, private loginservice :LoginService,private snackBar: MatSnackBar
+    private router: Router, private loginservice :LoginService,private snackBar: MatSnackBar,
+    private navigationService: NavigationService
+
     ) { }
 
   ngOnInit(): void {
+    this.navigationHistory = this.navigationService.getNavigationHistory();
+
     this.AddMentorForm = this.fb.group({
       name: ['', Validators.required], // Required field
       role: [1],
@@ -46,7 +53,11 @@ export class AddMentorComponent implements OnInit {
     });
 
   }
+  showNavigationHistory: boolean = false;
 
+  toggleNavigationHistory() {
+    this.showNavigationHistory = !this.showNavigationHistory;
+  }
   navigateTo(route: string): void {
     this.router.navigate([route]);
   }
@@ -80,5 +91,6 @@ export class AddMentorComponent implements OnInit {
       );
     }
   }
+
 
 }

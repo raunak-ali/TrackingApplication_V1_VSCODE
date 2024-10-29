@@ -1,0 +1,119 @@
+.container {
+  background-color: white;
+  padding: 10px;
+margin-left: 0px;
+  margin-right: 0px;
+}
+
+.head {
+  background-color: transparent; /* Set background color to transparent */
+  color: #2578be;
+  text-decoration: #00b4d8;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.header h2 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.list-group-item {
+  cursor: pointer; /* Change cursor to pointer on hover */
+  margin-bottom: 2px; /* Add tiny space between each batch name */
+}
+
+.list-group-item.active {
+  background-color: #0077b6; /* Change background color of active item */
+  color: #fff; /* Change text color of active item */
+}
+
+.card {
+  margin-top: 0; /* Remove margin-top */
+}
+
+.card p {
+  margin-bottom: 5px; /* Add margin-bottom to separate paragraphs */
+}
+
+.btn-primary {
+  background-color: #00b4d8;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #0077b6;
+}
+
+.btn-primary:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 180, 216, 0.5);
+}
+
+
+.card-container {
+
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.custom-card {
+  width: calc(33.33% - 20px); /* Adjust the width as needed */
+  margin: 10px;
+   /* Replace 'your-background-image-url' with the actual URL */
+  background-size: cover;
+  background-position: center;
+  background-color: #cedee4; /* Set background color with opacity */
+  color: currentcolor;
+
+
+}
+
+.custom-card:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Add hover effect */
+}
+.mat-mdc-card-title {
+  background-image: url('/assets/Modules.gif');
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  color: black;
+  height: 100px;
+  width: 320px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  text-align: center;
+}
+
+ .mat-mdc-card-subtitle {
+
+  display: block;
+  margin: 0;
+  color: black;
+  height: 200px;
+  text-overflow: ellipsis;
+  overflow: hidden; /* Hide the overflow */
+}
+
+
+/* Form Card */
+.form-card {
+  justify-self: center;
+  background-color: #ffffff; /* Set form card background color */
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  width: 500px; /* Adjust card width as needed */
+  z-index: 1000;
+}
+
+.form-card h2 {
+  margin-bottom: 20px;
+}
+
+

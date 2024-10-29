@@ -1,58 +1,72 @@
 <!-- User Profile Header -->
-<div class="content">
+<br>
+<br>
   <div class="header">
-    <h2> Dashboard <img src="/assets/Mentor_Dashboard_Icon.png" alt="Mentor Dashboard Icon" class="icon"></h2>
+    <h2 style="margin-bottom:110px"> Dashboard </h2>
+    <h2 style="margin-bottom:110px;text-align: right;"> Welcome {{User.name}}! </h2>
+
     <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu" class="menu-button">
       <mat-icon>menu</mat-icon>
     </button>
     <mat-menu #menu="matMenu" class="custom-menu">
-      <button mat-menu-item (click)="navigateTo('dashboard')">Dashboard</button>
-      <button mat-menu-item (click)="navigateTo('batches')">Batches</button>
-      <button mat-menu-item (click)="navigateTo('profile')">Profile</button>
-      <button mat-menu-item (click)="navigateTo('employees')">Employees</button>
+      <button mat-menu-item (click)="navigateToDahsBoard()">Dashboard</button>
       <button mat-menu-item (click)="logout()">Logout</button>
     </mat-menu>
   </div>
 <br>
 <br>
-<div class="profile-container">
-  <!-- User Information Section -->
-  <div class="user-info">
-    <h2>User Information</h2>
-    <p><strong>User ID:</strong> {{ User.capgeminiEmailId }}</p>
+<button class="btn" (click)="toggleNavigationHistory()">Show Navigation History</button>
+
+<ul *ngIf="showNavigationHistory">
+  <li *ngFor="let link of navigationHistory">
+    <a style="background-color: lightblue; width: 180px; margin-left: 60px;" [routerLink]="link">{{ link }}</a>
+  </li>
+</ul>
+<div>
+  <div class="head">
+    <h2>User Information</h2> <div>
+      <!--<input type="text" placeholder="Search..." [(ngModel)]="searchQuery" (input)="filterBatches()">-->
+    </div>
+
+  </div>
+  <br>
+  <div class="container">
+    <div class="card-container">
+      <mat-card class="custom-card">
+        <mat-card-header>
+          <mat-card-title>User Profile</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+    <p><strong>Capgemini Id:</strong> {{ User.capgeminiEmailId }}</p>
     <p><strong>Name:</strong> {{ User.name }}</p>
     <p><strong>Gender:</strong> {{ User.gender }}</p>
     <p><strong>Phone:</strong> {{ User.phone }}</p>
+    </mat-card-content>
+    </mat-card>
+    </div>
     <!-- Add more user fields as needed -->
   </div>
 
   <!-- Batches Section -->
-  <div class="batches-section">
-    <h2>All Batches</h2>
-    <div class="batch-cards">
-      <div class="batch-card" *ngFor="let batch of allBatches" (click)="viewBatch(batch.batchId)">
+
+  <div *ngIf="User.role!=2" class="batches-section">
+<div class="head">
+    <h2>All Batches</h2> <div>
+      <!--<input type="text" placeholder="Search..." [(ngModel)]="searchQuery" (input)="filterBatches()">-->
+    </div>
+
+  </div>
+  <div class="container">
+    <div class="card-container">
+      <div class="custom-card" *ngFor="let batch of allBatches" (click)="viewBatch(batch.batchId)">
         <p>Batch Name: {{ batch.batchName }}</p>
       </div>
     </div>
   </div>
+<br>
+<br>
+<br>
 
   <!-- Tasks Section -->
-  <div class="tasks-section">
-    <h2>All Tasks</h2>
-    <div class="task-list">
-      <ul>
-        <li *ngFor="let task of AllTasks" (click)="toggleSubtasks(task.userTaskID)">
-          <p>Task Name: {{ task.taskName }}</p>
-          <div class="subtasks" *ngIf="showSubtasks[task.userTaskID]">
-            <ul>
-              <li *ngFor="let subtask of task.subTasks">
-                <p>Subtask Title: {{ subtask.title }}</p>
-              </li>
-            </ul>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </div>
-</div>
+
 </div>

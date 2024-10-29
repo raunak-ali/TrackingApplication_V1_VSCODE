@@ -19,7 +19,7 @@ namespace TravkingApplicationAPI.Models
 
      public DateTime CreationDate { get; set; }
 
-     public bool? isCodingProblem{get;set;}=false;
+     public bool? isProctored{get;set;}=false;
        public string? TestCases{get;set;}=null;
 
    

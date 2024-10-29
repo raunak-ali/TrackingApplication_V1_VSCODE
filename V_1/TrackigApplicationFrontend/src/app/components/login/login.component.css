@@ -4,101 +4,71 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url('/assets/Login_Background.jpg');
+  background-image: url('/assets/NewBg.jpg');
   background-size: cover;
   background-position: center;
   width: 100vw; /* Use viewport width */
   height: 100vh; /* Use viewport height */
 }
-
-.container-fluid {
-  /* No specific styles */
-}
-
 .card {
   display: flex;
+  flex-direction: column; /* Align child elements vertically */
   justify-content: center;
-  background-position: center;
   align-items: center;
-  background-color:rgb(12 28 58 / 56%);/* Adjusted background color based on the color scheme */
+  background-color: rgba(12, 28, 58, 0.56);
   border: none;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   width: 400px;
-  text-align: center;
   margin: 0 auto;
+  text-align: center;
 }
 
 .card-header {
+  display: flex;
+  flex-direction: column; /* Align child elements vertically */
   align-items: center;
   background-color: transparent;
   border: none;
+  width: 100%; /* Ensure full width */
 }
 
 .card-header h2 {
-  color: #ffffff; /* Adjusted text color based on the color scheme */
+  margin-top: 20px;
+  color: #ffffff;
+  margin-bottom: 10px; /* Add spacing below the header */
+  size: 300rem;
+}
+
+.card-body {
+  width: auto; /* Ensure full width */
+}
+
+.form-group {
+  width: 100%; /* Ensure form inputs take full width */
 }
 
 .form-control {
-  background-color: #ffffff;
-  border: none;
-  border-radius: 0;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  color: #000000; /* Adjusted text color based on the color scheme */
+  width: calc(100% - 40px); /* Subtract padding and border width */
 }
-
-.form-control:focus {
-  box-shadow: 0 0 0 0.2rem rgba(0, 180, 216, 0.5);
-  border-color: #90e0ef;
+.input-group-text{
+  background-color: transparent;
+  border-color: transparent;
 }
-
-.form-group.btn-primary {
-  background-color: #00b4d8;
-  border: none;
-  border-radius: 5px;
-  color: #ffffff; /* Adjusted text color based on the color scheme */
-}
-
-.form-group.btn-primary:hover {
-  background-color: #caf0f8;
-}
-
-.glyphicon {
-  margin-right: 10px;
-  color: lightgrey; /* Set color to light grey */
-}
-
-.text-danger {
-  color: red;
-}
-.form-group{
-  color: #ffffff; /* Adjusted text color based on the color scheme */
-}
-
-.form-control.glyphicon {
-  color: #000000; /* Adjusted text color based on the color scheme */
-}
-.input-group-text {
-  background-color:transparent; /* Set background color to match form control background */
-  border: none;
-}
-
-.input-group-prepend, .input-group-append {
-  display: flex;
-}
-
 .input-group-text i {
-  margin-top: auto; /* Align icon vertically in the middle */
+  margin-top: auto;
   margin-bottom: auto;
 }
-.icon {
-  height: 1.9em; /* Adjust the height as needed */
-  width: auto; /* Maintain aspect ratio */
-  margin-left: 10px; /* Adjust spacing between header text and icon */
-  align-self:start;
+.input-group input{
+  background-color: lightgray;
 }
-.btn-primary {
-  --bs-btn-color: #fff;
-  --bs-btn-bg: #2c3943;
+.icon {
+  height: 1.9em;
+  width: auto;
+  margin: 10px auto; /* Center icon horizontally and add margin */
+}
+
+.input-group{
+  background-color: transparent;
+
 }

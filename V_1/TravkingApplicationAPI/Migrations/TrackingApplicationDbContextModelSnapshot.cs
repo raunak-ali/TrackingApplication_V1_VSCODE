@@ -132,10 +132,13 @@ namespace TravkingApplicationAPI.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ModuleId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Submission_Count")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TaskId")
+                    b.Property<int?>("TaskId")
                         .HasColumnType("int");
 
                     b.Property<int>("TotalAverageRating")
@@ -146,11 +149,59 @@ namespace TravkingApplicationAPI.Migrations
 
                     b.HasKey("FeedbackId");
 
+                    b.HasIndex("ModuleId");
+
                     b.HasIndex("TaskId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("FeedBacks");
+                });
+
+            modelBuilder.Entity("TravkingApplicationAPI.Models.Module", b =>
+                {
+                    b.Property<int>("ModuleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ModuleId"));
+
+                    b.Property<int>("BatchId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ModuleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ModuleId");
+
+                    b.ToTable("Modules");
+                });
+
+            modelBuilder.Entity("TravkingApplicationAPI.Models.Proctered", b =>
+                {
+                    b.Property<int>("ProcteredId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProcteredId"));
+
+                    b.Property<int>("subtaskid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("violations")
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("ProcteredId");
+
+                    b.ToTable("Proctereds");
                 });
 
             modelBuilder.Entity("TravkingApplicationAPI.Models.Rating", b =>
@@ -223,7 +274,7 @@ namespace TravkingApplicationAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool?>("isCodingProblem")
+                    b.Property<bool?>("isProctored")
                         .HasColumnType("bit");
 
                     b.HasKey("SubTaskId");
@@ -388,6 +439,9 @@ namespace TravkingApplicationAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ModuleId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
@@ -446,17 +500,22 @@ namespace TravkingApplicationAPI.Migrations
 
             modelBuilder.Entity("TravkingApplicationAPI.Models.FeedBack", b =>
                 {
+                    b.HasOne("TravkingApplicationAPI.Models.Module", "Module")
+                        .WithMany()
+                        .HasForeignKey("ModuleId");
+
                     b.HasOne("TravkingApplicationAPI.Models.UserTask", "UserTask")
                         .WithMany("FeedBack")
                         .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TravkingApplicationAPI.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Module");
 
                     b.Navigation("User");
 

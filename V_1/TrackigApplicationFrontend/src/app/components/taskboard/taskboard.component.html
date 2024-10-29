@@ -1,16 +1,17 @@
 
-
+<br>
+<br>
 <!-- Header -->
 <div class="header">
-  <h2>Dashboard <img src="/assets/Mentor_Dashboard_Icon.png" alt="Mentor Dashboard Icon" class="icon"></h2>
+  <h2 style="margin-bottom:110px"> Dashboard </h2>
+  <h2 style="margin-bottom:110px;text-align: right;"> Welcome {{currentUser.Name}}! </h2>
+
   <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu" class="menu-button">
     <mat-icon>menu</mat-icon>
   </button>
   <mat-menu #menu="matMenu" class="custom-menu">
-    <button mat-menu-item (click)="navigateTo('dashboard')">Dashboard</button>
-    <button mat-menu-item (click)="navigateTo('batches')">Batches</button>
-    <button mat-menu-item (click)="navigateTo('profile')">Profile</button>
-    <button mat-menu-item (click)="navigateTo('employees')">Employees</button>
+    <button mat-menu-item (click)="navigateToDahsBoard()">Dashboard</button>
+    <button mat-menu-item (click)="viewEmployee(currentUser.userId)">Profile</button>
     <button mat-menu-item (click)="logout()">Logout</button>
   </mat-menu>
 </div>
@@ -21,12 +22,29 @@
   <div class="task-container">
 
       <h2>All SubTasks Of the Task</h2>
-      <button *ngIf="currentUser.Role!=0" mat-raised-button (click)="showForm = !showForm" class="btn btn-primary">Add New Task</button>
+      <button class="btn" (click)="toggleNavigationHistory()">Show Navigation History</button>
+
+<ul *ngIf="showNavigationHistory">
+  <li *ngFor="let link of navigationHistory">
+    <a style="background-color: lightblue; width: 180px; margin-left: 60px;" [routerLink]="link">{{ link }}</a>
+  </li>
+</ul>
+      <button *ngIf="currentUser.Role==1" mat-raised-button (click)="showForm = !showForm" class="btn btn-primary">Add New Task</button>
       <br>
       <!-- Add New Task Form -->
+      <!-- Your Add New Task Form content -->
       <div *ngIf="showForm" class="form-card">
-        <!-- Your Add New Task Form content -->
         <h2>Add New SubTask</h2>
+
+        <select class="form-control"  id="subtaskType" name="subtaskType" [(ngModel)]="selectedSubtaskType" (change)="onChangeSubtaskType($event)">
+          <option value="" disabled selected>Select a Subtask Type</option>
+
+          <option value="Theory">Theory</option>
+          <option value="Assessment">Assessment</option>
+          <option value="Assignment">Assignment</option>
+          <option value="Evaluation">Evaluation</option>
+        </select>
+        <br>
         <form [formGroup]="form" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
           <mat-form-field appearance="fill">
             <mat-label>Title</mat-label>
@@ -40,9 +58,8 @@
             <mat-label>FileName</mat-label>
             <input matInput formControlName="FileName" placeholder="FileName" required>
           </mat-form-field>
-           <!-- TestCases field -->
- <!-- TestCases field -->
- <div formArrayName="TestCasesArray">
+
+ <div *ngIf="selectedSubtaskType === 'Assessment' || selectedSubtaskType === 'Assignment'" formArrayName="TestCasesArray">
     <div *ngFor="let testCase of testCasesArray.controls; let i = index" [formGroupName]="i">
       <p>TEST CASE {{i}}</p>
       <mat-form-field appearance="fill">
@@ -56,16 +73,17 @@
   </div>
 </div>
 
+
 <!-- Button to add test cases -->
-<button type="button" mat-raised-button color="primary" (click)="addTestCase()">Add Test Case</button>
+<button *ngIf="selectedSubtaskType === 'Assessment' || selectedSubtaskType === 'Assignment'" type="button" mat-raised-button color="primary" (click)="addTestCase()">Add Test Case</button>
 
 
 
-            <mat-checkbox style="color: blue;"  formControlName="isCodingProblem"><h3>isCodingProblem</h3></mat-checkbox>
+            <mat-checkbox style="color: blue; align-items: center;"  formControlName="isProctored"><h3 style="margin-top: 19px;">IsProctored</h3></mat-checkbox>
 
           <div class="form-group">
-            <label for="fileUploadTaskFileUpload">File (if any)</label>
-            <input type="file" (change)="onFileChange($event)" id="fileUploadTaskFileUpload" class="form-control-file">
+            <label  for="fileUploadTaskFileUpload">File (if any)</label>
+            <input  type="file"  (change)="onFileChange($event)" id="fileUploadTaskFileUpload" class="form-control-file">
           </div>
           <button type="submit" mat-raised-button color="primary">Submit</button>
         </form>

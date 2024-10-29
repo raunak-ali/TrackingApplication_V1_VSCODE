@@ -6,6 +6,9 @@ import { GetBatches } from 'src/app/Models/get-batches';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Role } from '../../Models/user';
+import { GetMentorsService } from 'src/app/Services/get-mentors.service';
+import { GetUser } from 'src/app/Models/get-user';
+import { NavigationService } from 'src/app/Services/navigation.service';
 
 @Component({
   selector: 'app-get-batch',
@@ -13,20 +16,42 @@ import { Role } from '../../Models/user';
   styleUrls: ['./get-batch.component.css']
 })
 export class GetBatchComponent implements OnInit {
+  navigationHistory: string[]=[];
+onMentorSelectChange() {
+  this.filteredBatches = this.allBatches.filter(batch =>
+    batch.mentorId==this.selectedMentor);
+
+
+}
 
   error: string | undefined;
   allBatches!: GetBatches[];
+  filteredBatches: GetBatches[] = [];
+searchQuery: string = '';
   getMentorID!: any;
   currentUser = this.loginservice.getUserFromSession();
+  allMentors!: GetUser[];
+  selectedMentor!:number;
 
 
   constructor( private getbatchesservice: GetBatchesService,
     private loginservice :LoginService,
     private router: Router,
-    private snackBar: MatSnackBar
-    ) { }
+    private snackBar: MatSnackBar,
+    private getMentorsService:GetMentorsService,
+    private navigationService: NavigationService
 
 
+    ) {
+      this.navigationHistory = this.navigationService.getNavigationHistory();
+
+     }
+
+    showNavigationHistory: boolean = false;
+
+    toggleNavigationHistory() {
+      this.showNavigationHistory = !this.showNavigationHistory;
+    }
   ngOnInit(): void {
     this.getMentorID=this.loginservice.getUser();
     if (this.getMentorID != null) {
@@ -44,7 +69,10 @@ export class GetBatchComponent implements OnInit {
    }
    else{
     this.fetchBatchesforAdmin();
+    this.fetchmentors();
    }
+
+
 
   }
   fetchBatchesforAdmin() {
@@ -53,6 +81,7 @@ export class GetBatchComponent implements OnInit {
         // Ensure data.$values exists and is an array before accessing it
         if (Array.isArray(data.$values)) {
           this.allBatches = data.$values;
+          this.filteredBatches = this.allBatches;
           console.log(this.allBatches);
         } else {
           console.error('Unexpected data format:', data);
@@ -72,6 +101,8 @@ export class GetBatchComponent implements OnInit {
       // Ensure data.$values exists and is an array before accessing it
       if (Array.isArray(data.$values)) {
         this.allBatches = data.$values;
+        this.filteredBatches = this.allBatches;
+
         console.log(this.allBatches);
       } else {
         console.error('Unexpected data format:', data);
@@ -91,6 +122,8 @@ export class GetBatchComponent implements OnInit {
         // Ensure data.$values exists and is an array before accessing it
         if (Array.isArray(data.$values)) {
           this.allBatches = data.$values;
+          this.filteredBatches = this.allBatches;
+
           console.log(this.allBatches);
         } else {
           console.error('Unexpected data format:', data);
@@ -104,7 +137,7 @@ export class GetBatchComponent implements OnInit {
 
   viewBatch(batchId: number): void {
     // Navigate to another component with batchId as a parameter
-    this.router.navigate(['/Batch_dashboard', batchId]);
+    this.router.navigate(['/Module_dashboard', batchId]);
 }
 
 addBatch(userid: number): void {
@@ -150,4 +183,39 @@ uint8ArrayToBase64(array: Uint8Array): string {
   }
   return window.btoa(binary);
 }
+
+filterBatches() {
+  if (this.searchQuery.trim() === '') {
+    this.filteredBatches = this.allBatches; // Display all batches when search query is empty
+  } else {
+    this.filteredBatches = this.allBatches.filter(batch =>
+      batch.batchName.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+      batch.domain.toLowerCase().includes(this.searchQuery.toLowerCase())
+    );
+  }
+}
+fetchmentors() {
+  this.getMentorsService. GetMentors().subscribe(
+    (data: any) => {
+      // Ensure data.$values exists and is an array before accessing it
+      if (Array.isArray(data.$values)) {
+        this.allMentors = data.$values;
+        console.log("All Mentors",this.allMentors);
+
+
+      } else {
+        console.error('Unexpected data format:', data);
+        this.snackBar.open(`Unexpected format: ${{data}}`, 'Close', { duration: 3000 });
+
+      }
+    },
+    (error) => {
+      console.error('Error fetching batches:', error);
+      this.snackBar.open(`Error fetching batches: ${{error}}`, 'Close', { duration: 3000 });
+
+
+    }
+  );
+}
+
 }

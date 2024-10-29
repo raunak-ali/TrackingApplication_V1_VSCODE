@@ -9,7 +9,8 @@ export class AddTask {
     AssignedBy!: number;
     AssignedTo!: number;
     BatchId!: number;
-    Comments!: Comment
+    Comments!: Comment;
+    ModuleId!:number;
 
 
 }

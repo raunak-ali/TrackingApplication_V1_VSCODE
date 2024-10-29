@@ -14,6 +14,8 @@ import { LayoutComponent } from './components/layout/layout.component';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 import { BatchEmployeeComponent } from './components/batch-employee/batch-employee.component';
 import { CompileAndExecuteComponent } from './components/compile-and-execute/compile-and-execute.component';
+import { ModuleDashboardComponent } from './components/module-dashboard/module-dashboard.component';
+import { ModuleFeedbackComponent } from './components/module-feedback/module-feedback.component';
 
 const routes: Routes = [
   {
@@ -47,7 +49,7 @@ const routes: Routes = [
     },
 
     {
-      path:"AddNewBatch/:UserId",
+      path:"AddNewBatch",
       component:AddBatchesComponent
       },
       {
@@ -59,7 +61,15 @@ const routes: Routes = [
         component:MentorDashboardComponent
       },
       {
-        path:"Batch_dashboard/:batchId",
+        path:"Module_dashboard/:batchId",
+        component:ModuleDashboardComponent
+      },
+      {
+        path:"Module_Feedback/:batchId",
+        component:ModuleFeedbackComponent
+      },
+      {
+        path:"Batch_dashboard/:batchId/:moduleId",
         component:BatchDashboardComponent
       },
       {

@@ -15,10 +15,19 @@ namespace TravkingApplicationAPI.DTO
     public string? description { get; set; }
     public UserModel? user { get; set; }
     public TaskModel? userTask { get; set; }
+
+     public Module? Module { get; set; }
     public Rating?ratings{get;set;}
     public string? Submission_Count { get; set; }=null;
 
 
+
+
+}
+
+public class Module{
+    public int ModuleId{get;set;}
+    public string ModuleName{get;set;}
 }
 
 public class UserModel

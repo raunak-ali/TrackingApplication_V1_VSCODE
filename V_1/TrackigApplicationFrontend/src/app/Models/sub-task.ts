@@ -12,5 +12,6 @@ export class SubTask {
   subTaskCompletedOn?: Date;
   userTask?: GetTask|null; // Assuming UserTask is also an Angular model
   fileName!:string;
+  isProctored!:boolean|null;
 }
 

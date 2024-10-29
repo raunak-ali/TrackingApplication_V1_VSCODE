@@ -1,33 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            width: 100%;
+            background-color: #333;
+            color: #2578be;
+            padding: 5px 0;
+            text-align: center;
+            height: 90px;
+            background-color: white;
+        }
+        .navbar h4{
+          margin: 0;
+          margin-right: 0px;
+          margin-left: 910px;
+        }
+       .navbar h2{
+        margin: 0;
+          margin-right: 20px;
+          padding: 0px;
+          font-family: 'Roboto', sans-serif;
+       }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            background-color: #555;
+            color: white;
+            padding: 10px;
+            height: 300px;
+            background:linear-gradient(to bottom, #007bbd, #ADD8E6); /* Dark blue to light blue */
+            background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+
+        }
+        .header h1 {
+            margin: 0;
+            margin-right: 5%;
+            margin-left: 5%;
+        }
+        .header h4 {
+            margin: 0;
+            margin-right: 20px;
+        }
+        .header p{
+          margin: 0;
+          margin-top: 0px;
+          align-items: center;
+          margin-right: 10%;
+
+
+        }
+        .menu-button {
+            margin-left: auto;
+        }
+        .container {
+display: flex;
+            padding: 20px;
+
+        }
+        .main-content {
+            flex: 2;
+            background-color: white;
+            padding: 20px;
+            margin-right: 20px;
+            margin-left: 20px;
+
+        }
+        .side-content {
+flex: 3;
+            background-color:white;
+            padding: 35px;
+        }
+        .form-card, .head, .card-container {
+            margin-bottom: 20px;
+        }
+        .btn {
+            margin-top: 5px;
+        }
+        .custom-menu {
+            margin-top: 40px;
+        }
+        .navbar img {
+          margin-top: 0px;
+        width: 100px; /* Adjust image width as needed */
+        height: auto; /* Maintain aspect ratio */
+        margin-right: 10px; /* Adjust spacing between image and text */
+        margin-left: 10px;
+    }
+    .breadcrumb {
+color: white;
+
+    padding: 5px;
+    margin: 5px;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size:1rem;
+    display: flex;
+    align-items: center;
+}
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+    margin-right: 5px;
+}
+
+.breadcrumb a {
+    color: white;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb i {
+    margin-right: 5px;
+}
+.search-container {
+    position: relative;
+    width: 1100px; /* Adjust this width as needed */
+}
+
+.search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: gray;
+    pointer-events: none;
+}
+
+.search-input {
+    width: 100%;
+    padding-left: 30px; /* Add padding to the left to make space for the icon */
+    height: 36px; /* Adjust the height as needed */
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+    </style>
 </head>
-
 <body>
-  <!-- Navbar -->
+    <div class="navbar">
+     <h2>
+      <img src="/assets/TechPro.png" alt="Image Description" style="vertical-align: middle; margin-right: 10px;">
 
+     </h2>
+      <h4 stye="text-align:margin-right:">Welcome {{currentUser.Name}} !</h4>
 
-  <!-- Page content -->
-  <div class="content">
-    <div class="header">
-      <h2>Mentor Dashboard <img src="/assets/Mentor_Dashboard_Icon.png" alt="Mentor Dashboard Icon" class="icon"></h2>
       <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu" class="menu-button">
         <mat-icon>menu</mat-icon>
-      </button>
-      <mat-menu #menu="matMenu" class="custom-menu">
-        <button mat-menu-item (click)="navigateTo('dashboard')">Dashboard</button>
-        <button mat-menu-item (click)="navigateTo('batches')">Batches</button>
-        <button mat-menu-item (click)="navigateTo('profile')">Profile</button>
-        <button mat-menu-item (click)="navigateTo('employees')">Employees</button>
+    </button>
+    <mat-menu #menu="matMenu" class="custom-menu">
+        <button mat-menu-item (click)="navigateToDahsBoard()">Dashboard</button>
+        <button mat-menu-item (click)="viewEmployee(currentUser.userId)">Profile</button>
         <button mat-menu-item (click)="logout()">Logout</button>
-      </mat-menu>
+
+    </mat-menu>
     </div>
+    <div class="header">
+        <h1>
+
+            <div  class="breadcrumb">
+              <i class="fas fa-tachometer-alt" style="color:#f8f9fa;"></i>
+                            <ng-container *ngFor="let link of navigationHistory; let i = index">
+                  <a style="color: white;" [routerLink]="link">{{ getLinkName(link) }}</a>
+                  <span *ngIf="i < navigationHistory.length - 1"> / </span>
+              </ng-container>
+          </div>
+
+          <p style="font-size:3rem;">Hello Mentor </p>
+          <br>
+
+          <p style="font-size:1rem;">Batches are organized groups of students undergoing training or education together under the guidance of a mentor. They serve as cohorts, progressing through a structured curriculum or program. Mentors oversee batch progress, provide support, and facilitate learning, fostering collaboration and growth within the group.</p></h1>
+        <br>
+        <br>
+
+
+
+    </div>
+    <div class="container">
+        <div class="main-content">
+
     <app-get-batch></app-get-batch>
+  </div>
   </div>
 </body>
 

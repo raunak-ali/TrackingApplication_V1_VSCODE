@@ -1,19 +1,27 @@
 <!-- Header -->
 <div class="header">
-  <h2>Dashboard <img src="/assets/Mentor_Dashboard_Icon.png" alt="Mentor Dashboard Icon" class="icon"></h2>
+  <h2 style="margin-bottom:110px">Dashboard </h2>
+  <h2 style="margin-bottom:110px;text-align: right;"> Welcome {{currentUser.Name}}! </h2>
+
   <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu" class="menu-button">
     <mat-icon>menu</mat-icon>
   </button>
   <mat-menu #menu="matMenu" class="custom-menu">
-    <button mat-menu-item (click)="navigateTo('dashboard')">Dashboard</button>
-    <button mat-menu-item (click)="navigateTo('batches')">Batches</button>
-    <button mat-menu-item (click)="navigateTo('profile')">Profile</button>
-    <button mat-menu-item (click)="navigateTo('employees')">Employees</button>
+    <button mat-menu-item (click)="navigateToDahsBoard()">Dashboard</button>
+    <button mat-menu-item (click)="viewEmployee(currentUser.userId)">Profile</button>
     <button mat-menu-item (click)="logout()">Logout</button>
   </mat-menu>
 </div>
 
-<br><br>
+<br>
+<button class="btn" (click)="toggleNavigationHistory()">Show Navigation History</button>
+
+<ul *ngIf="showNavigationHistory">
+  <li *ngFor="let link of navigationHistory">
+    <a style="background-color: lightblue; width: 180px; margin-left: 60px;" [routerLink]="link">{{ link }}</a>
+  </li>
+</ul>
+<br>
 <mat-tab-group>
   <mat-tab label="Subtask Description">
 
@@ -33,7 +41,9 @@
               </div>
 
               <div class="text-center">
-                <button mat-button (click)="downloadFile(CurrentSubtask.fileUploadTaskPdf,CurrentSubtask.fileName)">Download the Refrence File</button>
+                <button mat-button
+                  (click)="downloadFile(CurrentSubtask.fileUploadTaskPdf,CurrentSubtask.fileName)">Download the Refrence
+                  File</button>
               </div>
               <div class="text-center">
               </div>
@@ -46,7 +56,7 @@
         </div>
       </div>
     </div>
-    </mat-tab>
+  </mat-tab>
   <mat-tab label="Compiler">
 
     <div class="container-fluid">
@@ -55,13 +65,14 @@
         <div class="col-md-8">
           <div class="card">
 
-          <div class="card-header">
-          <div style="display: flex; justify-content: space-between; margin: 10px 10px; margin-left: 200px; margin-right: 200px;">
-            <button (click)="CompileCode()" class="btn btn-primary">CompileCode</button>
-            <button (click)="SubmitCode()" class="btn btn-primary">SubmitCode</button>
-  </div>
-  </div>
-  </div>
+            <div class="card-header">
+              <div
+                style="display: flex; justify-content: space-between; margin: 10px 10px; margin-left: 200px; margin-right: 200px;">
+                <button (click)="CompileCode()" class="btn btn-primary">CompileCode</button>
+                <button (click)="SubmitCode()" class="btn btn-primary">SubmitCode</button>
+              </div>
+            </div>
+          </div>
 
           <div class="card">
             <div class="card-header">
@@ -71,24 +82,33 @@
               <div class="row">
                 <div class="col-md-1 line-numbers" id="lineNumbers"></div> <!-- Container for line numbers -->
                 <div class="col-md-11 code-container">
-                  <textarea [(ngModel)]="code" id="codeTextarea" class="form-control" rows="10" placeholder="Enter your code here"></textarea>
+                  <textarea [(ngModel)]="code" id="codeTextarea" class="form-control" rows="10"
+                    placeholder="Enter your code here"></textarea>
                 </div>
               </div>
               <div class="form-group">
                 <label for="sampleInputTextarea">Enter sample input:</label>
-                <textarea [(ngModel)]="sampleInput" id="sampleInputTextarea" class="form-control" rows="5" placeholder="Enter sample input here"></textarea>
+                <textarea [(ngModel)]="sampleInput" id="sampleInputTextarea" class="form-control" rows="5"
+                  placeholder="Enter sample input here"></textarea>
               </div>
 
               <div class="mt-3" *ngFor="let item of response">
                 <h5>Response:</h5>
                 <div><b>Input: </b>{{ item.input }}</div>
-                <div><b>Expected Output: </b><span [ngClass]="{'green-text': compareStrings(item.expectedOutput, item.actualOutput.output), 'red-text': !compareStrings(item.expectedOutput, item.actualOutput.output)}">{{ item.expectedOutput }}</span></div>
-                <div><b>Actual Output:</b> <span [ngClass]="{'green-text': compareStrings(item.expectedOutput, item.actualOutput.output), 'red-text': !compareStrings(item.expectedOutput, item.actualOutput.output)}">{{ item.actualOutput.output }}</span></div>
+                <div><b>Expected Output: </b><span
+                    [ngClass]="{'green-text': compareStrings(item.expectedOutput, item.actualOutput.output), 'red-text': !compareStrings(item.expectedOutput, item.actualOutput.output)}">{{
+                    item.expectedOutput }}</span></div>
+                <div><b>Actual Output:</b> <span
+                    [ngClass]="{'green-text': compareStrings(item.expectedOutput, item.actualOutput.output), 'red-text': !compareStrings(item.expectedOutput, item.actualOutput.output)}">{{
+                    item.actualOutput.output }}</span></div>
               </div>
+
               <div class="mt-3">
                 <h5>Error:</h5>
                 <div>{{ERROR}}</div>
               </div>
+              <!--<video *ngIf="recordedVideoUrl" [src]="recordedVideoUrl" controls></video>-->
+
             </div>
           </div>
         </div>
